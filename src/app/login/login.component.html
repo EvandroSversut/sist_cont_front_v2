@@ -1,0 +1,24 @@
+<p>login works!</p>
+
+<div class="login-container">
+  <h2>Login</h2>
+
+  <form (ngSubmit)="fazerLogin()">
+    <label for="email">Email:</label>
+    <input id="email" [(ngModel)]="login" name="email" required>
+
+    <label for="senha">Senha:</label>
+    <input id="senha" [(ngModel)]="senha" name="senha" type="password" required>
+
+    <button type="submit">Entrar</button>
+
+    <div *ngIf="mensagemErro" class="erro">{{ mensagemErro }}</div>
+  </form>
+</div>
+
+<p>Ainda não tem conta?
+  <a [routerLink]="['usuario']">Cadastre-se aqui</a>
+</p>
+
+<!--<button routerLink="/pessoa-fisica">Cadastrar-se</button>-->
+<a routerLink="/usuario">Cadastre-se aqui</a>

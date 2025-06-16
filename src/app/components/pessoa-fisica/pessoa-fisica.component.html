@@ -1,0 +1,129 @@
+<div class="page-container">
+
+  <!-- 📝 Formulário de Cadastro -->
+  <div class="form-container">
+    <h2>Cadastro de Pessoa Física</h2>
+
+    <form (ngSubmit)="salvarPessoaFisica()" class="form-grid">
+      <div class="form-group">
+         <label>Id Pessoa Fisica:</label>
+        <input type="number" [(ngModel)]="pessoa.idPessoaFisica" name="idPessoaFis" required>
+      </div>
+
+      <div class="form-group">
+         <label>Id Usuario:</label>
+        <input type="number" [(ngModel)]="pessoa.idUsuario" name="idUsuario" required>
+      </div>
+
+      <div class="form-group">
+         <!-- Dados da Pessoa -->
+        <label>Nome:</label>
+        <input type="text" [(ngModel)]="pessoa.nome" name="nome" required>
+      </div>
+
+      <div class="form-group">
+        <label>CPF:</label>
+        <input type="text" [(ngModel)]="pessoa.cpf" name="cpf" required>
+      </div>
+
+      <div class="form-group">
+        <label>RG:</label>
+        <input type="text" [(ngModel)]="pessoa.rg" name="rg" required>
+      </div>
+
+      <div class="form-group">
+        <label>Telefone:</label>
+        <input type="text" [(ngModel)]="pessoa.telefone" name="telefone" required>
+      </div>
+
+      <!-- Dados de Endereço -->
+      <div class="form-group">
+        <label>Rua:</label>
+        <input type="text" [(ngModel)]="pessoa.rua" name="rua" required>
+      </div>
+
+      <div class="form-group">
+        <label>Número:</label>
+        <input type="text" [(ngModel)]="pessoa.numero" name="numero" required>
+      </div>
+
+      <div class="form-group">
+        <label>Complemento:</label>
+        <input type="text" [(ngModel)]="pessoa.complemento" name="complemento">
+      </div>
+
+      <div class="form-group">
+        <label>Bairro:</label>
+        <input type="text" [(ngModel)]="pessoa.bairro" name="bairro" required>
+      </div>
+
+      <div class="form-group">
+        <label>CEP:</label>
+        <input type="text" [(ngModel)]="pessoa.cep" name="cep" required>
+      </div>
+
+      <div class="form-group">
+        <label>Cidade:</label>
+        <input type="text" [(ngModel)]="pessoa.cidade" name="cidade" required>
+      </div>
+
+      <div class="form-group">
+        <label>UF:</label>
+        <input type="text" [(ngModel)]="pessoa.uf" name="uf" required>
+      </div>
+
+      <!-- Dados do Usuário -->
+      <div class="form-group">
+        <label>Email:</label>
+        <input type="email" [(ngModel)]="pessoa.email" name="email" required>
+      </div>
+
+      <div class="form-group">
+        <label>Senha:</label>
+        <input type="text" [(ngModel)]="pessoa.senha" name="senha" required>
+      </div>
+
+      
+      <div class="form-actions">
+        <button type="submit">Cadastrar</button>
+      </div>
+    </form>
+
+    <p class="mensagem">{{ mensagemErro }}</p>
+  </div>
+
+  <!-- 🔍 Lista e Busca -->
+  <div class="list-container">
+   
+    <!-- Campo de busca -->
+    <input type="text" [(ngModel)]="filtro" placeholder="Buscar por nome ou email">
+    <button (click)="buscar()">Buscar</button>
+    <button (click)="novo()">Novo Usuário</button>
+
+    <!-- Tabela de resultados -->
+    <table>
+      <thead>
+        <tr>
+          <th>Nome</th>
+          <th>Email</th>
+          <th>CPF</th>
+          <th>Ações</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let usuario of usuarios">
+          <td>{{ usuario.nome }}</td>
+          <td>{{ usuario.email }}</td>
+          <td>{{ usuario.cpf }}</td>
+          <td>
+            <button (click)="editar(usuario)">Editar</button>
+            <button (click)="excluir(usuario.id)">Excluir</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div *ngIf="mensagemErro" class="erro">{{ mensagemErro }}</div>
+  </div>
+
+</div>

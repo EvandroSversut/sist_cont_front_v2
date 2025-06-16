@@ -1,0 +1,32 @@
+<h2>Cadastro de Usuário</h2>
+
+<form (ngSubmit)="cadastrar()">
+
+  <fieldset>
+    <legend>Dados Pessoais</legend>
+    
+    <input placeholder="Nome" [(ngModel)]="usuario.pessoaFisica.nome" name="nome" required />
+    <input placeholder="Telefone" [(ngModel)]="usuario.pessoaFisica.telefone" name="telefone" required />
+    <input placeholder="CPF" [(ngModel)]="usuario.pessoaFisica.cpf" name="cpf" required />
+    <input placeholder="RG" [(ngModel)]="usuario.pessoaFisica.rg" name="rg" required />
+    <input placeholder="Rua" [(ngModel)]="usuario.pessoaFisica.rua" name="rua" required />
+    <input placeholder="Número" [(ngModel)]="usuario.pessoaFisica.numero" name="numero" required />
+    <input placeholder="Complemento" [(ngModel)]="usuario.pessoaFisica.complemento" name="complemento" />
+    <input placeholder="Bairro" [(ngModel)]="usuario.pessoaFisica.bairro" name="bairro" required />
+    <input placeholder="CEP" [(ngModel)]="usuario.pessoaFisica.cep" name="cep" required />
+    <input placeholder="Cidade" [(ngModel)]="usuario.pessoaFisica.cidade" name="cidade" required />
+    <input placeholder="UF" [(ngModel)]="usuario.pessoaFisica.uf" name="uf" required />
+    <input placeholder="Email" [(ngModel)]="usuario.pessoaFisica.email" name="emailPessoa" required />
+  </fieldset>
+
+  <fieldset>
+    <legend>Dados de Acesso</legend>
+    <input placeholder="Email (Login)" [(ngModel)]="usuario.email" name="emailLogin" required />
+    <input type="password" placeholder="Senha" [(ngModel)]="usuario.senha" name="senha" required />
+    <input type="password" placeholder="Confirmar Senha" [(ngModel)]="confirmarSenha" name="confirmarSenha" required />
+  </fieldset>
+
+  <button type="submit">Cadastrar</button>
+</form>
+
+<div *ngIf="mensagem" style="color: red;">{{ mensagem }}</div>
