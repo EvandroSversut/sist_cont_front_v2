@@ -1,0 +1,84 @@
+.page-container {
+  padding: 16px;
+}
+
+.form-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+mat-form-field {
+  flex: 1 1 300px;
+}
+
+.form-actions {
+  margin-top: 16px;
+  display: flex;
+  gap: 8px;
+}
+
+.list-container {
+  margin-top: 32px;
+}
+
+.busca {
+  width: 300px;
+  margin-right: 8px;
+}
+
+table {
+  width: 100%;
+  margin-top: 20px;
+}
+
+mat-form-field.filtro {
+  width: 100%;
+  max-width: 400px;
+  margin-bottom: 20px;
+  display: block;
+}
+
+mat-header-cell, mat-cell {
+  text-align: left;
+}
+
+.erro {
+  color: red;
+  margin-top: 10px;
+}
+
+button {
+  margin-right: 5px;
+}
+
+mat-tab-group {
+  margin-top: 20px;
+}
+
+mat-form-field {
+  width: 100%;
+}
+
+.form-container {
+  padding: 20px;
+  background-color: #fafafa;
+  border-radius: 8px;
+  box-shadow: 0 0 5px rgba(0,0,0,0.1);
+}
+
+.form-actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+table {
+  width: 100%;
+  margin-top: 20px;
+}
+
+.mensagem {
+  color: red;
+  margin-top: 10px;
+}

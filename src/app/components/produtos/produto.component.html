@@ -1,0 +1,198 @@
+<div class="page-container">
+  <h2>Cadastro de Produtos</h2>
+
+  <form (ngSubmit)="salvar()">
+    <mat-tab-group>
+
+      <!-- Aba Dados PJ -->
+      <mat-tab label="Dados Pessoa Juridica">
+        <div class="form-grid">
+
+          <mat-form-field appearance="outline">
+            <mat-label>Id Pj</mat-label>
+            <input matInput [(ngModel)]="pessoaJur.id" name="idJur">
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Razao Social</mat-label>
+            <input matInput [(ngModel)]="pessoaJur.razaoSocial" name="razaoSocial">
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Nome Fantasia</mat-label>
+            <input matInput [(ngModel)]="pessoaJur.nomeFantasia" name="nomeFantasia">
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>CNPJ</mat-label>
+            <input matInput [(ngModel)]="pessoaJur.cnpj" name="cnpj">
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Inscricao Estadual</mat-label>
+            <input matInput [(ngModel)]="pessoaJur.inscEstadual" name="inscEstadual">
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Inscricao Municipal</mat-label>
+            <input matInput [(ngModel)]="pessoaJur.inscMunicipal" name="inscMunicipal">
+          </mat-form-field>
+
+           <mat-form-field appearance="outline">
+            <mat-label>Telefone</mat-label>
+            <input matInput [(ngModel)]="pessoaJur.telefone" name="telefone">
+          </mat-form-field>
+
+           <mat-form-field appearance="outline">
+            <mat-label>Email</mat-label>
+            <input matInput [(ngModel)]="pessoaJur.email" name="email">
+          </mat-form-field>
+
+        </div>
+      </mat-tab>
+
+      <!-- Aba Endereço -->
+      <mat-tab label="Endereço">
+        <div class="form-grid">
+
+          <mat-form-field appearance="outline">
+            <mat-label>Rua</mat-label>
+            <input matInput [(ngModel)]="pessoaJur.rua" name="rua">
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Número</mat-label>
+            <input matInput [(ngModel)]="pessoaJur.numero" name="numero">
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Complemento</mat-label>
+            <input matInput [(ngModel)]="pessoaJur.complemento" name="complemento">
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Bairro</mat-label>
+            <input matInput [(ngModel)]="pessoaJur.bairro" name="bairro">
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>CEP</mat-label>
+            <input matInput [(ngModel)]="pessoaJur.cep" name="cep">
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Cidade</mat-label>
+            <input matInput [(ngModel)]="pessoaJur.cidade" name="cidade">
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>UF</mat-label>
+            <input matInput [(ngModel)]="pessoaJur.uf" name="uf">
+          </mat-form-field>
+        </div>
+      </mat-tab>
+
+      <!-- Aba Usuário  -->
+      <mat-tab label="Usuário">
+        <div class="form-grid">
+          <mat-form-field appearance="outline">
+            <mat-label>Email</mat-label>
+            <input matInput [(ngModel)]="pessoaJur.email" name="email">
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Email</mat-label>
+            <input matInput [(ngModel)]="pessoaJur.email" name="email">
+          </mat-form-field>
+
+
+          
+       <!-- <mat-form-field appearance="outline">
+            <mat-label>Senha</mat-label>
+            <input matInput type="password" [(ngModel)]="pessoaJur.email" name="senha">
+          </mat-form-field>
+          -->
+
+        </div>
+      </mat-tab>
+     
+       <!-- Aba Usuário  -->
+      <mat-tab label="Usuário">
+        <div class="form-grid">
+          <mat-form-field appearance="outline">
+            <mat-label>Email</mat-label>
+            <input matInput [(ngModel)]="pessoaJur.email" name="email">
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Email</mat-label>
+            <input matInput [(ngModel)]="pessoaJur.email" name="email">
+          </mat-form-field>
+
+        </div>
+      </mat-tab>
+     
+
+    </mat-tab-group>
+
+    <div class="form-actions">
+      <button mat-raised-button color="primary" type="submit">
+        Salvar
+      </button>
+      <button mat-button color="warn" type="button" (click)="novo()">
+        Novo
+      </button>
+    </div>
+  </form>
+
+  <!-- 🔍 Lista de Pessoas Jurídicas -->
+  <div class="list-container">
+    <mat-form-field appearance="outline" class="busca">
+      <mat-label>Buscar</mat-label>
+      <input matInput [(ngModel)]="filtro" placeholder="Por nome ou email">
+    </mat-form-field>
+
+    <button mat-raised-button color="primary" (click)="buscar()">Buscar</button>
+
+    <!-- Inicio da tabela -->
+    <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+
+      <ng-container matColumnDef="nome">
+        <th mat-header-cell *matHeaderCellDef>Nome</th>
+        <td mat-cell *matCellDef="let empresa">{{ empresa.razaoSocial }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="email">
+        <th mat-header-cell *matHeaderCellDef>Email</th>
+        <td mat-cell *matCellDef="let empresa">{{ empresa.email }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="cnpj">
+        <th mat-header-cell *matHeaderCellDef>CNPJ</th>
+        <td mat-cell *matCellDef="let empresa">{{ empresa.cnpj }}</td>
+      </ng-container>
+
+        <!-- Ações -->
+      <ng-container matColumnDef="acoes">
+        <th mat-header-cell *matHeaderCellDef>Ações</th>
+        <td mat-cell *matCellDef="let juridica">
+          <button mat-icon-button color="accent" (click)="editar(juridica)">
+            <mat-icon>edit</mat-icon>
+          </button>
+          <button mat-icon-button color="warn" (click)="excluir(juridica.idJur)">
+            <mat-icon>delete</mat-icon>
+          </button>
+        </td>
+      </ng-container>
+
+       <!-- Header e Rows -->
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    </table>
+
+  </div>
+
+  <div *ngIf="mensagemErro" class="erro">
+    {{ mensagemErro }}
+  </div>
+</div>
