@@ -4,23 +4,18 @@
   <form (ngSubmit)="salvar()">
     <mat-tab-group>
 
-      <!-- Aba Dados PJ -->
-      <mat-tab label="Dados Pessoa Juridica">
+      <!-- Aba Dados Nota Fiscal -->
+      <mat-tab label="Dados Básicos da NF">
         <div class="form-grid">
 
           <mat-form-field appearance="outline">
-            <mat-label>Id Pj</mat-label>
+            <mat-label>Id</mat-label>
             <input matInput [(ngModel)]="pessoaJur.id" name="idJur">
           </mat-form-field>
 
           <mat-form-field appearance="outline">
-            <mat-label>Razao Social</mat-label>
+            <mat-label>Razão Social</mat-label>
             <input matInput [(ngModel)]="pessoaJur.razaoSocial" name="razaoSocial">
-          </mat-form-field>
-
-          <mat-form-field appearance="outline">
-            <mat-label>Nome Fantasia</mat-label>
-            <input matInput [(ngModel)]="pessoaJur.nomeFantasia" name="nomeFantasia">
           </mat-form-field>
 
           <mat-form-field appearance="outline">
@@ -28,67 +23,64 @@
             <input matInput [(ngModel)]="pessoaJur.cnpj" name="cnpj">
           </mat-form-field>
 
+           <mat-form-field appearance="outline">
+            <mat-label>Nota Fiscal</mat-label>
+            <input matInput [(ngModel)]="pessoaJur.inscMunicipal" name="inscMunicipal">
+          </mat-form-field>
+
           <mat-form-field appearance="outline">
-            <mat-label>Inscricao Estadual</mat-label>
+            <mat-label>Data Compra</mat-label>
             <input matInput [(ngModel)]="pessoaJur.inscEstadual" name="inscEstadual">
           </mat-form-field>
 
           <mat-form-field appearance="outline">
-            <mat-label>Inscricao Municipal</mat-label>
-            <input matInput [(ngModel)]="pessoaJur.inscMunicipal" name="inscMunicipal">
-          </mat-form-field>
-
-           <mat-form-field appearance="outline">
-            <mat-label>Telefone</mat-label>
+            <mat-label>Modelo</mat-label>
             <input matInput [(ngModel)]="pessoaJur.telefone" name="telefone">
           </mat-form-field>
 
            <mat-form-field appearance="outline">
-            <mat-label>Email</mat-label>
+            <mat-label>Serie</mat-label>
+            <input matInput [(ngModel)]="pessoaJur.telefone" name="telefone">
+          </mat-form-field>
+
+           <mat-form-field appearance="outline">
+            <mat-label>obs</mat-label>
             <input matInput [(ngModel)]="pessoaJur.email" name="email">
           </mat-form-field>
 
         </div>
       </mat-tab>
 
-      <!-- Aba Endereço -->
-      <mat-tab label="Endereço">
+      <!-- Aba Itens Compra -->
+      <mat-tab label="Itens da Compra">
         <div class="form-grid">
 
           <mat-form-field appearance="outline">
-            <mat-label>Rua</mat-label>
+            <mat-label>Id Produto</mat-label>
             <input matInput [(ngModel)]="pessoaJur.rua" name="rua">
           </mat-form-field>
 
           <mat-form-field appearance="outline">
-            <mat-label>Número</mat-label>
+            <mat-label>Nome do Produto</mat-label>
             <input matInput [(ngModel)]="pessoaJur.numero" name="numero">
           </mat-form-field>
 
           <mat-form-field appearance="outline">
-            <mat-label>Complemento</mat-label>
+            <mat-label>Unidade Medida</mat-label>
             <input matInput [(ngModel)]="pessoaJur.complemento" name="complemento">
           </mat-form-field>
 
           <mat-form-field appearance="outline">
-            <mat-label>Bairro</mat-label>
+            <mat-label>Qde Produto</mat-label>
             <input matInput [(ngModel)]="pessoaJur.bairro" name="bairro">
           </mat-form-field>
 
           <mat-form-field appearance="outline">
-            <mat-label>CEP</mat-label>
+            <mat-label>Vr Unitário</mat-label>
             <input matInput [(ngModel)]="pessoaJur.cep" name="cep">
           </mat-form-field>
 
-          <mat-form-field appearance="outline">
-            <mat-label>Cidade</mat-label>
-            <input matInput [(ngModel)]="pessoaJur.cidade" name="cidade">
-          </mat-form-field>
-
-          <mat-form-field appearance="outline">
-            <mat-label>UF</mat-label>
-            <input matInput [(ngModel)]="pessoaJur.uf" name="uf">
-          </mat-form-field>
+        
         </div>
       </mat-tab>
 
