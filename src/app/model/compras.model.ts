@@ -1,14 +1,15 @@
+import { PessoaJuridica } from './pessoa-juridica';
+import { ItensCompra } from './itens-compra.model';
 
-export class Compras  {
-
+export interface Compras {
   id?: number;
-  !: string;
-  nome!: string;
-  nome!: string;
-  nome!: string;
-  nome!: string;
-  nome!: string;
-  nome!: string;
-
+  pessoaJuridica: PessoaJuridica;
+  dataCompra: Date;
+  numeroNota: string;
+  serieNota: string;
+  descricaoNota: string;
+  valorTotal: number;
+  valorDesconto: number;
+  valorIcms: number;
+  itens: ItensCompra[];
 }
-  

@@ -1,140 +1,179 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
 import { HttpClientModule } from '@angular/common/http';
 
-import { MatTabsModule } from '@angular/material/tabs';
+import { MatCardModule } from '@angular/material/card';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatNativeDateModule } from '@angular/material/core';
 import { MatButtonModule } from '@angular/material/button';
-import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatIconModule } from '@angular/material/icon';
+import { MatTabsModule } from '@angular/material/tabs';
+import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatSortModule } from '@angular/material/sort';
 import { JuridicaDTO } from '../../dto/juridica.dto';
 import { PessoaJuridicaService } from '../../services/pessoa-juridica.service';
 import { PessoaJuridica } from '../../model/pessoa-juridica';
 import { Pessoa } from '../../model/pessoa.model';
+import { Produtos } from '../../model/produtos.model';
+import { ComprasService } from '../../services/compras.service';
+import { MatDialog } from '@angular/material/dialog';
+import { BuscaFornecedorDialogComponent } from '../dialogs/busca-fornecedor-dialog.component';
 
 @Component({
   selector: 'app-compras',
   standalone: true,
   imports: [
     CommonModule,
+    ReactiveFormsModule,
     FormsModule,
-    RouterModule,
-    HttpClientModule,
-
-    // ✅ Importação dos módulos do Angular Material
-    MatTabsModule,
+    MatCardModule,
     MatFormFieldModule,
     MatInputModule,
+    MatAutocompleteModule,
+    MatDatepickerModule,
+    MatNativeDateModule,
     MatButtonModule,
-    MatTableModule,
     MatIconModule,
-    MatPaginatorModule,
-    MatSortModule,
+    MatTableModule
   ],
   templateUrl: './compras.component.html',
   styleUrls: ['./compras.component.css']
 })
-export class ComprasComponent {
-  // 🔥 Toda sua lógica permanece igual
-  pessoaJur: JuridicaDTO = this.novaPessoa();
-  usuarios: JuridicaDTO[] = []; // <- sua lista da tabela
-  filtro: string = '';
-  mensagemErro = '';
+// Importações necessárias...
+export class ComprasComponent implements OnInit {
   
-  displayedColumns: string[] = ['nome', 'email', 'cnpj', 'acoes']; // nome das colunas
-  dataSource = new MatTableDataSource<JuridicaDTO>();
+  formCompra!: FormGroup;
 
-  constructor(
-    private service: PessoaJuridicaService,
-    private router: Router
+  fornecedorSelecionado!: PessoaJuridica; // ✅ Variável que guarda o fornecedor
+
+  fornecedores: PessoaJuridica[] = []; // 	Lista completa vinda do backend
+  fornecedoresFiltrados: PessoaJuridica[] = []; // Lista filtrada (autocomplete ou dialog)
+
+  produtos: Produtos[] = [];
+  produtosFiltrados: Produtos[] = [];
+
+  produtoCtrl = new FormControl();
+  quantidade: number = 1;
+  valorUnitario: number = 0;
+
+  itensCompra: any[] = [];
+  dataSourceItens = new MatTableDataSource<any>();
+  displayedColumns: string[] = ['produto', 'unidade', 'quantidade', 'valorUnitario', 'valorTotal', 'acoes'];
+
+  constructor(private fb: FormBuilder, private service: ComprasService,
+    private dialog: MatDialog    
   ) {}
 
   ngOnInit() {
-    this.carregarTabela();
-    this.buscar();
-  }
+    this.formCompra = this.fb.group({
+      fornecedor: ['', Validators.required],
+      dataCompra: ['', Validators.required],
+      numeroNota: ['', Validators.required],
+      serieNota: ['', Validators.required],
+      descricaoNota: ['']
+    });
 
-  
-  buscar() { /* ... */ }
-  
-  excluir(id: number) { /* ... */ }
-  novo() { this.limparFormulario(); }
-  limparFormulario() { this.pessoaJur = this.novaPessoa(); }
-  tratarErro(err: any) { /* ... */ }
+    this.carregarFornecedores();
+    this.carregarProdutos();
 
-   salvar() {
-    this.service.salvar(this.pessoaJur).subscribe({
-      next: (res) => {
-        alert('Pessoa Jurídica salva com sucesso!');
-        this.limparFormulario();
-      },
-      error: (err) => {
-        console.error('Erro ao salvar', err);
-        alert('Erro ao salvar');
-      }
+    this.produtoCtrl.valueChanges.subscribe(valor => {
+      this.produtosFiltrados = this.produtos.filter(p => 
+        p.nomeProduto.toLowerCase().includes(valor?.toLowerCase())
+      );
     });
   }
 
-   carregarTabela() {
-    console.log('📤 Buscando lista de pessoas jurídicas...');
-    this.service.listar().subscribe({
-      next: (dados) => {
-        this.dataSource.data = dados;
-         console.log('📥 Dados recebidos do backend:', dados);
-      },
-      error: (erro) => {
-        console.error('Erro ao buscar dados:', erro);
-      }
+  carregarFornecedores() {
+    this.service.getFornecedores().subscribe(data => {
+      this.fornecedores = data;
+      this.fornecedoresFiltrados = data;
     });
   }
 
-  novaPessoa(): JuridicaDTO {
-    return {
-      id: undefined,
-      razaoSocial: '',
-      cnpj: '',
-      inscEstadual: '',
-      inscMunicipal: '',
-      nomeFantasia: '',
-      telefone: '',
-      email: '',
-      rua: '',
-      numero: '',
-      complemento: '',
-      bairro: '',
-      cep: '',
-      cidade: '',
-      uf: ''
-    };
-  }
+  abrirBuscaFornecedor() {
+  // 🔥 Aqui você pode abrir um Dialog com uma tabela de fornecedores
+  //alert('Abrir busca de fornecedor (aqui entra um Dialog futuramente)');
+  const dialogRef = this.dialog.open(BuscaFornecedorDialogComponent, {
+  width: '800px'  // 🔥 Aqui aumentamos o tamanho do dialog
+});
 
-   editar(juridica: JuridicaDTO) {
-  this.pessoaJur = { ...juridica }; // <-- Clona o objeto para o formulário
-   console.log('Editando:', this.pessoaJur);
+dialogRef.afterClosed().subscribe(result => {
+  if (result) {
+    console.log('Fornecedor selecionado:', result);
+     // 🔥 Aqui você decide: se quiser armazenar o objeto inteiro
+      this.fornecedorSelecionado = result;
+
+      // ✅ E preenche o campo no formulário
+        this.formCompra.patchValue({ fornecedor: result.razaoSocial });
   }
+});
+
+
 }
 
-    //idPessoaFisica: usuario.idPessoaFisica || usuario.id,
-   // idJur: juridica.id,
-   // razaoSocial: juridica.nome,
-   // cnpj: juridica.cnpj,
-  //  nomeFantasia: juridica.nomeFantasia,
-   // inscEstadual: juridica.inscEstadual,
-   // inscMunicipal: juridica.inscMunicipal,
-   // email: juridica.email,
-   // telefone: juridica.telefone,
-   // rua: juridica.rua,
-   // numero: juridica.numero,
-   // complemento: juridica.complemento,
-   // bairro: juridica.bairro,
-   // cep: juridica.cep,
-   // cidade: juridica.cidade,
-   // uf: juridica.uf,
-  
+  carregarProdutos() {
+    this.service.getProdutos().subscribe(data => {
+      this.produtos = data;
+      this.produtosFiltrados = data;
+    });
+  }
 
+  selecionaFornecedor(nome: string) {
+    // Aqui você pode vincular o objeto fornecedor se desejar
+  }
 
+  selecionaProduto(nome: string) {
+    const produtoSelecionado = this.produtos.find(p => p.nomeProduto === nome);
+    if (produtoSelecionado) {
+      this.valorUnitario = 0;
+      this.quantidade = 1;
+    }
+  }
+
+  adicionarItem() {
+    const produtoSelecionado = this.produtos.find(p => p.nomeProduto === this.produtoCtrl.value);
+    if (produtoSelecionado) {
+      const valorTotal = this.quantidade * this.valorUnitario;
+      const item = {
+        produto: produtoSelecionado,
+        quantidade: this.quantidade,
+        valorUnitario: this.valorUnitario,
+        valorTotal: valorTotal
+      };
+      this.itensCompra.push(item);
+      this.dataSourceItens.data = this.itensCompra;
+
+      this.produtoCtrl.setValue('');
+      this.quantidade = 1;
+      this.valorUnitario = 0;
+    }
+  }
+
+  removerItem(item: any) {
+    const index = this.itensCompra.indexOf(item);
+    if (index >= 0) {
+      this.itensCompra.splice(index, 1);
+      this.dataSourceItens.data = this.itensCompra;
+    }
+  }
+
+  salvar() {
+    const compra = {
+      fornecedor: this.formCompra.value.pessoaJuridica,
+      dataCompra: this.formCompra.value.dataCompra,
+      numeroNota: this.formCompra.value.numeroNota,
+      serieNota: this.formCompra.value.serieNota,
+      descricaoNota: this.formCompra.value.descricaoNota,
+      itens: this.itensCompra
+    };
+   // this.service.salvarCompra(compra).subscribe(() => {
+  //    alert('Compra salva com sucesso!');
+  //  });
+  }
+}
