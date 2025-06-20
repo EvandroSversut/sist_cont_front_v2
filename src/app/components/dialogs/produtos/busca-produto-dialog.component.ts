@@ -1,7 +1,5 @@
 import { Component, Inject } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { PessoaJuridica } from '../../model/pessoa-juridica';
-import { ComprasService } from '../../services/compras.service';
 import { MatTableModule } from '@angular/material/table';
 import { MatIconModule } from '@angular/material/icon';
 import { MatNativeDateModule } from '@angular/material/core';
@@ -14,14 +12,17 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatDialogModule } from '@angular/material/dialog';
+import { ProdutoService } from '../../../services/produto.service';
+import { PessoaJuridica } from '../../../model/pessoa-juridica';
+import { Produtos } from '../../../model/produtos.model';
 
 
 
 @Component({
-  selector: 'app-busca-fornecedor-dialog',
+  selector: 'app-busca-produto-dialog',
   standalone: true,
-  templateUrl: './busca-fornecedor-dialog.component.html',
-  styleUrls: ['./busca-fornecedor-dialog.component.css'],
+  templateUrl: './busca-produto-dialog.component.html',
+  styleUrls: ['./busca-produto-dialog.component.css'],
   imports: [
     CommonModule,
     ReactiveFormsModule,
@@ -38,32 +39,35 @@ import { MatDialogModule } from '@angular/material/dialog';
     MatDialogModule
   ]
 })
-export class BuscaFornecedorDialogComponent {
-  fornecedores: PessoaJuridica[] = [];
-  fornecedoresFiltrados: PessoaJuridica[] = [];
+export class BuscaProdutoDialogComponent {
+  produto: Produtos [] = [];
+  produtosFiltrados: Produtos[] = [];
+
   filtro = '';
 
   constructor(
-    public dialogRef: MatDialogRef<BuscaFornecedorDialogComponent>,
-    private service: ComprasService,
+    public dialogRef: MatDialogRef<BuscaProdutoDialogComponent>,
+    private service: ProdutoService,
     @Inject(MAT_DIALOG_DATA) public data: any
   ) {
-    this.carregarFornecedores();
+    this.carregarProdutos();
   }
 
-  carregarFornecedores() {
-    this.service.getFornecedores().subscribe(data => {
-      this.fornecedores = data;
-      this.fornecedoresFiltrados = data;
+  carregarProdutos() {
+    this.service.getProdutos().subscribe(data => {
+      this.produto = data;
+     // this.fornecedoresFiltrados = data;
     });
   }
 
-  aplicarFiltro() {
+    aplicarFiltro() {
     const valor = this.filtro.trim().toLowerCase();
-    this.fornecedoresFiltrados = this.fornecedores.filter(f => 
-      f.razaoSocial.toLowerCase().includes(valor) || f.cnpj.includes(valor)
+    // this.fornecedoresFiltrados = this.fornecedores.filter(f => 
+    this.produtosFiltrados = this.produto.filter(f => 
+      f.nomeProduto.toLowerCase().includes(valor) 
     );
   }
+  
 
   selecionar(fornecedor: PessoaJuridica) {
     this.dialogRef.close(fornecedor);

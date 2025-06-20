@@ -23,7 +23,7 @@ import { Pessoa } from '../../model/pessoa.model';
 import { Produtos } from '../../model/produtos.model';
 import { ComprasService } from '../../services/compras.service';
 import { MatDialog } from '@angular/material/dialog';
-import { BuscaFornecedorDialogComponent } from '../dialogs/busca-fornecedor-dialog.component';
+import { BuscaFornecedorDialogComponent } from '../dialogs/fornecedor/busca-fornecedor-dialog.component';
 
 @Component({
   selector: 'app-compras',
