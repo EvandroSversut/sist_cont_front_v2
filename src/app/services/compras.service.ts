@@ -4,6 +4,7 @@ import { Observable } from 'rxjs';
 import { PessoaJuridica } from '../model/pessoa-juridica';
 import { Produtos } from '../model/produtos.model';
 import { Compras } from '../model/compras.model';
+import { ComprasDTO } from '../model/itens-compra.model';
 
 @Injectable({
   providedIn: 'root'
@@ -25,7 +26,7 @@ export class ComprasService {
   }
 
   // 💾 Salvar compra (com os itens)
-  salvarCompra(compra: Compras): Observable<any> {
+  salvarCompra(compra: ComprasDTO): Observable<any> {
     return this.http.post(`${this.apiUrl}/compras`, compra);
   }
 

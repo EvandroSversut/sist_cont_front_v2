@@ -42,35 +42,37 @@ import { Produtos } from '../../../model/produtos.model';
 export class BuscaProdutoDialogComponent {
   produto: Produtos [] = [];
   produtosFiltrados: Produtos[] = [];
-
   filtro = '';
 
   constructor(
     public dialogRef: MatDialogRef<BuscaProdutoDialogComponent>,
     private service: ProdutoService,
     @Inject(MAT_DIALOG_DATA) public data: any
-  ) {
+  ) 
+  {
     this.carregarProdutos();
   }
 
   carregarProdutos() {
-    this.service.getProdutos().subscribe(data => {
+    this.service.listar().subscribe(data => {
       this.produto = data;
-     // this.fornecedoresFiltrados = data;
+      this.produtosFiltrados = data;
     });
   }
 
     aplicarFiltro() {
     const valor = this.filtro.trim().toLowerCase();
-    // this.fornecedoresFiltrados = this.fornecedores.filter(f => 
+     console.info('Teste busca produto');
+     console.info(this.produtosFiltrados);
     this.produtosFiltrados = this.produto.filter(f => 
       f.nomeProduto.toLowerCase().includes(valor) 
     );
+   
   }
   
 
-  selecionar(fornecedor: PessoaJuridica) {
-    this.dialogRef.close(fornecedor);
+  selecionar(produto: Produtos) {
+    this.dialogRef.close(produto);
   }
 
   fechar() {

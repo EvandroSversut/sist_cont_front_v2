@@ -4,42 +4,40 @@
   <form (ngSubmit)="salvar()">
     <mat-tab-group>
 
-      <!-- Aba Dados PJ -->
-      <mat-tab label="Dados Basicos do Produto">
+      <!-- Aba Dados do Produto -->
+      <mat-tab label="Dados Básicos do Produto">
         <div class="form-grid">
 
           <mat-form-field appearance="outline">
-            <mat-label>Id</mat-label>
-            <input matInput [(ngModel)]="pessoaJur.id" name="idJur">
+            <mat-label>ID</mat-label>
+            <input matInput [(ngModel)]="produto.id" name="id" disabled>
           </mat-form-field>
 
           <mat-form-field appearance="outline">
-            <mat-label>Produto</mat-label>
-            <input matInput [(ngModel)]="pessoaJur.razaoSocial" name="razaoSocial">
+            <mat-label>Nome do Produto</mat-label>
+            <input matInput [(ngModel)]="produto.nomeProduto" name="nomeProduto" required>
           </mat-form-field>
 
           <mat-form-field appearance="outline">
             <mat-label>Unidade</mat-label>
-            <input matInput [(ngModel)]="pessoaJur.nomeFantasia" name="nomeFantasia">
+            <input matInput [(ngModel)]="produto.unidade" name="unidade" required>
           </mat-form-field>
-        
-        
+
         </div>
       </mat-tab>
 
-      <!-- Aba Endereço -->
-      <mat-tab label="outros">
+      <!-- Aba Outros -->
+      <mat-tab label="Outros">
         <div class="form-grid">
 
-          <mat-form-field appearance="outline">
-            <mat-label>outros</mat-label>
-            <input matInput [(ngModel)]="pessoaJur.rua" name="rua">
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Descrição</mat-label>
+            <textarea matInput [(ngModel)]="produto.descricao" name="descricao"></textarea>
           </mat-form-field>
 
         </div>
       </mat-tab>
 
-     
     </mat-tab-group>
 
     <div class="form-actions">
@@ -52,51 +50,59 @@
     </div>
   </form>
 
-  <!-- 🔍 Lista de Pessoas Jurídicas -->
+  <!-- 🔍 Lista de Produtos -->
   <div class="list-container">
     <mat-form-field appearance="outline" class="busca">
       <mat-label>Buscar</mat-label>
-      <input matInput [(ngModel)]="filtro" placeholder="Por nome ou email">
+      <input matInput [(ngModel)]="filtro" placeholder="Por nome">
     </mat-form-field>
 
     <button mat-raised-button color="primary" (click)="buscar()">Buscar</button>
 
-    <!-- Inicio da tabela -->
     <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
 
-      <ng-container matColumnDef="nome">
+      <!-- ID -->
+      <ng-container matColumnDef="id">
+        <th mat-header-cell *matHeaderCellDef>ID</th>
+        <td mat-cell *matCellDef="let produto">{{ produto.id }}</td>
+      </ng-container>
+
+      <!-- Nome -->
+      <ng-container matColumnDef="nomeProduto">
         <th mat-header-cell *matHeaderCellDef>Nome</th>
-        <td mat-cell *matCellDef="let empresa">{{ empresa.razaoSocial }}</td>
+        <td mat-cell *matCellDef="let produto">{{ produto.nomeProduto }}</td>
       </ng-container>
 
-      <ng-container matColumnDef="email">
-        <th mat-header-cell *matHeaderCellDef>Email</th>
-        <td mat-cell *matCellDef="let empresa">{{ empresa.email }}</td>
+      <!-- Unidade -->
+      <ng-container matColumnDef="unidade">
+        <th mat-header-cell *matHeaderCellDef>Unidade</th>
+        <td mat-cell *matCellDef="let produto">{{ produto.unidade }}</td>
       </ng-container>
 
-      <ng-container matColumnDef="cnpj">
-        <th mat-header-cell *matHeaderCellDef>CNPJ</th>
-        <td mat-cell *matCellDef="let empresa">{{ empresa.cnpj }}</td>
+      <!-- Descrição -->
+      <ng-container matColumnDef="descricao">
+        <th mat-header-cell *matHeaderCellDef>Descrição</th>
+        <td mat-cell *matCellDef="let produto">{{ produto.descricao }}</td>
       </ng-container>
 
-        <!-- Ações -->
+      <!-- Ações -->
       <ng-container matColumnDef="acoes">
         <th mat-header-cell *matHeaderCellDef>Ações</th>
-        <td mat-cell *matCellDef="let juridica">
-          <button mat-icon-button color="accent" (click)="editar(juridica)">
+        <td mat-cell *matCellDef="let produto">
+          <button mat-icon-button color="accent" (click)="editar(produto)">
             <mat-icon>edit</mat-icon>
           </button>
-          <button mat-icon-button color="warn" (click)="excluir(juridica.idJur)">
+          <button mat-icon-button color="warn" (click)="excluir(produto.id)">
             <mat-icon>delete</mat-icon>
           </button>
         </td>
       </ng-container>
 
-       <!-- Header e Rows -->
+      <!-- Header e Rows -->
       <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
       <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-    </table>
 
+    </table>
   </div>
 
   <div *ngIf="mensagemErro" class="erro">

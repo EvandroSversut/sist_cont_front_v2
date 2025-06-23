@@ -1,11 +1,8 @@
-mat-card {
-  margin-bottom: 20px;
-}
-
-.linha-campos {
+.form-grid {
   display: flex;
-  gap: 16px;
   flex-wrap: wrap;
+  gap: 16px;
+  align-items: center;
 }
 
 mat-form-field {
@@ -13,42 +10,13 @@ mat-form-field {
   min-width: 200px;
 }
 
-.full-width {
-  width: 100%;
-}
-
-.linha-itens {
-  display: flex;
-  gap: 16px;
-  flex-wrap: wrap;
-  align-items: center;
-  margin-bottom: 16px;
-}
-
 table {
   width: 100%;
 }
 
-.mat-column-acoes {
-  width: 50px;
-  text-align: center;
-}
-
-.botoes-finais {
-  display: flex;
-  justify-content: flex-end;
-  gap: 16px;
+.form-actions {
   margin-top: 20px;
-}
-
-@media (max-width: 768px) {
-  .linha-campos, .linha-itens {
-    flex-direction: column;
-  }
-}
-
-mat-form-field + button {
-  align-self: center;
-  margin-top: 8px;
-  height: 40px;
+  display: flex;
+  gap: 16px;
+  justify-content: flex-end;
 }

@@ -1,33 +1,28 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormBuilder, FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
-import { Router, RouterModule } from '@angular/router';
-import { HttpClientModule } from '@angular/common/http';
-
+import { FormBuilder, FormControl, FormGroup, Validators, ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { MatCardModule } from '@angular/material/card';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
-import { MatDatepickerModule } from '@angular/material/datepicker';
-import { MatNativeDateModule } from '@angular/material/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
-import { MatTabsModule } from '@angular/material/tabs';
-import { MatTableDataSource, MatTableModule } from '@angular/material/table';
-import { MatPaginatorModule } from '@angular/material/paginator';
-import { MatSortModule } from '@angular/material/sort';
-import { JuridicaDTO } from '../../dto/juridica.dto';
-import { PessoaJuridicaService } from '../../services/pessoa-juridica.service';
+import { MatTableModule, MatTableDataSource } from '@angular/material/table';
+import { MatDialog, MatDialogModule } from '@angular/material/dialog';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatNativeDateModule } from '@angular/material/core';
+
 import { PessoaJuridica } from '../../model/pessoa-juridica';
-import { Pessoa } from '../../model/pessoa.model';
 import { Produtos } from '../../model/produtos.model';
 import { ComprasService } from '../../services/compras.service';
-import { MatDialog } from '@angular/material/dialog';
 import { BuscaFornecedorDialogComponent } from '../dialogs/fornecedor/busca-fornecedor-dialog.component';
+import { BuscaProdutoDialogComponent } from '../dialogs/produtos/busca-produto-dialog.component';
 
 @Component({
   selector: 'app-compras',
   standalone: true,
+  templateUrl: './compras.component.html',
+  styleUrls: ['./compras.component.css'],
   imports: [
     CommonModule,
     ReactiveFormsModule,
@@ -36,57 +31,66 @@ import { BuscaFornecedorDialogComponent } from '../dialogs/fornecedor/busca-forn
     MatFormFieldModule,
     MatInputModule,
     MatAutocompleteModule,
-    MatDatepickerModule,
-    MatNativeDateModule,
     MatButtonModule,
     MatIconModule,
-    MatTableModule
-  ],
-  templateUrl: './compras.component.html',
-  styleUrls: ['./compras.component.css']
+    MatTableModule,
+    MatDialogModule,
+    MatDatepickerModule,
+    MatNativeDateModule
+  ]
 })
-// Importações necessárias...
 export class ComprasComponent implements OnInit {
-  
+
   formCompra!: FormGroup;
+  formItem!: FormGroup;
 
-  fornecedorSelecionado!: PessoaJuridica; // ✅ Variável que guarda o fornecedor
-
-  fornecedores: PessoaJuridica[] = []; // 	Lista completa vinda do backend
-  fornecedoresFiltrados: PessoaJuridica[] = []; // Lista filtrada (autocomplete ou dialog)
-
+  fornecedorSelecionado!: PessoaJuridica;
+  fornecedores: PessoaJuridica[] = [];
+  fornecedoresFiltrados: PessoaJuridica[] = [];
+  produtoSelecionado!: Produtos;
   produtos: Produtos[] = [];
   produtosFiltrados: Produtos[] = [];
 
   produtoCtrl = new FormControl();
-  quantidade: number = 1;
-  valorUnitario: number = 0;
 
   itensCompra: any[] = [];
   dataSourceItens = new MatTableDataSource<any>();
-  displayedColumns: string[] = ['produto', 'unidade', 'quantidade', 'valorUnitario', 'valorTotal', 'acoes'];
+  displayedColumns: string[] = ['produto', 'unidade', 'quantidade', 'valorUnitario', 'desconto', 'valorTotal', 'acoes'];
 
-  constructor(private fb: FormBuilder, private service: ComprasService,
-    private dialog: MatDialog    
-  ) {}
 
-  ngOnInit() {
+  constructor(
+    private fb: FormBuilder,
+    private service: ComprasService,
+    private dialog: MatDialog
+  ) { }
+
+  ngOnInit(): void {
     this.formCompra = this.fb.group({
       fornecedor: ['', Validators.required],
       dataCompra: ['', Validators.required],
       numeroNota: ['', Validators.required],
-      serieNota: ['', Validators.required],
-      descricaoNota: ['']
+      serieNota: ['', Validators.required]
+    });
+
+    this.formItem = this.fb.group({
+      quantidade: [1, [Validators.required, Validators.min(1)]],
+      valorUnitario: [null, [Validators.required, Validators.min(0)]], // começa vazio
+      desconto: [0, [Validators.min(0)]],  // ✅ campo novo
+      valorTotal: [{ value: 0, disabled: true }]
     });
 
     this.carregarFornecedores();
     this.carregarProdutos();
 
     this.produtoCtrl.valueChanges.subscribe(valor => {
-      this.produtosFiltrados = this.produtos.filter(p => 
-        p.nomeProduto.toLowerCase().includes(valor?.toLowerCase())
+      this.produtosFiltrados = this.produtos.filter(p =>
+        p.nomeProduto.toLowerCase().includes((valor || '').toLowerCase())
       );
     });
+
+    this.formItem.get('quantidade')!.valueChanges.subscribe(() => this.atualizaValorTotal());
+    this.formItem.get('valorUnitario')!.valueChanges.subscribe(() => this.atualizaValorTotal());
+    this.formItem.get('desconto')!.valueChanges.subscribe(() => this.atualizaValorTotal());
   }
 
   carregarFornecedores() {
@@ -96,27 +100,6 @@ export class ComprasComponent implements OnInit {
     });
   }
 
-  abrirBuscaFornecedor() {
-  // 🔥 Aqui você pode abrir um Dialog com uma tabela de fornecedores
-  //alert('Abrir busca de fornecedor (aqui entra um Dialog futuramente)');
-  const dialogRef = this.dialog.open(BuscaFornecedorDialogComponent, {
-  width: '800px'  // 🔥 Aqui aumentamos o tamanho do dialog
-});
-
-dialogRef.afterClosed().subscribe(result => {
-  if (result) {
-    console.log('Fornecedor selecionado:', result);
-     // 🔥 Aqui você decide: se quiser armazenar o objeto inteiro
-      this.fornecedorSelecionado = result;
-
-      // ✅ E preenche o campo no formulário
-        this.formCompra.patchValue({ fornecedor: result.razaoSocial });
-  }
-});
-
-
-}
-
   carregarProdutos() {
     this.service.getProdutos().subscribe(data => {
       this.produtos = data;
@@ -124,56 +107,89 @@ dialogRef.afterClosed().subscribe(result => {
     });
   }
 
-  selecionaFornecedor(nome: string) {
-    // Aqui você pode vincular o objeto fornecedor se desejar
+  abrirBuscaFornecedor() {
+    const dialogRef = this.dialog.open(BuscaFornecedorDialogComponent, {
+      width: '800px'
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.fornecedorSelecionado = result;
+        this.formCompra.patchValue({ fornecedor: result.razaoSocial });
+      }
+    });
+  }
+
+  abrirBuscaProduto() {
+    const dialogRef = this.dialog.open(BuscaProdutoDialogComponent, {
+      width: '800px'
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.produtoSelecionado = result;
+        this.produtoCtrl.setValue(result.nomeProduto);
+        this.formItem.patchValue({
+          valorUnitario: result.valorUnitario || 0,
+          quantidade: 1
+        });
+        this.atualizaValorTotal();
+      }
+    });
   }
 
   selecionaProduto(nome: string) {
-    const produtoSelecionado = this.produtos.find(p => p.nomeProduto === nome);
-    if (produtoSelecionado) {
-      this.valorUnitario = 0;
-      this.quantidade = 1;
+    const produto = this.produtos.find(p => p.nomeProduto === nome);
+    if (produto) {
+      this.produtoSelecionado = produto;
+      this.formItem.patchValue({
+        valorUnitario: produto.valorUnitario || 0,
+        quantidade: 1
+      });
+      this.atualizaValorTotal();
     }
+  }
+
+  atualizaValorTotal() {
+    const qtde = this.formItem.get('quantidade')!.value || 0;
+    const unit = this.formItem.get('valorUnitario')!.value || 0;
+    const desconto = this.formItem.get('desconto')!.value || 0;
+    const total = (qtde * unit) - desconto;
+    this.formItem.get('valorTotal')!.setValue(total >= 0 ? total : 0);
   }
 
   adicionarItem() {
-    const produtoSelecionado = this.produtos.find(p => p.nomeProduto === this.produtoCtrl.value);
-    if (produtoSelecionado) {
-      const valorTotal = this.quantidade * this.valorUnitario;
-      const item = {
-        produto: produtoSelecionado,
-        quantidade: this.quantidade,
-        valorUnitario: this.valorUnitario,
-        valorTotal: valorTotal
-      };
-      this.itensCompra.push(item);
-      this.dataSourceItens.data = this.itensCompra;
-
-      this.produtoCtrl.setValue('');
-      this.quantidade = 1;
-      this.valorUnitario = 0;
+    if (!this.produtoSelecionado) {
+      alert('Selecione um produto!');
+      return;
     }
+
+    const item = {
+      produto: this.produtoSelecionado,
+      quantidade: this.formItem.get('quantidade')!.value,
+      valorUnitario: this.formItem.get('valorUnitario')!.value,
+      desconto: this.formItem.get('desconto')!.value,
+      valorTotal: this.formItem.get('valorTotal')!.value
+    };
+
+    this.itensCompra.push(item);
+    this.dataSourceItens.data = [...this.itensCompra];
+
+    this.produtoSelecionado = undefined!;
+    this.produtoCtrl.setValue('');
+    this.formItem.reset({ quantidade: 1, valorUnitario: null, desconto: 0, valorTotal: 0 });;
   }
+
+  // 🔥 Calcular o Valor Total da Compra (todos os itens):
+  get valorTotalCompra(): number {
+  return this.itensCompra.reduce((soma, item) => soma + (item.valorTotal || 0), 0);
+}
 
   removerItem(item: any) {
     const index = this.itensCompra.indexOf(item);
     if (index >= 0) {
       this.itensCompra.splice(index, 1);
-      this.dataSourceItens.data = this.itensCompra;
+      this.dataSourceItens.data = [...this.itensCompra];
     }
-  }
-
-  salvar() {
-    const compra = {
-      fornecedor: this.formCompra.value.pessoaJuridica,
-      dataCompra: this.formCompra.value.dataCompra,
-      numeroNota: this.formCompra.value.numeroNota,
-      serieNota: this.formCompra.value.serieNota,
-      descricaoNota: this.formCompra.value.descricaoNota,
-      itens: this.itensCompra
-    };
-   // this.service.salvarCompra(compra).subscribe(() => {
-  //    alert('Compra salva com sucesso!');
-  //  });
   }
 }

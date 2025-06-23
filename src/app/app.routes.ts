@@ -6,7 +6,7 @@ import { PessoaJuridicaComponent } from './components/pessoa-juridica/pessoa-jur
 import { authGuard } from './guard/auth.guard';
 import { UsuarioComponent } from './components/usuario/usuario.component';
 import { ComprasComponent } from './components/compras/compras.component';
-import { ProdutosComponent } from './components/produtos/produto.component';
+import { ProdutoComponent } from './components/produtos/produto.component';
 
 export const routes: Routes = [
 
@@ -18,7 +18,7 @@ export const routes: Routes = [
   { path: 'pessoa-fisica', component: PessoaFisicaComponent, canActivate: [authGuard] },
   { path: 'pessoa-juridica', component: PessoaJuridicaComponent, canActivate: [authGuard] },
   { path: 'compras', component: ComprasComponent, canActivate: [authGuard] },
-  { path: 'produtos', component: ProdutosComponent, canActivate: [authGuard] }
+  { path: 'produtos', component: ProdutoComponent, canActivate: [authGuard] }
 ];
 
 // estudei melhor e vi que não é extamente isso que escrevi
