@@ -151,3 +151,9 @@
 <div class="total-geral">
   <h3>Total Geral: {{ valorTotalCompra | currency:'BRL':'symbol':'1.2-2' }}</h3>
 </div>
+
+<div style="display: flex; justify-content: flex-end; padding-right: 100px;">
+  <button mat-raised-button color="primary" (click)="adicionarItem()">
+    Salvar Compra
+  </button>
+</div>

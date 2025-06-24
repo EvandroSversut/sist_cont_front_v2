@@ -192,4 +192,52 @@ export class ComprasComponent implements OnInit {
       this.dataSourceItens.data = [...this.itensCompra];
     }
   }
+
+  salvarCompra() {
+  if (!this.fornecedorSelecionado) {
+    alert('Selecione um fornecedor!');
+    return;
+  }
+
+  if (this.itensCompra.length === 0) {
+    alert('Adicione pelo menos um item!');
+    return;
+  }
+
+  const compra = {
+    fornecedor: { id: this.fornecedorSelecionado.id },
+    dataCompra: this.formCompra.get('dataCompra')!.value,
+    numeroNota: this.formCompra.get('numeroNota')!.value,
+    serieNota: this.formCompra.get('serieNota')!.value,
+    valorDesconto: 0, // se quiser pode somar os descontos dos itens
+    valorIcms: 0, // opcional preencher
+    valorTotal: this.valorTotalCompra,
+    itens: this.itensCompra.map(item => ({
+      produto: { id: item.produto.id },
+      quantidade: item.quantidade,
+      valorUnitario: item.valorUnitario,
+      valorTotal: item.valorTotal
+    }))
+  };
+
+  this.service.salvarCompra(compra).subscribe({
+    next: () => {
+      alert('Compra salva com sucesso!');
+      this.limparFormulario();
+    },
+    error: () => {
+      alert('Erro ao salvar a compra.');
+    }
+  });
+}
+
+limparFormulario() {
+  this.formCompra.reset();
+  this.formItem.reset({ quantidade: 1, valorUnitario: null, desconto: 0, valorTotal: 0 });
+  this.fornecedorSelecionado = undefined!;
+  this.produtoSelecionado = undefined!;
+  this.produtoCtrl.setValue('');
+  this.itensCompra = [];
+  this.dataSourceItens.data = [];
+}
 }
