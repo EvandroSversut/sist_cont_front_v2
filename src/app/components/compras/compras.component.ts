@@ -17,6 +17,7 @@ import { Produtos } from '../../model/produtos.model';
 import { ComprasService } from '../../services/compras.service';
 import { BuscaFornecedorDialogComponent } from '../dialogs/fornecedor/busca-fornecedor-dialog.component';
 import { BuscaProdutoDialogComponent } from '../dialogs/produtos/busca-produto-dialog.component';
+import { ComprasDTO } from '../../model/itens-compra.model';
 
 @Component({
   selector: 'app-compras',
@@ -69,7 +70,8 @@ export class ComprasComponent implements OnInit {
       fornecedor: ['', Validators.required],
       dataCompra: ['', Validators.required],
       numeroNota: ['', Validators.required],
-      serieNota: ['', Validators.required]
+      serieNota: ['', Validators.required],
+      descricaoNota: ['']  // agora presente
     });
 
     this.formItem = this.fb.group({
@@ -204,21 +206,26 @@ export class ComprasComponent implements OnInit {
     return;
   }
 
-  const compra = {
-    fornecedor: { id: this.fornecedorSelecionado.id },
-    dataCompra: this.formCompra.get('dataCompra')!.value,
-    numeroNota: this.formCompra.get('numeroNota')!.value,
-    serieNota: this.formCompra.get('serieNota')!.value,
-    valorDesconto: 0, // se quiser pode somar os descontos dos itens
-    valorIcms: 0, // opcional preencher
-    valorTotal: this.valorTotalCompra,
-    itens: this.itensCompra.map(item => ({
-      produto: { id: item.produto.id },
-      quantidade: item.quantidade,
-      valorUnitario: item.valorUnitario,
-      valorTotal: item.valorTotal
-    }))
-  };
+const compra: ComprasDTO = {
+  pessoaJuridica: { id: this.fornecedorSelecionado?.id ?? 0 }, // nunca undefined
+  dataCompra: this.formCompra.get('dataCompra')?.value ?? new Date(),
+  numeroNota: this.formCompra.get('numeroNota')?.value ?? '',
+  serieNota: this.formCompra.get('serieNota')?.value ?? '',
+  descricaoNota: this.formCompra.get('descricaoNota')?.value ?? '',  // 👈 adicione esse campo ao form se ainda não tiver
+  valorDesconto: 0,
+  valorIcms: 0,
+  valorTotal: this.valorTotalCompra ?? 0,
+  itens: this.itensCompra.map(item => ({
+    produto: { id: item.produto.id },
+    quantidade: item.quantidade ?? 0,
+    valorUnitario: item.valorUnitario ?? 0,
+    valorTotal: item.valorTotal ?? 0
+  }))
+};
+
+
+   // ✅ Aqui você imprime no console:
+  console.log('📦 Dados da compra sendo enviados:', compra);
 
   this.service.salvarCompra(compra).subscribe({
     next: () => {

@@ -3,13 +3,13 @@ import { Produtos } from './produtos.model';
 
 export interface ItensCompra {
   id?: number;
-  produto: Produtos;
+  produto: { id: number };
   quantidade: number;
   valorUnitario: number;
   valorTotal: number;
 }
   export interface ComprasDTO {
-  pessoaJuridica: JuridicaDTO;
+  pessoaJuridica: { id: number };
   dataCompra: Date;
   numeroNota: string;
   serieNota: string;
@@ -19,4 +19,5 @@ export interface ItensCompra {
   valorIcms: number;
   itens: ItensCompra[];
 }
+
 
