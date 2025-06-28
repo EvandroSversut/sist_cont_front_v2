@@ -6,6 +6,7 @@ export interface ItensCompra {
   produto: { id: number };
   quantidade: number;
   valorUnitario: number;
+  desconto: number;
   valorTotal: number;
 }
   export interface ComprasDTO {

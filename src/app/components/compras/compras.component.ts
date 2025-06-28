@@ -58,6 +58,12 @@ export class ComprasComponent implements OnInit {
   dataSourceItens = new MatTableDataSource<any>();
   displayedColumns: string[] = ['produto', 'unidade', 'quantidade', 'valorUnitario', 'desconto', 'valorTotal', 'acoes'];
 
+  // parametros para a tabela de compras realizadas/salvas
+  todasCompras: any[] = [];
+  dataSourceCompras = new MatTableDataSource<any>();
+  displayedColumnsCompras: string[] = ['fornecedor', 'data', 'numeroNota', 'valorTotal', 'acoes'];
+
+  idCompraEmEdicao: number | null = null;
 
   constructor(
     private fb: FormBuilder,
@@ -72,6 +78,7 @@ export class ComprasComponent implements OnInit {
       numeroNota: ['', Validators.required],
       serieNota: ['', Validators.required],
       descricaoNota: ['']  // agora presente
+    
     });
 
     this.formItem = this.fb.group({
@@ -83,6 +90,8 @@ export class ComprasComponent implements OnInit {
 
     this.carregarFornecedores();
     this.carregarProdutos();
+    this.carregarComprasSalvas();
+    this.limparFormulario();
 
     this.produtoCtrl.valueChanges.subscribe(valor => {
       this.produtosFiltrados = this.produtos.filter(p =>
@@ -93,6 +102,14 @@ export class ComprasComponent implements OnInit {
     this.formItem.get('quantidade')!.valueChanges.subscribe(() => this.atualizaValorTotal());
     this.formItem.get('valorUnitario')!.valueChanges.subscribe(() => this.atualizaValorTotal());
     this.formItem.get('desconto')!.valueChanges.subscribe(() => this.atualizaValorTotal());
+  }
+
+  carregarComprasSalvas(){
+    this.service.listarCompras().subscribe(data => {
+      console.log('🟦 Compras recebidas do backend:', data); // ✅ PRINT
+      this.todasCompras = data;
+      this.dataSourceCompras.data = data;
+    });
   }
 
   carregarFornecedores() {
@@ -199,7 +216,7 @@ export class ComprasComponent implements OnInit {
   if (!this.fornecedorSelecionado) {
     alert('Selecione um fornecedor!');
     return;
-  }
+    }
 
   if (this.itensCompra.length === 0) {
     alert('Adicione pelo menos um item!');
@@ -207,35 +224,50 @@ export class ComprasComponent implements OnInit {
   }
 
 const compra: ComprasDTO = {
-  pessoaJuridica: { id: this.fornecedorSelecionado?.id ?? 0 }, // nunca undefined
+  pessoaJuridica: { id: this.fornecedorSelecionado?.id ?? 0 },
   dataCompra: this.formCompra.get('dataCompra')?.value ?? new Date(),
   numeroNota: this.formCompra.get('numeroNota')?.value ?? '',
   serieNota: this.formCompra.get('serieNota')?.value ?? '',
-  descricaoNota: this.formCompra.get('descricaoNota')?.value ?? '',  // 👈 adicione esse campo ao form se ainda não tiver
-  valorDesconto: 0,
+  descricaoNota: this.formCompra.get('descricaoNota')?.value ?? '',
+  valorDesconto: this.itensCompra.reduce((acc, item) => acc + (item.desconto ?? 0), 0),
   valorIcms: 0,
   valorTotal: this.valorTotalCompra ?? 0,
   itens: this.itensCompra.map(item => ({
     produto: { id: item.produto.id },
     quantidade: item.quantidade ?? 0,
     valorUnitario: item.valorUnitario ?? 0,
+    desconto: item.desconto ?? 0,
     valorTotal: item.valorTotal ?? 0
   }))
 };
 
 
    // ✅ Aqui você imprime no console:
-  console.log('📦 Dados da compra sendo enviados:', compra);
+  console.log('📦 Dados da compra sendo enviados:', JSON.stringify(compra, null, 2));
 
+  if (this.idCompraEmEdicao) {
+  this.service.atualizarCompra(this.idCompraEmEdicao, compra).subscribe({
+    next: () => {
+      alert('Compra atualizada com sucesso!');
+      this.limparFormulario();
+      this.carregarComprasSalvas();
+    },
+    error: () => {
+      alert('Erro ao atualizar a compra.');
+    }
+  });
+} else {
   this.service.salvarCompra(compra).subscribe({
     next: () => {
       alert('Compra salva com sucesso!');
       this.limparFormulario();
+      this.carregarComprasSalvas();
     },
     error: () => {
       alert('Erro ao salvar a compra.');
     }
   });
+ }
 }
 
 limparFormulario() {
@@ -246,5 +278,36 @@ limparFormulario() {
   this.produtoCtrl.setValue('');
   this.itensCompra = [];
   this.dataSourceItens.data = [];
+  this.idCompraEmEdicao = null; // reseta o ID
 }
+
+editarCompra(compra: any) {
+   this.idCompraEmEdicao = compra.id; // ✅ Guarda o ID da compra
+
+   // Preenche o formulário da nota
+  this.formCompra.patchValue({
+    fornecedor: compra.pessoaJuridica?.razaoSocial,
+    dataCompra: compra.dataCompra,
+    numeroNota: compra.numeroNota,
+    serieNota: compra.serieNota,
+    descricaoNota: compra.descricaoNota
+  });
+
+  // Armazena o fornecedor selecionado (para manter ID)
+  this.fornecedorSelecionado = compra.pessoaJuridica;
+
+  // Preenche os itens na tabela de edição
+  this.itensCompra = compra.itens.map((item: any) => ({
+    produto: item.produto,
+    quantidade: item.quantidade,
+    valorUnitario: item.valorUnitario,
+    desconto: item.desconto,
+    valorTotal: item.valorTotal
+  }));
+
+  this.dataSourceItens.data = [...this.itensCompra];
+
+  console.log('✏️ Compra carregada para edição:', compra);
+}
+
 }

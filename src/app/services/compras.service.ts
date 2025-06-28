@@ -22,13 +22,17 @@ export class ComprasService {
 
   // 🔍 Buscar produtos
   getProdutos(): Observable<Produtos[]> {
-    return this.http.get<Produtos[]>(`${this.apiUrl}/produtos`);
+    return this.http.get<Produtos[]>(`${this.apiUrl}/produtos/listar`);
   }
 
   // 💾 Salvar compra (com os itens)
   salvarCompra(compra: ComprasDTO): Observable<any> {
     return this.http.post(`${this.apiUrl}/compras`, compra);
   }
+
+  atualizarCompra(id: number, compra: ComprasDTO): Observable<any> {
+  return this.http.put(`${this.apiUrl}/compras/${id}`, compra);
+}
 
   // 🔍 Buscar todas as compras (opcional)
   listarCompras(): Observable<Compras[]> {
