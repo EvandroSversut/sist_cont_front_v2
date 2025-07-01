@@ -30,4 +30,13 @@ export class NfeService {
         }
       });
   }
+
+  enviarNotaFiscal(dados: any) {
+  this.http.post('http://localhost:8080/api/nfe/json', dados)
+    .subscribe({
+      next: res => alert('NF-e enviada com sucesso!'),
+      error: err => alert('Erro ao enviar a NF-e')
+    });
+}
+
 }

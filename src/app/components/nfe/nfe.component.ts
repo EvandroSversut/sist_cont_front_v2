@@ -145,15 +145,15 @@ export class NfeComponent {
   }
 
   emitirNfe() {
-  const xml = this.xmlService.gerarXml({
+  const dadosNota = {
     emitente: this.formEmitente.value,
     destinatario: this.formDestinatario.value,
     produtos: this.produtos,
     transporte: this.formTransporte.value,
     pagamento: this.formPagamento.value
-  });
-    console.log('📄 XML Gerado:', xml);
+  };
+    console.log('📄 XML Gerado:', dadosNota);
 
-    this.nfeService.enviarXml(xml);
+    this.nfeService.enviarNotaFiscal(dadosNota);
   }
 }
