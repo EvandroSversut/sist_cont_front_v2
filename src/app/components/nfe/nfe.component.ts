@@ -85,43 +85,64 @@ export class NfeComponent {
     private nfeService: NfeService // ✅ injeção do service
    ) {
     this.formEmitente = this.fb.group({
-      cnpj: ['', Validators.required],
-      razaoSocial: ['', Validators.required],
-      ie: ['', Validators.required],
-      uf: ['', Validators.required],
-      municipio: ['', Validators.required],
-      crt: ['', Validators.required]
+      cnpj: ['12345678000199', Validators.required],
+    razaoSocial: ['Empresa Emitente Ltda', Validators.required],
+    ie: ['12345678', Validators.required],
+    uf: ['SP', Validators.required],
+    municipio: ['São Paulo', Validators.required],
+    crt: ['1', Validators.required]
     });
 
     this.formDestinatario = this.fb.group({
-      cnpj: ['', Validators.required],
-      razaoSocial: ['', Validators.required],
-      ie: ['', Validators.required],
-      uf: ['', Validators.required],
-      municipio: ['', Validators.required],
-      indIEDest: ['', Validators.required]
+      cnpj: ['98765432000199', Validators.required],
+    razaoSocial: ['Cliente Destinatário SA', Validators.required],
+    ie: ['87654321', Validators.required],
+    uf: ['RJ', Validators.required],
+    municipio: ['Rio de Janeiro', Validators.required],
+    indIEDest: ['9', Validators.required]
     });
 
     this.formTransporte = this.fb.group({
-    modFrete: ['0', Validators.required],
-    transportadora: [''],
-    cnpjTransportadora: [''],
-    placaVeiculo: [''],
-    ufPlaca: [''],
-    valorFrete: [0]
+   modFrete: ['1', Validators.required],
+    transportadora: ['Transportadora XYZ'],
+    cnpjTransportadora: ['55667788000199'],
+    placaVeiculo: ['ABC1D23'],
+    ufPlaca: ['SP'],
+    valorFrete: [100]
   });
 
     this.formPagamento = this.fb.group({
-    formaPagamento: ['01', Validators.required],
-    valorPago: [0, Validators.required],
+    formaPagamento: ['03', Validators.required],
+    valorPago: [500, Validators.required],
     valorTroco: [0]
   });
+
+   // ✅ Mock inicial dos produtos
+  this.produtos = [
+  {
+    descricao: 'Produto Teste 1',
+    quantidade: 2,
+    valorUnitario: 50,
+    desconto: 5,
+    aliquotaIcms: 12,
+    valorTotal: 95 // Exemplo: (50 * 2) - 5
+  },
+  {
+    descricao: 'Produto Teste 2',
+    quantidade: 1,
+    valorUnitario: 200,
+    desconto: 0,
+    aliquotaIcms: 18,
+    valorTotal: 200 // Exemplo: (200 * 1) - 0
+  }
+];
 
   }
 
   adicionarProduto(produto: any) {
     this.produtos.push(produto);
     console.log('➕ Produto adicionado:', produto);
+    
   }
 
   removerProduto(index: number) {
