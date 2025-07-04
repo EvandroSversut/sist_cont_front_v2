@@ -3,7 +3,7 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { EmitenteFormComponent } from './emitente-form.component';
+
 import { DestinatarioFormComponent } from './destinatario-form.component';
 import { ProdutoFormComponent } from './produto-form.component';
 import { ProdutosTabelaComponent } from './produtos-tabela.component';
@@ -15,6 +15,9 @@ import { PagamentoFormComponent } from './pagamento-form';
 import { NfeXmlService } from './nfe-xml.service';
 import { MatIconModule } from '@angular/material/icon';
 import { NfeService } from '../../services/nfe.service';
+import { MatDialog } from '@angular/material/dialog';
+import { EmitenteBuscaDialogComponent } from './dialogs/emitente-busca-dialog.component';
+import { EmitenteFormComponent } from './emitente-form.component';
 
 @Component({
   selector: 'app-nfe',
@@ -24,22 +27,30 @@ import { NfeService } from '../../services/nfe.service';
     ReactiveFormsModule,
     MatCardModule,
     MatButtonModule,
-    EmitenteFormComponent,
     DestinatarioFormComponent,
     ProdutoFormComponent,
     ProdutosTabelaComponent,
     TotaisResumoComponent, // ✅ aqui
     TransporteFormComponent,
     PagamentoFormComponent, 
-    MatIconModule
+    MatIconModule,
+    EmitenteFormComponent
+    
   ],
   template: `
   <div class="p-4 space-y-4">
     <h1 class="text-xl font-bold">Emissão de Nota Fiscal Eletrônica (NF-e)</h1>
 
     <!-- Seção: Emitente -->
-     <h2 class="text-lg font-semibold mt-4"><mat-icon class="mr-2">person</mat-icon> Emitente</h2>
-    <app-emitente-form [formEmitente]="formEmitente"></app-emitente-form>
+     <div class="flex items-center justify-between mt-4">
+  <h2 class="text-lg font-semibold flex items-center">
+    <mat-icon class="mr-2">person</mat-icon> Emitente
+  </h2>
+  
+</div>
+
+<app-emitente-form [formEmitente]="formEmitente"></app-emitente-form>
+
 
     <!-- Seção: Destinatário -->
      <h2 class="text-lg font-semibold mt-4">Destinatário</h2>
@@ -82,7 +93,9 @@ export class NfeComponent {
   constructor(
     private fb: FormBuilder,
     private xmlService: NfeXmlService,
-    private nfeService: NfeService // ✅ injeção do service
+    private nfeService: NfeService, // ✅ injeção do service
+    private dialog: MatDialog // ✅ injetar dialog aqui
+    
    ) {
     this.formEmitente = this.fb.group({
       cnpj: ['12345678000199', Validators.required],
@@ -177,4 +190,13 @@ export class NfeComponent {
 
     this.nfeService.enviarNotaFiscal(dadosNota);
   }
+
+  abrirBuscaEmitente() {
+  const dialogRef = this.dialog.open(EmitenteBuscaDialogComponent);
+  dialogRef.afterClosed().subscribe(result => {
+    if (result) {
+      this.formEmitente.patchValue(result);
+    }
+  });
+}
 }
