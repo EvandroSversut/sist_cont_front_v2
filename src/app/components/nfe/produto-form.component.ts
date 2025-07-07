@@ -2,11 +2,16 @@
 
 import { Component, EventEmitter, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
+import { MatIconModule } from '@angular/material/icon';
+import { BuscaProdutoDialogComponent } from '../dialogs/produtos/busca-produto-dialog.component';
+import { MatDialog } from '@angular/material/dialog';
+import { Produtos } from '../../model/produtos.model';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
 
 @Component({
   selector: 'app-produto-form',
@@ -17,7 +22,9 @@ import { MatCardModule } from '@angular/material/card';
     MatFormFieldModule,
     MatInputModule,
     MatButtonModule,
-    MatCardModule
+    MatCardModule,
+    MatIconModule,
+    MatAutocompleteModule
   ],
   template: `
     <mat-card>
@@ -30,8 +37,17 @@ import { MatCardModule } from '@angular/material/card';
 
         <mat-form-field appearance="outline">
           <mat-label>Descrição</mat-label>
-          <input matInput formControlName="descricao">
+          <input type="text" matInput [matAutocomplete]="autoProduto" [formControl]="produtoCtrl">
+                    <mat-autocomplete #autoProduto="matAutocomplete" (optionSelected)="selecionaProduto($event.option.value)">
+            <mat-option *ngFor="let p of produtosFiltrados" [value]="p.nomeProduto">
+              {{ p.nomeProduto }} ({{ p.unidade }})
+            </mat-option>
+          </mat-autocomplete>
         </mat-form-field>
+
+        <button mat-icon-button color="primary" (click)="abrirBuscaProduto()">
+          <mat-icon>search</mat-icon>
+        </button>
 
         <mat-form-field appearance="outline">
           <mat-label>NCM</mat-label>
@@ -82,7 +98,13 @@ export class ProdutoFormComponent {
 
   formProduto: FormGroup;
 
-  constructor(private fb: FormBuilder) {
+  produtoSelecionado!: Produtos;
+  produtoCtrl = new FormControl();
+  formItem!: FormGroup;
+  produtos: Produtos[] = [];
+  produtosFiltrados: Produtos[] = [];
+
+  constructor(private fb: FormBuilder, private dialog: MatDialog) {
     this.formProduto = this.fb.group({
       codigo: ['', Validators.required],
       descricao: ['', Validators.required],
@@ -93,6 +115,7 @@ export class ProdutoFormComponent {
       valorUnitario: [0, [Validators.required, Validators.min(0)]],
       desconto: [0],
       aliquotaIcms: [0, [Validators.required, Validators.min(0)]]
+      
     });
   }
 
@@ -100,6 +123,43 @@ export class ProdutoFormComponent {
     if (this.formProduto.valid) {
       this.produtoAdicionado.emit(this.formProduto.value);
       this.formProduto.reset({ quantidade: 1, valorUnitario: 0, desconto: 0, aliquotaIcms: 0 });
+    }
+  }
+
+    abrirBuscaProduto() {
+      const dialogRef = this.dialog.open(BuscaProdutoDialogComponent, {
+        width: '800px'
+      });
+  
+      dialogRef.afterClosed().subscribe(result => {
+        if (result) {
+          this.produtoSelecionado = result;
+          this.produtoCtrl.setValue(result.nomeProduto);
+          this.formItem.patchValue({
+            valorUnitario: result.valorUnitario || 0,
+            quantidade: 1
+          });
+          this.atualizaValorTotal();
+        }
+      });
+    }
+      atualizaValorTotal() {
+    const qtde = this.formItem.get('quantidade')!.value || 0;
+    const unit = this.formItem.get('valorUnitario')!.value || 0;
+    const desconto = this.formItem.get('desconto')!.value || 0;
+    const total = (qtde * unit) - desconto;
+    this.formItem.get('valorTotal')!.setValue(total >= 0 ? total : 0);
+  }
+
+   selecionaProduto(nome: string) {
+    const produto = this.produtos.find(p => p.nomeProduto === nome);
+    if (produto) {
+      this.produtoSelecionado = produto;
+      this.formItem.patchValue({
+        valorUnitario: produto.valorUnitario || 0,
+        quantidade: 1
+      });
+      this.atualizaValorTotal();
     }
   }
 }

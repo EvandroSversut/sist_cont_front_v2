@@ -18,6 +18,7 @@ import { ComprasService } from '../../services/compras.service';
 import { BuscaFornecedorDialogComponent } from '../dialogs/fornecedor/busca-fornecedor-dialog.component';
 import { BuscaProdutoDialogComponent } from '../dialogs/produtos/busca-produto-dialog.component';
 import { ComprasDTO } from '../../model/itens-compra.model';
+import { EmitenteFormComponent } from "../nfe/emitente-form.component";
 
 @Component({
   selector: 'app-compras',
@@ -37,8 +38,9 @@ import { ComprasDTO } from '../../model/itens-compra.model';
     MatTableModule,
     MatDialogModule,
     MatDatepickerModule,
-    MatNativeDateModule
-  ]
+    MatNativeDateModule,
+    EmitenteFormComponent
+]
 })
 export class ComprasComponent implements OnInit {
 

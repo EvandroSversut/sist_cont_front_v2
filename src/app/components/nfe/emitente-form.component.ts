@@ -7,6 +7,9 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { MatCardModule } from '@angular/material/card';
+import { MatDialog } from '@angular/material/dialog';
+import { BuscaFornecedorDialogComponent } from '../dialogs/fornecedor/busca-fornecedor-dialog.component';
+import { MatIconModule } from '@angular/material/icon';
 
 @Component({
   selector: 'app-emitente-form',
@@ -17,7 +20,8 @@ import { MatCardModule } from '@angular/material/card';
     MatFormFieldModule,
     MatInputModule,
     MatSelectModule,
-    MatCardModule
+    MatCardModule,
+    MatIconModule
   ],
   template: `
     <mat-card>
@@ -32,6 +36,10 @@ import { MatCardModule } from '@angular/material/card';
           <mat-label>Razão Social</mat-label>
           <input matInput formControlName="razaoSocial">
         </mat-form-field>
+
+        <button mat-icon-button color="primary" (click)="abrirBuscaFornecedor()">
+          <mat-icon>search</mat-icon>
+        </button>
 
         <mat-form-field appearance="outline">
           <mat-label>Inscrição Estadual</mat-label>
@@ -63,5 +71,17 @@ import { MatCardModule } from '@angular/material/card';
 export class EmitenteFormComponent {
   @Input() formEmitente!: FormGroup;
 
-  constructor() {}
+  constructor(private dialog: MatDialog) {}
+
+abrirBuscaFornecedor() {
+  const dialogRef = this.dialog.open(BuscaFornecedorDialogComponent, {
+    width: '800px'
+  });
+
+  dialogRef.afterClosed().subscribe(result => {
+    if (result) {
+      this.formEmitente.patchValue({ razaoSocial: result.razaoSocial, cnpj: result.cnpj });
+    }
+  });
+ }
 }

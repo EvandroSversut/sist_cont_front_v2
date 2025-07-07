@@ -5,6 +5,8 @@
     <mat-card-title>Dados da Compra</mat-card-title>
     <mat-card-content>
 
+      <app-emitente-form (buscarFornecedor)="abrirBuscaFornecedor()"></app-emitente-form>
+
       <div class="linha-campos">
         <mat-form-field>
           <mat-label>Fornecedor</mat-label>

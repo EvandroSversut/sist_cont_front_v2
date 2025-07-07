@@ -1,6 +1,6 @@
 // 📁 src/app/components/nfe/nfe.component.ts
 
-import { Component } from '@angular/core';
+import { Component, EventEmitter, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { EmitenteFormComponent } from './emitente-form.component';
@@ -76,6 +76,8 @@ export class NfeComponent {
   formDestinatario: FormGroup;
   formTransporte: FormGroup;
   formPagamento: FormGroup;
+
+  // @Output() buscarFornecedor = new EventEmitter<void>();
 
   produtos: any[] = [];
 
