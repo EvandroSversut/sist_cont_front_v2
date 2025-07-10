@@ -15,6 +15,10 @@ import { PagamentoFormComponent } from './pagamento-form';
 import { NfeXmlService } from './nfe-xml.service';
 import { MatIconModule } from '@angular/material/icon';
 import { NfeService } from '../../services/nfe.service';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { GeraisNfeComponent } from "./geraisNfe-form.component";
+
+
 
 @Component({
   selector: 'app-nfe',
@@ -30,13 +34,19 @@ import { NfeService } from '../../services/nfe.service';
     ProdutosTabelaComponent,
     TotaisResumoComponent, // ✅ aqui
     TransporteFormComponent,
-    PagamentoFormComponent, 
-    MatIconModule
-  ],
+    PagamentoFormComponent,
+    MatIconModule,
+    MatFormFieldModule,
+    GeraisNfeComponent
+],
   template: `
-  <div class="p-4 space-y-4">
+    <div class="p-4 space-y-4">
     <h1 class="text-xl font-bold">Emissão de Nota Fiscal Eletrônica (NF-e)</h1>
 
+     <!-- Seção: Dados Gerais da NF - basicos -->
+     <h2 class="text-lg font-semibold mt-4"><mat-icon class="mr-2">person</mat-icon> Dados Gerais - basicos</h2>
+    <app-geraisNfe-form [formGeral]="formGeral"></app-geraisNfe-form>
+            
     <!-- Seção: Emitente -->
      <h2 class="text-lg font-semibold mt-4"><mat-icon class="mr-2">person</mat-icon> Emitente</h2>
     <app-emitente-form [formEmitente]="formEmitente"></app-emitente-form>
@@ -51,7 +61,7 @@ import { NfeService } from '../../services/nfe.service';
     <app-produtos-tabela [produtos]="produtos" (excluirProduto)="removerProduto($event)"></app-produtos-tabela>
 
     <!-- Seção: Totais da Nota -->
-    <h2 class="text-lg font-semibold mt-4">Totais</h2>
+    <h2 class="text-lg font-semibold mt-4">Total da Nota Fiscal</h2>
     <app-totais-resumo [produtos]="produtos"></app-totais-resumo>
 
     <!-- Seção: Transporte -->
@@ -72,6 +82,7 @@ import { NfeService } from '../../services/nfe.service';
 
 })
 export class NfeComponent {
+  formGeral: FormGroup;
   formEmitente: FormGroup;
   formDestinatario: FormGroup;
   formTransporte: FormGroup;
@@ -86,13 +97,18 @@ export class NfeComponent {
     private xmlService: NfeXmlService,
     private nfeService: NfeService // ✅ injeção do service
    ) {
+
+    this.formGeral = this.fb.group({
+      
+    })
+
     this.formEmitente = this.fb.group({
       cnpj: ['12345678000199', Validators.required],
-    razaoSocial: ['Empresa Emitente Ltda', Validators.required],
-    ie: ['12345678', Validators.required],
-    uf: ['SP', Validators.required],
-    municipio: ['São Paulo', Validators.required],
-    crt: ['1', Validators.required]
+      razaoSocial: ['Empresa Emitente Ltda', Validators.required],
+      ie: ['12345678', Validators.required],
+      uf: ['SP', Validators.required],
+      municipio: ['São Paulo', Validators.required],
+      crt: ['1', Validators.required]
     });
 
     this.formDestinatario = this.fb.group({

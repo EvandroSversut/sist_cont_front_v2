@@ -75,14 +75,55 @@ import { MatAutocompleteModule } from '@angular/material/autocomplete';
         </mat-form-field>
 
         <mat-form-field appearance="outline">
+          <mat-label>Total Produto</mat-label>
+          <input matInput type="number" formControlName="totalProd">
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
           <mat-label>Desconto</mat-label>
           <input matInput type="number" formControlName="desconto">
         </mat-form-field>
 
         <mat-form-field appearance="outline">
-          <mat-label>Alíquota ICMS (%)</mat-label>
-          <input matInput type="number" formControlName="aliquotaIcms">
+          <mat-label>Frete</mat-label>
+          <input matInput type="number" formControlName="frete">
         </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Seguro</mat-label>
+          <input matInput type="number" formControlName="seguro">
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Outras Despesas</mat-label>
+          <input matInput type="number" formControlName="outrasDesp">
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>ICMS</mat-label>
+          <input matInput type="number" formControlName="icms">
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>IPI</mat-label>
+          <input matInput type="number" formControlName="ipi">
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>PIS</mat-label>
+          <input matInput type="number" formControlName="pis">
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>COFINS</mat-label>
+          <input matInput type="number" formControlName="cofins">
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>ISS</mat-label>
+          <input matInput type="number" formControlName="iss">
+        </mat-form-field>
+
       </form>
 
       <div class="mt-4">

@@ -21,6 +21,7 @@ import { MatCardModule } from '@angular/material/card';
     <mat-card>
       <mat-card-title>Dados de Transporte</mat-card-title>
       <form [formGroup]="formTransporte" class="grid grid-cols-1 md:grid-cols-3 gap-4">
+        
         <mat-form-field appearance="outline">
           <mat-label>Modalidade de Frete</mat-label>
           <mat-select formControlName="modFrete">
@@ -52,9 +53,26 @@ import { MatCardModule } from '@angular/material/card';
         </mat-form-field>
 
         <mat-form-field appearance="outline">
+          <mat-label>Numero Fatura</mat-label>
+          <input matInput formControlName="numeroFatura">
+        </mat-form-field>
+     
+        <mat-form-field appearance="outline">
           <mat-label>Valor do Frete</mat-label>
           <input matInput type="number" formControlName="valorFrete">
         </mat-form-field>
+        
+        <mat-form-field appearance="outline">
+          <mat-label>Desconto Frete</mat-label>
+          <input matInput type="number" formControlName="descontoFrete">
+        </mat-form-field>
+        
+        <mat-form-field appearance="outline">
+          <mat-label>Liquido</mat-label>
+          <input matInput type="number" formControlName="liquidoFrete">
+        </mat-form-field>
+
+
       </form>
     </mat-card>
   `

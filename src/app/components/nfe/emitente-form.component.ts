@@ -28,18 +28,23 @@ import { MatIconModule } from '@angular/material/icon';
       <mat-card-title>Dados do Emitente</mat-card-title>
       <form [formGroup]="formEmitente" class="grid grid-cols-1 md:grid-cols-3 gap-4">
         <mat-form-field appearance="outline">
-          <mat-label>CNPJ</mat-label>
-          <input matInput formControlName="cnpj">
+          <mat-label>CNPJ ou CPF</mat-label>
+          <input matInput formControlName="cnpjCpf">
         </mat-form-field>
 
         <mat-form-field appearance="outline">
-          <mat-label>Razão Social</mat-label>
+          <mat-label>Razão Social / Nome</mat-label>
           <input matInput formControlName="razaoSocial">
         </mat-form-field>
 
         <button mat-icon-button color="primary" (click)="abrirBuscaFornecedor()">
           <mat-icon>search</mat-icon>
         </button>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Nome Fantasia</mat-label>
+          <input matInput formControlName="nomeFantasia">
+        </mat-form-field>
 
         <mat-form-field appearance="outline">
           <mat-label>Inscrição Estadual</mat-label>
@@ -54,6 +59,11 @@ import { MatIconModule } from '@angular/material/icon';
         <mat-form-field appearance="outline">
           <mat-label>Município</mat-label>
           <input matInput formControlName="municipio">
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>CNAE</mat-label>
+          <input matInput formControlName="cnae">
         </mat-form-field>
 
         <mat-form-field appearance="outline">

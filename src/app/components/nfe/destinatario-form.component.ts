@@ -57,6 +57,11 @@ import { MatDialog } from '@angular/material/dialog';
         </mat-form-field>
 
         <mat-form-field appearance="outline">
+          <mat-label>E-mail</mat-label>
+          <input matInput formControlName="email">
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
           <mat-label>Indicador IE</mat-label>
           <mat-select formControlName="indIEDest">
             <mat-option value="1">Contribuinte ICMS</mat-option>
