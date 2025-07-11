@@ -54,6 +54,7 @@ export class BuscaFornecedorDialogComponent {
 
   carregarFornecedores() {
     this.service.getFornecedores().subscribe(data => {
+      console.log('Fornecedores carregados:', data);  // <-- Aqui imprime os dados recebidos da API
       this.fornecedores = data;
       this.fornecedoresFiltrados = data;
     });
@@ -66,7 +67,8 @@ export class BuscaFornecedorDialogComponent {
     );
   }
 
-  selecionar(f: PessoaJuridica) {
+  selecionar(f: JuridicaDTO) {
+    console.log('Fornecedor selecionado no dialog:', f);
     this.dialogRef.close(f); // Aqui está retornando o fornecedor completo
   }
 

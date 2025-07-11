@@ -29,7 +29,7 @@ import { MatIconModule } from '@angular/material/icon';
       <form [formGroup]="formEmitente" class="grid grid-cols-1 md:grid-cols-3 gap-4">
         <mat-form-field appearance="outline">
           <mat-label>CNPJ ou CPF</mat-label>
-          <input matInput formControlName="cnpjCpf">
+          <input matInput formControlName="cnpj">
         </mat-form-field>
 
         <mat-form-field appearance="outline">
@@ -93,13 +93,16 @@ dialogRef.afterClosed().subscribe(result => {
   console.log('Fornecedor selecionado:', result);  // <-- Aqui imprime o que o Dialog retornou
 
   if (result) {
+    console.log('Campos do formEmitente:', this.formEmitente.controls);
+
     this.formEmitente.patchValue({
+      
       razaoSocial: result.razaoSocial,
-      cnpjCpf: result.cnpj,
+      cnpj: result.cnpj,
       nomeFantasia: result.nomeFantasia,
-      ie: result.ie,
+      ie: result.inscEstadual,  // Aqui corrigido!
       uf: result.uf,
-      municipio: result.municipio,
+      municipio: result.cidade, // <-- Corrigido
       cnae: result.cnae,
       crt: result.crt
     });

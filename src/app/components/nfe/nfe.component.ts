@@ -105,10 +105,12 @@ export class NfeComponent {
     this.formEmitente = this.fb.group({
       cnpj: ['12345678000199', Validators.required],
       razaoSocial: ['Empresa Emitente Ltda', Validators.required],
+      nomeFantasia: ['', Validators.required],       
       ie: ['12345678', Validators.required],
       uf: ['SP', Validators.required],
       municipio: ['São Paulo', Validators.required],
-      crt: ['1', Validators.required]
+      crt: ['1', Validators.required],
+      cnae: ['', Validators.required]       
     });
 
     this.formDestinatario = this.fb.group({
