@@ -6,6 +6,7 @@ export interface JuridicaDTO {
   inscEstadual: string;
   inscMunicipal: string;
   nomeFantasia: string;
+  cnae: String;
   razaoSocial: string;
   telefone: string;
   email: string;

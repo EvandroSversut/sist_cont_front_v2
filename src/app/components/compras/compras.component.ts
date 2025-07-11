@@ -19,6 +19,7 @@ import { BuscaFornecedorDialogComponent } from '../dialogs/fornecedor/busca-forn
 import { BuscaProdutoDialogComponent } from '../dialogs/produtos/busca-produto-dialog.component';
 import { ComprasDTO } from '../../model/itens-compra.model';
 import { EmitenteFormComponent } from "../nfe/emitente-form.component";
+import { JuridicaDTO } from '../../dto/juridica.dto';
 
 @Component({
   selector: 'app-compras',
@@ -48,8 +49,8 @@ export class ComprasComponent implements OnInit {
   formItem!: FormGroup;
 
   fornecedorSelecionado!: PessoaJuridica;
-  fornecedores: PessoaJuridica[] = [];
-  fornecedoresFiltrados: PessoaJuridica[] = [];
+  fornecedores: JuridicaDTO[] = [];
+  fornecedoresFiltrados: JuridicaDTO[] = [];
   produtoSelecionado!: Produtos;
   produtos: Produtos[] = [];
   produtosFiltrados: Produtos[] = [];

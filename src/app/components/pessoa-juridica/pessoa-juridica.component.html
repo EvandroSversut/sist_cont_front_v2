@@ -34,6 +34,11 @@
           </mat-form-field>
 
           <mat-form-field appearance="outline">
+            <mat-label>CNAE</mat-label>
+            <input matInput [(ngModel)]="pessoaJur.cnae" name="cnae">
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
             <mat-label>Inscricao Municipal</mat-label>
             <input matInput [(ngModel)]="pessoaJur.inscMunicipal" name="inscMunicipal">
           </mat-form-field>
@@ -93,19 +98,17 @@
       </mat-tab>
 
       <!-- Aba Usuário  -->
-      <mat-tab label="Usuário">
+      <mat-tab label="Outros">
         <div class="form-grid">
           <mat-form-field appearance="outline">
-            <mat-label>Email</mat-label>
-            <input matInput [(ngModel)]="pessoaJur.email" name="email">
+            <mat-label>Outros campo</mat-label>
+            <input matInput [(ngModel)]="pessoaJur.email" name="outro1">
           </mat-form-field>
 
           <mat-form-field appearance="outline">
-            <mat-label>Email</mat-label>
-            <input matInput [(ngModel)]="pessoaJur.email" name="email">
+            <mat-label>Outro2</mat-label>
+            <input matInput [(ngModel)]="pessoaJur.email" name="outro2">
           </mat-form-field>
-
-
           
        <!-- <mat-form-field appearance="outline">
             <mat-label>Senha</mat-label>
@@ -115,23 +118,7 @@
 
         </div>
       </mat-tab>
-     
-       <!-- Aba Usuário  -->
-      <mat-tab label="Usuário">
-        <div class="form-grid">
-          <mat-form-field appearance="outline">
-            <mat-label>Email</mat-label>
-            <input matInput [(ngModel)]="pessoaJur.email" name="email">
-          </mat-form-field>
-
-          <mat-form-field appearance="outline">
-            <mat-label>Email</mat-label>
-            <input matInput [(ngModel)]="pessoaJur.email" name="email">
-          </mat-form-field>
-
-        </div>
-      </mat-tab>
-     
+       
 
     </mat-tab-group>
 

@@ -5,6 +5,7 @@ import { PessoaJuridica } from '../model/pessoa-juridica';
 import { Produtos } from '../model/produtos.model';
 import { Compras } from '../model/compras.model';
 import { ComprasDTO } from '../model/itens-compra.model';
+import { JuridicaDTO } from '../dto/juridica.dto';
 
 @Injectable({
   providedIn: 'root'
@@ -16,8 +17,8 @@ export class ComprasService {
   constructor(private http: HttpClient) { }
 
   // 🔍 Buscar fornecedores
-  getFornecedores(): Observable<PessoaJuridica[]> {
-    return this.http.get<PessoaJuridica[]>(`${this.apiUrl}/pessoa-juridica/listar`);
+  getFornecedores(): Observable<JuridicaDTO[]> {
+    return this.http.get<JuridicaDTO[]>(`${this.apiUrl}/pessoa-juridica/listar`);
   }
 
   // 🔍 Buscar produtos

@@ -88,10 +88,23 @@ abrirBuscaFornecedor() {
     width: '800px'
   });
 
-  dialogRef.afterClosed().subscribe(result => {
-    if (result) {
-      this.formEmitente.patchValue({ razaoSocial: result.razaoSocial, cnpj: result.cnpj });
-    }
-  });
+dialogRef.afterClosed().subscribe(result => {
+
+  console.log('Fornecedor selecionado:', result);  // <-- Aqui imprime o que o Dialog retornou
+
+  if (result) {
+    this.formEmitente.patchValue({
+      razaoSocial: result.razaoSocial,
+      cnpjCpf: result.cnpj,
+      nomeFantasia: result.nomeFantasia,
+      ie: result.ie,
+      uf: result.uf,
+      municipio: result.municipio,
+      cnae: result.cnae,
+      crt: result.crt
+    });
+  }
+});
+
  }
 }

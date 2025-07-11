@@ -7,6 +7,7 @@ export interface PessoaJuridica extends Pessoa {
   cnpj: string;
   inscEstadual: string;
   inscMunicipal: string;
+  cnae: string;
  
 
 }

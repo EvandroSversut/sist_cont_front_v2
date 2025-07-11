@@ -14,6 +14,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatDialogModule } from '@angular/material/dialog';
 import { PessoaJuridica } from '../../../model/pessoa-juridica';
 import { ComprasService } from '../../../services/compras.service';
+import { JuridicaDTO } from '../../../dto/juridica.dto';
 
 
 
@@ -39,8 +40,8 @@ import { ComprasService } from '../../../services/compras.service';
   ]
 })
 export class BuscaFornecedorDialogComponent {
-  fornecedores: PessoaJuridica[] = [];
-  fornecedoresFiltrados: PessoaJuridica[] = [];
+  fornecedores: JuridicaDTO[] = [];
+  fornecedoresFiltrados: JuridicaDTO[] = [];
   filtro = '';
 
   constructor(
@@ -65,8 +66,8 @@ export class BuscaFornecedorDialogComponent {
     );
   }
 
-  selecionar(fornecedor: PessoaJuridica) {
-    this.dialogRef.close(fornecedor);
+  selecionar(f: PessoaJuridica) {
+    this.dialogRef.close(f); // Aqui está retornando o fornecedor completo
   }
 
   fechar() {

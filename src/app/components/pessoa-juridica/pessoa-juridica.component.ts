@@ -99,6 +99,7 @@ export class PessoaJuridicaComponent {
       razaoSocial: '',
       cnpj: '',
       inscEstadual: '',
+      cnae: '',
       inscMunicipal: '',
       nomeFantasia: '',
       telefone: '',
