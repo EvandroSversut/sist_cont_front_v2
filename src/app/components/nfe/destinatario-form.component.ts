@@ -41,6 +41,11 @@ import { MatDialog } from '@angular/material/dialog';
           <mat-icon>search</mat-icon>
         </button>
 
+ <mat-form-field appearance="outline">
+          <mat-label>Nome Fantasia</mat-label>
+          <input matInput formControlName="nomeFantasia">
+        </mat-form-field>
+
         <mat-form-field appearance="outline">
           <mat-label>Inscrição Estadual</mat-label>
           <input matInput formControlName="ie">
@@ -57,8 +62,17 @@ import { MatDialog } from '@angular/material/dialog';
         </mat-form-field>
 
         <mat-form-field appearance="outline">
-          <mat-label>E-mail</mat-label>
-          <input matInput formControlName="email">
+          <mat-label>CNAE</mat-label>
+          <input matInput formControlName="cnae">
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Regime Tributário</mat-label>
+          <mat-select formControlName="crt">
+            <mat-option value="1">Simples Nacional</mat-option>
+            <mat-option value="2">Simples Nacional - excesso sublimite</mat-option>
+            <mat-option value="3">Regime Normal</mat-option>
+          </mat-select>
         </mat-form-field>
 
         <mat-form-field appearance="outline">
@@ -84,8 +98,21 @@ export class DestinatarioFormComponent {
     });
   
     dialogRef.afterClosed().subscribe(result => {
+
+      console.log('Fornecedor selecionado:', result);  // <-- Aqui imprime o que o Dialog retornou
+
       if (result) {
-        this.formDestinatario.patchValue({ razaoSocial: result.razaoSocial, cnpj: result.cnpj });
+        console.log('Campos do formEmitente:', this.formDestinatario.controls);
+        this.formDestinatario.patchValue({ 
+          razaoSocial: result.razaoSocial, 
+          cnpj: result.cnpj,
+          nomeFantasia: result.nomeFantasia,
+          ie: result.inscEstadual,  // Aqui corrigido!
+          uf: result.uf,
+          municipio: result.cidade, // <-- Corrigido
+          cnae: result.cnae,
+          crt: result.crt
+        });
       }
     });
    }

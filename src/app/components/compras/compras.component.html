@@ -5,8 +5,7 @@
     <mat-card-title>Dados da Compra</mat-card-title>
     <mat-card-content>
 
-      <app-emitente-form (buscarFornecedor)="abrirBuscaFornecedor()"></app-emitente-form>
-
+     
       <div class="linha-campos">
         <mat-form-field>
           <mat-label>Fornecedor</mat-label>
@@ -79,10 +78,9 @@
         </mat-form-field>
 
         <mat-form-field>
-  <mat-label>Desconto</mat-label>
-  <input type="number" matInput formControlName="desconto" step="0.01" min="0" />
-</mat-form-field>
-
+          <mat-label>Desconto</mat-label>
+          <input type="number" matInput formControlName="desconto" step="0.01" min="0" />
+        </mat-form-field>
 
         <mat-form-field>
           <mat-label>Valor Total</mat-label>

@@ -34,7 +34,7 @@ import { MatIconModule } from '@angular/material/icon';
 
         <mat-form-field appearance="outline">
           <mat-label>Id Chave de Acesso</mat-label>
-          <input matInput formControlName="Id Chave de Acesso">
+          <input matInput formControlName="idChaveAcesso">
         </mat-form-field>
 
     <mat-card-title>Identificação da NFe</mat-card-title>

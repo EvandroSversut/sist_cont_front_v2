@@ -39,8 +39,7 @@ import { JuridicaDTO } from '../../dto/juridica.dto';
     MatTableModule,
     MatDialogModule,
     MatDatepickerModule,
-    MatNativeDateModule,
-    EmitenteFormComponent
+    MatNativeDateModule
 ]
 })
 export class ComprasComponent implements OnInit {
@@ -96,12 +95,13 @@ export class ComprasComponent implements OnInit {
     this.carregarComprasSalvas();
     this.limparFormulario();
 
-    this.produtoCtrl.valueChanges.subscribe(valor => {
+      this.produtoCtrl.valueChanges.subscribe(valor => {
       this.produtosFiltrados = this.produtos.filter(p =>
         p.nomeProduto.toLowerCase().includes((valor || '').toLowerCase())
       );
     });
 
+    // isso aqui faz o calculo da qde x vrUnitario ao mudar o input: "valueChanges" faz isso
     this.formItem.get('quantidade')!.valueChanges.subscribe(() => this.atualizaValorTotal());
     this.formItem.get('valorUnitario')!.valueChanges.subscribe(() => this.atualizaValorTotal());
     this.formItem.get('desconto')!.valueChanges.subscribe(() => this.atualizaValorTotal());

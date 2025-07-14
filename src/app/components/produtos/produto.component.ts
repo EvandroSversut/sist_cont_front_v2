@@ -36,6 +36,7 @@ export class ProdutoComponent implements OnInit {
     id: undefined,
     nomeProduto: '',
     unidade: '',
+    ncm: '',
     descricao: '',
     valorUnitario: 0
   };
@@ -91,6 +92,7 @@ export class ProdutoComponent implements OnInit {
     id: undefined,
     nomeProduto: '',
     unidade: '',
+    ncm: '',
     descricao: '',
     valorUnitario: 0  // <-- adicione aqui para não dar erro
   };

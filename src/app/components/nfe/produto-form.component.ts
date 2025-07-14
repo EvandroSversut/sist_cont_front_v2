@@ -53,15 +53,15 @@ import { MatAutocompleteModule } from '@angular/material/autocomplete';
           <mat-label>NCM</mat-label>
           <input matInput formControlName="ncm">
         </mat-form-field>
+        
+        <mat-form-field appearance="outline">
+          <mat-label>Unidade</mat-label>
+          <input matInput formControlName="unidade">
+        </mat-form-field>
 
         <mat-form-field appearance="outline">
           <mat-label>CFOP</mat-label>
           <input matInput formControlName="cfop">
-        </mat-form-field>
-
-        <mat-form-field appearance="outline">
-          <mat-label>Unidade</mat-label>
-          <input matInput formControlName="unidade">
         </mat-form-field>
 
         <mat-form-field appearance="outline">
@@ -72,11 +72,6 @@ import { MatAutocompleteModule } from '@angular/material/autocomplete';
         <mat-form-field appearance="outline">
           <mat-label>Valor Unitário</mat-label>
           <input matInput type="number" formControlName="valorUnitario">
-        </mat-form-field>
-
-        <mat-form-field appearance="outline">
-          <mat-label>Total Produto</mat-label>
-          <input matInput type="number" formControlName="totalProd">
         </mat-form-field>
 
         <mat-form-field appearance="outline">
@@ -97,6 +92,11 @@ import { MatAutocompleteModule } from '@angular/material/autocomplete';
         <mat-form-field appearance="outline">
           <mat-label>Outras Despesas</mat-label>
           <input matInput type="number" formControlName="outrasDesp">
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Total Produto</mat-label>
+          <input matInput type="number" formControlName="totalProd">
         </mat-form-field>
 
         <mat-form-field appearance="outline">
@@ -153,17 +153,37 @@ export class ProdutoFormComponent {
       cfop: ['', Validators.required],
       unidade: ['', Validators.required],
       quantidade: [1, [Validators.required, Validators.min(0.0001)]],
-      valorUnitario: [0, [Validators.required, Validators.min(0)]],
-      desconto: [0],
-      aliquotaIcms: [0, [Validators.required, Validators.min(0)]]
+      valorUnitario: ['', [Validators.required, Validators.min(0)]],
+      desconto: [''],
+      frete: [''],
+      seguro: [''],
+      outrasDesp: [''],
+      totalProd: [{ value: 0, disabled: true }],  // Adicionado aqui
       
     });
+
+    
+    this.formProduto.valueChanges.subscribe(() => {
+    this.atualizaValorTotal();
+});
+
   }
 
   adicionarProduto() {
     if (this.formProduto.valid) {
-      this.produtoAdicionado.emit(this.formProduto.value);
-      this.formProduto.reset({ quantidade: 1, valorUnitario: 0, desconto: 0, aliquotaIcms: 0 });
+      // Habilita o campo para pegar o valor ao emitir
+      this.formProduto.get('totalProd')?.enable({ emitEvent: false });
+
+      // Captura o valor com total incluso
+      const produto = this.formProduto.getRawValue();
+
+      this.produtoAdicionado.emit(produto);
+
+       // Desativa novamente se quiser continuar deixando o campo bloqueado
+      this.formProduto.get('totalProd')?.disable({ emitEvent: false });
+      
+      // Reset padrão
+      this.formProduto.reset({ quantidade: 1, valorUnitario: 0, desconto: 0 });
     }
   }
 
@@ -173,24 +193,46 @@ export class ProdutoFormComponent {
       });
   
       dialogRef.afterClosed().subscribe(result => {
-        if (result) {
-          this.produtoSelecionado = result;
-          this.produtoCtrl.setValue(result.nomeProduto);
-          this.formItem.patchValue({
-            valorUnitario: result.valorUnitario || 0,
-            quantidade: 1
+    console.log('Produto selecionado:', result);
+    if (result) {
+      this.produtoSelecionado = result;
+      this.produtoCtrl.setValue(result.nomeProduto);
+   
+      // o primeiro codigo à esquerda é o input do html: <input matInput formControlName="codigo">
+      // o segundo codigo à direita é o que vem do banco ou objeto selecionado no dialog
+      this.formProduto.patchValue({
+        codigo: result.id,                          
+        descricao: result.nomeProduto,
+        ncm: result.ncm,
+        unidade: result.unidade
+              
           });
           this.atualizaValorTotal();
         }
       });
     }
-      atualizaValorTotal() {
+
+    // Importante: para calcular esses campos, 
+    // precisa adicionar no "formProduto" que está no construtor
+    atualizaValorTotal() {
+    const qtde = this.formProduto.get('quantidade')!.value || 0;
+    const unit = this.formProduto.get('valorUnitario')!.value || 0;
+    const desconto = this.formProduto.get('desconto')!.value || 0;
+    const frete = this.formProduto.get('frete')!.value || 0;
+    const seguro = this.formProduto.get('seguro')!.value || 0;
+    const outrasDesp = this.formProduto.get('outrasDesp')!.value || 0;
+    const total = (qtde * unit) + ( - desconto + frete + seguro + outrasDesp);
+    this.formProduto.get('totalProd')!.setValue(total >= 0 ? total : 0);
+  }
+
+ /*   atualizaValorTotal() {
     const qtde = this.formItem.get('quantidade')!.value || 0;
     const unit = this.formItem.get('valorUnitario')!.value || 0;
     const desconto = this.formItem.get('desconto')!.value || 0;
     const total = (qtde * unit) - desconto;
     this.formItem.get('valorTotal')!.setValue(total >= 0 ? total : 0);
   }
+    */
 
    selecionaProduto(nome: string) {
     const produto = this.produtos.find(p => p.nomeProduto === nome);

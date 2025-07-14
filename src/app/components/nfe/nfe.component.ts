@@ -14,7 +14,7 @@ import { TransporteFormComponent } from './transporte-form.component';
 import { PagamentoFormComponent } from './pagamento-form';
 import { NfeXmlService } from './nfe-xml.service';
 import { MatIconModule } from '@angular/material/icon';
-import { NfeService } from '../../services/nfe.service';
+import { NfeService } from '../../services/nfe/nfe.service';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { GeraisNfeComponent } from "./geraisNfe-form.component";
 
@@ -40,6 +40,7 @@ import { GeraisNfeComponent } from "./geraisNfe-form.component";
     GeraisNfeComponent
 ],
   template: `
+  <div style="display: flex; justify-content: flex-end;">
     <div class="p-4 space-y-4">
     <h1 class="text-xl font-bold">Emissão de Nota Fiscal Eletrônica (NF-e)</h1>
 
@@ -78,6 +79,7 @@ import { GeraisNfeComponent } from "./geraisNfe-form.component";
       <button mat-raised-button color="accent" (click)="emitirNfe()">Emitir NF-e</button>
     </div>
   </div>
+  </div>
 `
 
 })
@@ -95,35 +97,59 @@ export class NfeComponent {
   constructor(
     private fb: FormBuilder,
     private xmlService: NfeXmlService,
-    private nfeService: NfeService // ✅ injeção do service
+   // private nfeService: NfeService // ✅ injeção do service
+   private nfeService: NfeService
    ) {
 
     this.formGeral = this.fb.group({
-      
-    })
+  layout: ['7.0'],
+  idChaveAcesso: ['45644654654654'], // ⚠️ o campo estava escrito como "Id Chave de Acesso", o correto é evitar espaços
+  ufEmitente: ['SP'],
+  codNumericoNFe: ['112233'],
+  natOperacao: ['1'],
+  crt: ['55'],
+  serie: ['1'],
+  numeroNFe: ['58200'],
+  dtHrEmissao: ['19:07'],
+  dtHrSaida: ['19:07'],
+  tipo: ['1'],
+  destinoOpe: ['1'],
+  ibge: ['3525'],
+  formatoDanfe: ['NAO SEI'],
+  tipoEmissao: ['normal'],
+  digitoChave: ['1'],
+  ambiente: ['1'],
+  finalidade: ['1'],
+  consumidorFinal: ['1'],
+  vendaPresencial: ['2'],
+  processoVersaoEmissor: ['2']
+});
+
 
     this.formEmitente = this.fb.group({
       cnpj: ['12345678000199', Validators.required],
       razaoSocial: ['Empresa Emitente Ltda', Validators.required],
-      nomeFantasia: ['', Validators.required],       
+      nomeFantasia: ['emitente', Validators.required],       
       ie: ['12345678', Validators.required],
       uf: ['SP', Validators.required],
       municipio: ['São Paulo', Validators.required],
       crt: ['1', Validators.required],
-      cnae: ['', Validators.required]       
+      cnae: ['45.55.22', Validators.required]       
     });
 
     this.formDestinatario = this.fb.group({
-      cnpj: ['98765432000199', Validators.required],
-    razaoSocial: ['Cliente Destinatário SA', Validators.required],
-    ie: ['87654321', Validators.required],
-    uf: ['RJ', Validators.required],
-    municipio: ['Rio de Janeiro', Validators.required],
-    indIEDest: ['9', Validators.required]
+      cnpj: ['456', Validators.required],
+      razaoSocial: ['empresa b', Validators.required],
+      nomeFantasia: ['empresa', Validators.required],
+      cnae: ['55.55.22', Validators.required],
+      ie: ['445566', Validators.required],
+      uf: ['sp', Validators.required],
+      municipio: ['birigui', Validators.required],
+      indIEDest: ['54546', Validators.required]
     });
 
     this.formTransporte = this.fb.group({
-   modFrete: ['1', Validators.required],
+    modFrete: ['1', Validators.required],
     transportadora: ['Transportadora XYZ'],
     cnpjTransportadora: ['55667788000199'],
     placaVeiculo: ['ABC1D23'],
@@ -137,6 +163,7 @@ export class NfeComponent {
     valorTroco: [0]
   });
 
+ 
    // ✅ Mock inicial dos produtos
   this.produtos = [
   {
@@ -155,26 +182,47 @@ export class NfeComponent {
     aliquotaIcms: 18,
     valorTotal: 200 // Exemplo: (200 * 1) - 0
   }
-];
+]; 
 
   }
 
   adicionarProduto(produto: any) {
-    this.produtos.push(produto);
+    //this.produtos.push(produto);
+
+    this.produtos = [...this.produtos, produto]; // cria novo array. 🔁 força atualização da tabela
+
     console.log('➕ Produto adicionado:', produto);
     
   }
 
   removerProduto(index: number) {
-    const removido = this.produtos.splice(index, 1);
-    console.log('🗑️ Produto removido:', removido);
-  }
+  const removido = this.produtos[index];
+  this.produtos = this.produtos.filter((_, i) => i !== index);
+  console.log('🗑️ Produto removido:', removido);
+}
+  
 
   salvarNfe() {
+    console.log('📑 Dados Gerais:', this.formGeral.value);
+    console.log('Emitente válido?', this.formEmitente.valid);
+    console.log('Destinatário válido?', this.formDestinatario.valid);
+    console.log('Produtos:', this.produtos);
+    console.log('Emitente:', this.formEmitente.value);
+    console.log('Destinatário:', this.formDestinatario.value);
+
     if (this.formEmitente.invalid || this.formDestinatario.invalid || this.produtos.length === 0) {
       alert('Preencha todos os dados corretamente e adicione pelo menos um produto.');
       return;
     }
+
+    const notaFiscal = {
+    gerais: this.formGeral.value,
+    emitente: this.formEmitente.value,
+    destinatario: this.formDestinatario.value,
+    produtos: this.produtos,
+    transporte: this.formTransporte.value,
+    pagamento: this.formPagamento.value
+  };
 
     console.log('📤 Emitente:', this.formEmitente.value);
     console.log('📤 Destinatário:', this.formDestinatario.value);
@@ -183,7 +231,18 @@ export class NfeComponent {
     console.log('💵 Pagamento:', this.formPagamento.value);
   
     // No futuro: enviar todos os dados para o backend
-  }
+    this.nfeService.enviarNotaFiscal(notaFiscal).subscribe({
+    next: (res) => {
+      console.log('✅ NF-e salva com sucesso:', res);
+      alert('NF-e salva com sucesso!');
+    },
+    error: (err) => {
+      console.error('❌ Erro ao salvar NF-e:', err);
+      alert('Erro ao salvar a NF-e. Verifique os dados e tente novamente.');
+    }
+  });
+}
+  
 
   emitirNfe() {
   const dadosNota = {
