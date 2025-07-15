@@ -89,6 +89,7 @@ export class NfeComponent {
   formDestinatario: FormGroup;
   formTransporte: FormGroup;
   formPagamento: FormGroup;
+  formTotal!: FormGroup;
 
   // @Output() buscarFornecedor = new EventEmitter<void>();
 
@@ -127,7 +128,7 @@ export class NfeComponent {
 
 
     this.formEmitente = this.fb.group({
-      cnpj: ['12345678000199', Validators.required],
+      cnpj: ['23.335.656/0001-58', Validators.required],
       razaoSocial: ['Empresa Emitente Ltda', Validators.required],
       nomeFantasia: ['emitente', Validators.required],       
       ie: ['12345678', Validators.required],
@@ -145,8 +146,9 @@ export class NfeComponent {
       ie: ['445566', Validators.required],
       uf: ['sp', Validators.required],
       municipio: ['birigui', Validators.required],
-      indIEDest: ['54546', Validators.required]
-    });
+      indIEDest: ['1', Validators.required],
+      crt: ['1', Validators.required],
+      });
 
     this.formTransporte = this.fb.group({
     modFrete: ['1', Validators.required],
@@ -162,6 +164,13 @@ export class NfeComponent {
     valorPago: [500, Validators.required],
     valorTroco: [0]
   });
+
+    this.formTotal = this.fb.group({
+      baseCalculo: ['20000', Validators.required],
+      vrIcms: ['18%', Validators.required],
+      vrTotalProd: ['19000', Validators.required],
+      vrTotalNfe: ['21000', Validators.required]
+    })
 
  
    // ✅ Mock inicial dos produtos

@@ -67,6 +67,7 @@ export class TotaisResumoComponent {
   @Input() produtos: any[] = [];
   @Input() formTotal!: FormGroup;
 
+
   get totalBruto(): number {
     return this.produtos.reduce((acc, p) => acc + (p.quantidade * p.valorUnitario), 0);
   }
