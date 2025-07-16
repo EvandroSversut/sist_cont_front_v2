@@ -150,16 +150,21 @@ export class ProdutoFormComponent {
       codigo: ['', Validators.required],
       descricao: ['', Validators.required],
       ncm: ['', Validators.required],
-      cfop: ['', Validators.required],
       unidade: ['', Validators.required],
-      quantidade: [1, [Validators.required, Validators.min(0.0001)]],
+      cfop: ['', Validators.required],
+      quantidade: ['', [Validators.required, Validators.min(0.0001)]],
       valorUnitario: ['', [Validators.required, Validators.min(0)]],
       desconto: [''],
       frete: [''],
       seguro: [''],
       outrasDesp: [''],
-      totalProd: [{ value: 0, disabled: true }],  // Adicionado aqui
-      
+      totalProd: [{ value: 0, disabled: true }],
+      icms: [''],
+      ipi: [''],
+      pis: [''],
+      cofins: [''],
+      iss: [''],
+      // ✅ agora sim, todos os campos serão enviados
     });
 
     
@@ -175,6 +180,8 @@ export class ProdutoFormComponent {
       this.formProduto.get('totalProd')?.enable({ emitEvent: false });
 
       // Captura o valor com total incluso
+      // Aqui o Angular incluir todos os campos declarados no FormGroup no Construtor
+      // mesmo que nao apareca na tabela.
       const produto = this.formProduto.getRawValue();
 
       this.produtoAdicionado.emit(produto);

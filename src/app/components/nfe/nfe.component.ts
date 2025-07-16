@@ -172,7 +172,7 @@ export class NfeComponent {
       vrTotalNfe: ['21000', Validators.required]
     })
 
- 
+ /*
    // ✅ Mock inicial dos produtos
   this.produtos = [
   {
@@ -192,11 +192,13 @@ export class NfeComponent {
     valorTotal: 200 // Exemplo: (200 * 1) - 0
   }
 ]; 
+*/
 
   }
 
   adicionarProduto(produto: any) {
     //this.produtos.push(produto);
+    console.log('📦 Produtos que serão enviados:', JSON.stringify(this.produtos, null, 2));
 
     this.produtos = [...this.produtos, produto]; // cria novo array. 🔁 força atualização da tabela
 
@@ -230,7 +232,8 @@ export class NfeComponent {
     destinatario: this.formDestinatario.value,
     produtos: this.produtos,
     transporte: this.formTransporte.value,
-    pagamento: this.formPagamento.value
+    pagamento: this.formPagamento.value,
+    formTotal: this.formTotal.value
   };
 
     console.log('📤 Emitente:', this.formEmitente.value);
