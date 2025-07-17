@@ -128,10 +128,10 @@ this.formGeral = this.fb.group({
   vendaPresencial: ['2'],
   processoVersaoEmissor: ['2'],
   totais: this.fb.group({ // 👈 esse é o FormGroup aninhado
-    baseCalculo: ['46'],
-    vrIcms: ['4564'],
-    vrTotalProd: ['7897'],
-    vrTotalNfe: ['456456']
+    baseCalculo: [''],
+    vrIcms: [''],
+    vrTotalProd: [''],
+    vrTotalNfe: ['']
   })
   
 });
@@ -176,10 +176,10 @@ console.log(this.formGeral.get('totais')?.value);
   });
 
     this.formTotal = this.fb.group({
-      baseCalculo: ['20000', Validators.required],
-      vrIcms: ['18%', Validators.required],
-      vrTotalProd: ['19000', Validators.required],
-      vrTotalNfe: ['21000', Validators.required]
+      baseCalculo: ['', Validators.required],
+      vrIcms: ['', Validators.required],
+      vrTotalProd: ['', Validators.required],
+      vrTotalNfe: ['', Validators.required]
     })
 
  /*
@@ -218,7 +218,7 @@ console.log(this.formGeral.get('totais')?.value);
   adicionarProduto(produto: any) {
     //this.produtos.push(produto);
     console.log('📦 Produtos que serão enviados:', JSON.stringify(this.produtos, null, 2));
-
+    
     this.produtos = [...this.produtos, produto]; // cria novo array. 🔁 força atualização da tabela
 
     console.log('➕ Produto adicionado:', produto);
@@ -245,15 +245,20 @@ console.log(this.formGeral.get('totais')?.value);
       return;
     }
 
+    // 🔁 Unifica os campos gerais e os totais (form aninhado) em um único objeto
+    // para enviar ao backend no mesmo nível, conforme estrutura do DTO (GeraisDTO)
     const notaFiscal = {
-    gerais: this.formGeral.value,
-    emitente: this.formEmitente.value,
-    destinatario: this.formDestinatario.value,
-    produtos: this.produtos,
-    transporte: this.formTransporte.value,
-    pagamento: this.formPagamento.value,
-    formTotal: this.formTotal.value
-  };
+      gerais: {
+        ...this.formGeral.value,
+        ...this.formGeral.get('totais')?.value // 🔁 move os campos totais para o mesmo nível
+      },
+      emitente: this.formEmitente.value,
+      destinatario: this.formDestinatario.value,
+      produtos: this.produtos,
+      transporte: this.formTransporte.value,
+      pagamento: this.formPagamento.value
+    };
+
 
     console.log('📤 Emitente:', this.formEmitente.value);
     console.log('📤 Destinatário:', this.formDestinatario.value);

@@ -26,10 +26,11 @@ import { MatAutocompleteModule } from '@angular/material/autocomplete';
     MatIconModule,
     MatAutocompleteModule
   ],
+  
   template: `
     <mat-card>
       <mat-card-title>Adicionar Produto</mat-card-title>
-      <form [formGroup]="formProduto" class="grid grid-cols-1 md:grid-cols-3 gap-4">
+      <form [formGroup]="formProduto" class="grid grid-cols-1 md:grid-cols-3 gap-4" style="text-align: center;">
         <mat-form-field appearance="outline">
           <mat-label>Código</mat-label>
           <input matInput formControlName="codigo">
@@ -95,16 +96,6 @@ import { MatAutocompleteModule } from '@angular/material/autocomplete';
         </mat-form-field>
 
         <mat-form-field appearance="outline">
-          <mat-label>Total Produto</mat-label>
-          <input matInput type="number" formControlName="totalProd">
-        </mat-form-field>
-
-        <mat-form-field appearance="outline">
-          <mat-label>ICMS</mat-label>
-          <input matInput type="number" formControlName="icms">
-        </mat-form-field>
-
-        <mat-form-field appearance="outline">
           <mat-label>IPI</mat-label>
           <input matInput type="number" formControlName="ipi">
         </mat-form-field>
@@ -122,6 +113,16 @@ import { MatAutocompleteModule } from '@angular/material/autocomplete';
         <mat-form-field appearance="outline">
           <mat-label>ISS</mat-label>
           <input matInput type="number" formControlName="iss">
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Alíquota ICMS (%)</mat-label>
+          <input matInput type="number" formControlName="aliquotaIcms">
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Total Produto</mat-label>
+          <input matInput type="number" formControlName="totalProd">
         </mat-form-field>
 
       </form>
@@ -146,6 +147,7 @@ export class ProdutoFormComponent {
   produtosFiltrados: Produtos[] = [];
 
   constructor(private fb: FormBuilder, private dialog: MatDialog) {
+
     this.formProduto = this.fb.group({
       codigo: ['', Validators.required],
       descricao: ['', Validators.required],
@@ -153,7 +155,7 @@ export class ProdutoFormComponent {
       unidade: ['', Validators.required],
       cfop: ['', Validators.required],
       quantidade: ['', [Validators.required, Validators.min(0.0001)]],
-      valorUnitario: ['', [Validators.required, Validators.min(0)]],
+      valorUnitario: ['', Validators.required],
       desconto: [''],
       frete: [''],
       seguro: [''],
@@ -164,6 +166,7 @@ export class ProdutoFormComponent {
       pis: [''],
       cofins: [''],
       iss: [''],
+      aliquotaIcms: ['', Validators.required] // isso faz referencia ao input "aliquotaIcms"
       // ✅ agora sim, todos os campos serão enviados
     });
 
