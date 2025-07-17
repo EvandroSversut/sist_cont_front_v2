@@ -63,7 +63,10 @@ import { GeraisNfeComponent } from "./geraisNfe-form.component";
 
     <!-- Seção: Totais da Nota -->
     <h2 class="text-lg font-semibold mt-4">Total da Nota Fiscal</h2>
-    <app-totais-resumo [produtos]="produtos"></app-totais-resumo>
+    <app-totais-resumo 
+      [produtos]="produtos" 
+      [formTotal]="totaisForm">
+    </app-totais-resumo>
 
     <!-- Seção: Transporte -->
     <h2 class="text-lg font-semibold mt-4">Transporte</h2>
@@ -102,7 +105,7 @@ export class NfeComponent {
    private nfeService: NfeService
    ) {
 
-    this.formGeral = this.fb.group({
+this.formGeral = this.fb.group({
   layout: ['7.0'],
   idChaveAcesso: ['45644654654654'], // ⚠️ o campo estava escrito como "Id Chave de Acesso", o correto é evitar espaços
   ufEmitente: ['SP'],
@@ -123,9 +126,16 @@ export class NfeComponent {
   finalidade: ['1'],
   consumidorFinal: ['1'],
   vendaPresencial: ['2'],
-  processoVersaoEmissor: ['2']
+  processoVersaoEmissor: ['2'],
+  totais: this.fb.group({ // 👈 esse é o FormGroup aninhado
+    baseCalculo: ['46'],
+    vrIcms: ['4564'],
+    vrTotalProd: ['7897'],
+    vrTotalNfe: ['456456']
+  })
+  
 });
-
+console.log(this.formGeral.get('totais')?.value);
 
     this.formEmitente = this.fb.group({
       cnpj: ['23.335.656/0001-58', Validators.required],
@@ -193,8 +203,17 @@ export class NfeComponent {
   }
 ]; 
 */
-
   }
+
+     // 🔧 Getter criado para acessar o grupo 'totais' do formGeral de forma segura e tipada.
+    // Isso é necessário porque, ao usar formGeral.get('totais') diretamente no HTML, o Angular
+    // reconhece o retorno como AbstractControl, e não como FormGroup — o que gera erro de tipagem.
+    // Com esse getter, o cast para FormGroup é feito aqui no TypeScript, garantindo que o
+    // template HTML possa utilizar normalmente o formTotal sem erros de compilação.
+    get totaisForm(): FormGroup {
+      return this.formGeral.get('totais') as FormGroup;
+    }
+
 
   adicionarProduto(produto: any) {
     //this.produtos.push(produto);
