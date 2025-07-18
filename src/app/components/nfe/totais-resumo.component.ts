@@ -29,22 +29,22 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 
         <mat-form-field appearance="outline">
           <mat-label>Valor Total Produtos</mat-label>
-          <input matInput type="number" formControlName="vrTotalProd">
+          <input matInput type="text" [value]="formTotal.get('vrTotalProd')?.value | currency:'BRL':'symbol':'1.2-2'" readonly>
         </mat-form-field>
 
-<mat-form-field appearance="outline">
-  <mat-label>Base de Cálculo</mat-label>
-  <input matInput type="text" [value]="formTotal.get('baseCalculo')?.value | currency:'BRL':'symbol':'1.2-2'" readonly>
-</mat-form-field>
+        <mat-form-field appearance="outline">
+          <mat-label>Base de Cálculo</mat-label>
+          <input matInput type="text" [value]="formTotal.get('baseCalculo')?.value | currency:'BRL':'symbol':'1.2-2'" readonly>
+        </mat-form-field>
 
         <mat-form-field appearance="outline">
           <mat-label>Valor ICMS</mat-label>
-          <input matInput type="number" formControlName="vrIcms">
+          <input matInput type="text" [value]="formTotal.get('vrIcms')?.value | currency:'BRL':'symbol':'1.2-2'" readonly>
         </mat-form-field>
       
         <mat-form-field appearance="outline">
           <mat-label>Valor Total NF-e</mat-label>
-          <input matInput type="number" formControlName="vrTotalNfe">
+          <input matInput type="text" [value]="formTotal.get('vrTotalNfe')?.value | currency:'BRL':'symbol':'1.2-2'" readonly>
         </mat-form-field>
 
       </form>
