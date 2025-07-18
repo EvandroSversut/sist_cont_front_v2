@@ -30,7 +30,7 @@ import { MatAutocompleteModule } from '@angular/material/autocomplete';
   template: `
     <mat-card>
       <mat-card-title>Adicionar Produto</mat-card-title>
-      <form [formGroup]="formProduto" class="grid grid-cols-1 md:grid-cols-3 gap-4" style="text-align: center;">
+      <form [formGroup]="formProduto" class="grid grid-cols-1 md:grid-cols-3 gap-4">
         <mat-form-field appearance="outline">
           <mat-label>Código</mat-label>
           <input matInput formControlName="codigo">

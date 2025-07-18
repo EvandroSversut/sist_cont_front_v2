@@ -222,13 +222,34 @@ console.log(this.formGeral.get('totais')?.value);
     this.produtos = [...this.produtos, produto]; // cria novo array. 🔁 força atualização da tabela
 
     console.log('➕ Produto adicionado:', produto);
+
+    this.atualizarTotais();
     
   }
+
+  atualizarTotais() {
+  const totalBruto = this.produtos.reduce((acc, p) => acc + (p.quantidade * p.valorUnitario), 0);
+  const totalDesconto = this.produtos.reduce((acc, p) => acc + p.desconto, 0);
+  const totalIcms = this.produtos.reduce((acc, p) => {
+    const base = p.quantidade * p.valorUnitario - p.desconto;
+    return acc + ((base * p.aliquotaIcms) / 100);
+  }, 0);
+  const totalLiquido = totalBruto - totalDesconto;
+
+  this.totaisForm.patchValue({
+    baseCalculo: totalBruto - totalDesconto,
+    vrIcms: totalIcms,
+    vrTotalProd: totalBruto,
+    vrTotalNfe: totalLiquido
+  });
+}
+
 
   removerProduto(index: number) {
   const removido = this.produtos[index];
   this.produtos = this.produtos.filter((_, i) => i !== index);
   console.log('🗑️ Produto removido:', removido);
+   this.atualizarTotais();
 }
   
 

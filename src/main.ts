@@ -12,6 +12,12 @@ import { PessoaJuridicaComponent } from './app/components/pessoa-juridica/pessoa
 
 import { routes } from './app/app.routes';
 
+import { LOCALE_ID } from '@angular/core';
+import localePt from '@angular/common/locales/pt';
+import { registerLocaleData } from '@angular/common';
+
+registerLocaleData(localePt);
+
 bootstrapApplication(AppComponent, {
   providers: [
     provideHttpClient(withInterceptors([authInterceptor])),
