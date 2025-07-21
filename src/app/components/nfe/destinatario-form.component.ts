@@ -2,7 +2,7 @@
 
 import { Component, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
@@ -41,14 +41,18 @@ import { MatDialog } from '@angular/material/dialog';
           <mat-icon>search</mat-icon>
         </button>
 
- <mat-form-field appearance="outline">
+        <mat-form-field appearance="outline">
           <mat-label>Nome Fantasia</mat-label>
           <input matInput formControlName="nomeFantasia">
         </mat-form-field>
 
-        <mat-form-field appearance="outline">
+        <mat-form-field appearance="outline" style="width: 310px; margin-bottom: 20px;">
           <mat-label>Inscrição Estadual</mat-label>
           <input matInput formControlName="ie">
+          <mat-error *ngIf="formDestinatario.get('ie')?.hasError('required')"
+            style="font-size: 9px; color: #d32f2f;">
+            Inscrição Estadual é obrigatória para contribuintes ICMS.
+          </mat-error>
         </mat-form-field>
 
         <mat-form-field appearance="outline">
@@ -92,6 +96,20 @@ export class DestinatarioFormComponent {
 
   constructor(private dialog: MatDialog) {}
   
+    ngOnInit() {
+    this.formDestinatario.get('indIEDest')?.valueChanges.subscribe(value => {
+      const ieControl = this.formDestinatario.get('ie');
+      if (value === '1') {
+        ieControl?.setValidators([Validators.required]);
+      } else {
+        ieControl?.clearValidators();
+        ieControl?.setValue('');
+      }
+      ieControl?.updateValueAndValidity();
+    });
+  }
+
+
   abrirBuscaFornecedor() {
     const dialogRef = this.dialog.open(BuscaFornecedorDialogComponent, {
       width: '800px'

@@ -17,6 +17,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { NfeService } from '../../services/nfe/nfe.service';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { GeraisNfeComponent } from "./geraisNfe-form.component";
+import { MatTabsModule } from '@angular/material/tabs';
 
 
 
@@ -37,52 +38,47 @@ import { GeraisNfeComponent } from "./geraisNfe-form.component";
     PagamentoFormComponent,
     MatIconModule,
     MatFormFieldModule,
+    MatTabsModule,
     GeraisNfeComponent
 ],
   template: `
-  <div style="display: flex; justify-content: flex-end;">
-    <div class="p-4 space-y-4">
-    <h1 class="text-xl font-bold">Emissão de Nota Fiscal Eletrônica (NF-e)</h1>
-
-     <!-- Seção: Dados Gerais da NF - basicos -->
-     <h2 class="text-lg font-semibold mt-4"><mat-icon class="mr-2">person</mat-icon> Dados Gerais - basicos</h2>
+  <mat-tab-group>
+  <mat-tab label="Dados Gerais">
     <app-geraisNfe-form [formGeral]="formGeral"></app-geraisNfe-form>
-            
-    <!-- Seção: Emitente -->
-     <h2 class="text-lg font-semibold mt-4"><mat-icon class="mr-2">person</mat-icon> Emitente</h2>
+  </mat-tab>
+
+  <mat-tab label="Emitente">
     <app-emitente-form [formEmitente]="formEmitente"></app-emitente-form>
+  </mat-tab>
 
-    <!-- Seção: Destinatário -->
-     <h2 class="text-lg font-semibold mt-4">Destinatário</h2>
+  <mat-tab label="Destinatário">
     <app-destinatario-form [formDestinatario]="formDestinatario"></app-destinatario-form>
+  </mat-tab>
 
-    <!-- Seção: Produtos -->
-     <h2 class="text-lg font-semibold mt-4">Produtos</h2>
+  <mat-tab label="Produtos">
     <app-produto-form (produtoAdicionado)="adicionarProduto($event)"></app-produto-form>
-    <app-produtos-tabela [produtos]="produtos" (excluirProduto)="removerProduto($event)"></app-produtos-tabela>
+    <app-produtos-tabela 
+      [produtos]="produtos" 
+      (excluirProduto)="removerProduto($event)">
+    </app-produtos-tabela>
+  </mat-tab>
 
-    <!-- Seção: Totais da Nota -->
-    <h2 class="text-lg font-semibold mt-4">Total da Nota Fiscal</h2>
+  <mat-tab label="Totais">
     <app-totais-resumo 
       [produtos]="produtos" 
       [formTotal]="totaisForm">
     </app-totais-resumo>
+  </mat-tab>
 
-    <!-- Seção: Transporte -->
-    <h2 class="text-lg font-semibold mt-4">Transporte</h2>
+  <mat-tab label="Transporte">
     <app-transporte-form [formTransporte]="formTransporte"></app-transporte-form>
+  </mat-tab>
 
-    <!-- Seção: Pagamento -->
-     <h2 class="text-lg font-semibold mt-4">Pagamento</h2>
+  <mat-tab label="Pagamento">
     <app-pagamento-form [formPagamento]="formPagamento"></app-pagamento-form>
+  </mat-tab>
+</mat-tab-group>
 
-    <!-- Ações -->
-    <div class="flex gap-4">
-      <button mat-raised-button color="primary" (click)="salvarNfe()">Salvar NF-e</button>
-      <button mat-raised-button color="accent" (click)="emitirNfe()">Emitir NF-e</button>
-    </div>
-  </div>
-  </div>
 `
 
 })
@@ -105,6 +101,7 @@ export class NfeComponent {
    private nfeService: NfeService
    ) {
 
+    
 this.formGeral = this.fb.group({
   layout: ['7.0'],
   idChaveAcesso: ['45644654654654'], // ⚠️ o campo estava escrito como "Id Chave de Acesso", o correto é evitar espaços
@@ -114,7 +111,7 @@ this.formGeral = this.fb.group({
   crt: ['55'],
   serie: ['1'],
   numeroNFe: ['58200'],
-  dtHrEmissao: ['19:07'],
+  dtHrEmissao: [this.getDataHoraEmissao()],
   dtHrSaida: ['19:07'],
   tipo: ['1'],
   destinoOpe: ['1'],
@@ -126,6 +123,7 @@ this.formGeral = this.fb.group({
   finalidade: ['1'],
   consumidorFinal: ['1'],
   vendaPresencial: ['2'],
+  indIntermed: [],
   processoVersaoEmissor: ['2'],
   totais: this.fb.group({ // 👈 esse é o FormGroup aninhado
     baseCalculo: [''],
@@ -182,6 +180,7 @@ console.log(this.formGeral.get('totais')?.value);
       vrTotalNfe: ['', Validators.required]
     })
 
+    
  /*
    // ✅ Mock inicial dos produtos
   this.produtos = [
@@ -214,7 +213,16 @@ console.log(this.formGeral.get('totais')?.value);
       return this.formGeral.get('totais') as FormGroup;
     }
 
-
+   getDataHoraEmissao(): string {
+        const agora = new Date();
+        return agora.toLocaleString('sv-SE', {
+          timeZone: 'America/Sao_Paulo',
+          hour12: false
+        }).replace(' ', 'T') + '-03:00';
+        console.log(agora);
+    }
+  
+    
   adicionarProduto(produto: any) {
     //this.produtos.push(produto);
     console.log('📦 Produtos que serão enviados:', JSON.stringify(this.produtos, null, 2));

@@ -25,7 +25,7 @@ import { MatIconModule } from '@angular/material/icon';
   ],
   template: `
     <mat-card>
-      <mat-card-title>Dados do Emitente</mat-card-title>
+      <mat-card-title style="margin-bottom: 20px;">Dados do Emitente</mat-card-title>
       <form [formGroup]="formEmitente" class="grid grid-cols-1 md:grid-cols-3 gap-4">
         <mat-form-field appearance="outline">
           <mat-label>CNPJ ou CPF</mat-label>

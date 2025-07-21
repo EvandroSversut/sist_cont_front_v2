@@ -1,6 +1,6 @@
 // 📁 src/app/components/nfe/emitente-form.component.ts
 
-import { Component, Input } from '@angular/core';
+import { Component, Input, SimpleChanges } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -56,8 +56,8 @@ import { MatIconModule } from '@angular/material/icon';
         <mat-form-field appearance="outline">
           <mat-label>Modelo da NFe</mat-label>
           <mat-select formControlName="crt">
-            <mat-option value="55">NF-e</mat-option>
-            <mat-option value="65">Telecom</mat-option>
+            <mat-option value="55">NF-e (55)</mat-option>
+            <mat-option value="62">Telecom (62)</mat-option>
             <mat-option value="999">Outras</mat-option>
           </mat-select>
         </mat-form-field>
@@ -72,9 +72,9 @@ import { MatIconModule } from '@angular/material/icon';
           <input matInput formControlName="numeroNFe">
         </mat-form-field>
 
-        <mat-form-field appearance="outline">
+        <mat-form-field appearance="outline" style="width: 300px;">
           <mat-label>Data/Hora Emissao</mat-label>
-          <input matInput formControlName="dtHrEmissao">
+          <input matInput formControlName="dtHrEmissao" readonly>
         </mat-form-field>
 
         <mat-form-field appearance="outline">
@@ -106,7 +106,10 @@ import { MatIconModule } from '@angular/material/icon';
 
         <mat-form-field appearance="outline">
           <mat-label>Formato do DANFE</mat-label>
-          <input matInput formControlName="ibge">
+          <mat-select formControlName="formDanfe">
+            <mat-option value="1">1 - Normal</mat-option>
+            <mat-option value="4">4 - NFC-e</mat-option>
+           </mat-select>
         </mat-form-field>
 
         <mat-form-field appearance="outline">
@@ -125,26 +128,26 @@ import { MatIconModule } from '@angular/material/icon';
          <mat-form-field appearance="outline">
           <mat-label>Ambiente</mat-label>
           <mat-select formControlName="ambiente">
-            <mat-option value="1">Produção</mat-option>
-            <mat-option value="2">Homologação</mat-option>
+            <mat-option value="1">1 - Produção</mat-option>
+            <mat-option value="2">2 - Homologação</mat-option>
         </mat-select>
         </mat-form-field>
 
          <mat-form-field appearance="outline">
           <mat-label>Finalidade</mat-label>
           <mat-select formControlName="finalidade">
-            <mat-option value="1">Normal</mat-option>
-            <mat-option value="2">Complementar</mat-option>
+            <mat-option value="1">1 - Normal</mat-option>
+            <mat-option value="2">2 - Complementar</mat-option>
             <mat-option value="3">Ajuste</mat-option>
             <mat-option value="4">Devolução</mat-option>
         </mat-select>
         </mat-form-field>
 
         <mat-form-field appearance="outline">
-          <mat-label>Consumidor Final ?</mat-label>
+          <mat-label>Destinatario Final</mat-label>
           <mat-select formControlName="consumidorFinal">
-            <mat-option value="1">Sim</mat-option>
-            <mat-option value="2">Não</mat-option>
+            <mat-option value="0">0 - Intermediario</mat-option>
+            <mat-option value="1">1 - Consumidor Final</mat-option>
           </mat-select>
         </mat-form-field>
 
@@ -157,9 +160,18 @@ import { MatIconModule } from '@angular/material/icon';
         </mat-form-field>
 
         <mat-form-field appearance="outline">
+          <mat-label>Houve Intermediador/Marketplane ?</mat-label>
+          <mat-select formControlName="indIntermed">
+            <mat-option value="1">Sim</mat-option>
+            <mat-option value="2">Não</mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
           <mat-label>Processo e Versão Emissor</mat-label>
           <input matInput formControlName="processoVersaoEmissor">
         </mat-form-field>
+        
 
       </form>
     </mat-card>
@@ -167,8 +179,10 @@ import { MatIconModule } from '@angular/material/icon';
 })
 export class GeraisNfeComponent {
   @Input() formGeral!: FormGroup; // aqui é onde liga ao form nfe
+ 
 
   constructor(private dialog: MatDialog) {}
+
 
 abrirBuscaFornecedor() {
   const dialogRef = this.dialog.open(BuscaFornecedorDialogComponent, {
@@ -181,4 +195,6 @@ abrirBuscaFornecedor() {
     }
   });
  }
+
+ 
 }

@@ -12,6 +12,11 @@ import { BuscaProdutoDialogComponent } from '../dialogs/produtos/busca-produto-d
 import { MatDialog } from '@angular/material/dialog';
 import { Produtos } from '../../model/produtos.model';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
+import { MatExpansionModule } from '@angular/material/expansion';
+import { MatTabGroup, MatTabsModule } from "@angular/material/tabs";
+import { MatTab } from "../../../../node_modules/@angular/material/tabs/index";
+import { MatSelectModule } from '@angular/material/select';
+
 
 @Component({
   selector: 'app-produto-form',
@@ -24,116 +29,169 @@ import { MatAutocompleteModule } from '@angular/material/autocomplete';
     MatButtonModule,
     MatCardModule,
     MatIconModule,
-    MatAutocompleteModule
-  ],
+    MatAutocompleteModule,
+    MatExpansionModule,
+    MatTabsModule,
+    MatSelectModule
+],
   
-  template: `
-    <mat-card>
-      <mat-card-title>Adicionar Produto</mat-card-title>
-      <form [formGroup]="formProduto" class="grid grid-cols-1 md:grid-cols-3 gap-4">
-        <mat-form-field appearance="outline">
-          <mat-label>Código</mat-label>
-          <input matInput formControlName="codigo">
-        </mat-form-field>
+ template: `
+<mat-tab-group>
+  <!-- Aba: Produtos -->
+  <mat-tab label="Produtos">
+    <form [formGroup]="formProduto" class="grid grid-cols-1 md:grid-cols-3 gap-4">
+      <mat-form-field appearance="outline">
+        <mat-label>Código</mat-label>
+        <input matInput formControlName="codigo">
+      </mat-form-field>
 
-        <mat-form-field appearance="outline">
-          <mat-label>Descrição</mat-label>
-          <input type="text" matInput [matAutocomplete]="autoProduto" [formControl]="produtoCtrl">
-                    <mat-autocomplete #autoProduto="matAutocomplete" (optionSelected)="selecionaProduto($event.option.value)">
-            <mat-option *ngFor="let p of produtosFiltrados" [value]="p.nomeProduto">
-              {{ p.nomeProduto }} ({{ p.unidade }})
-            </mat-option>
-          </mat-autocomplete>
-        </mat-form-field>
+      <mat-form-field appearance="outline">
+        <mat-label>Descrição</mat-label>
+        <input type="text" matInput [matAutocomplete]="autoProduto" [formControl]="produtoCtrl">
+        <mat-autocomplete #autoProduto="matAutocomplete" (optionSelected)="selecionaProduto($event.option.value)">
+          <mat-option *ngFor="let p of produtosFiltrados" [value]="p.nomeProduto">
+            {{ p.nomeProduto }} ({{ p.unidade }})
+          </mat-option>
+        </mat-autocomplete>
+      </mat-form-field>
 
-        <button mat-icon-button color="primary" (click)="abrirBuscaProduto()">
-          <mat-icon>search</mat-icon>
-        </button>
+      <button mat-icon-button color="primary" (click)="abrirBuscaProduto()">
+        <mat-icon>search</mat-icon>
+      </button>
 
-        <mat-form-field appearance="outline">
-          <mat-label>NCM</mat-label>
-          <input matInput formControlName="ncm">
-        </mat-form-field>
-        
-        <mat-form-field appearance="outline">
-          <mat-label>Unidade</mat-label>
-          <input matInput formControlName="unidade">
-        </mat-form-field>
+      <mat-form-field appearance="outline">
+        <mat-label>Código de Barras</mat-label>
+        <input matInput formControlName="codBarras">
+      </mat-form-field>
 
-        <mat-form-field appearance="outline">
-          <mat-label>CFOP</mat-label>
-          <input matInput formControlName="cfop">
-        </mat-form-field>
+      <mat-form-field appearance="outline">
+        <mat-label>NCM</mat-label>
+        <input matInput formControlName="ncm">
+      </mat-form-field>
 
-        <mat-form-field appearance="outline">
-          <mat-label>Quantidade</mat-label>
-          <input matInput type="number" formControlName="quantidade">
-        </mat-form-field>
+      <mat-form-field appearance="outline">
+        <mat-label>CST</mat-label>
+        <input matInput formControlName="cst">
+      </mat-form-field>
 
-        <mat-form-field appearance="outline">
-          <mat-label>Valor Unitário</mat-label>
-          <input matInput type="number" formControlName="valorUnitario">
-        </mat-form-field>
+      <mat-form-field appearance="outline">
+        <mat-label>CFOP</mat-label>
+        <input matInput formControlName="cfop">
+      </mat-form-field>
 
-        <mat-form-field appearance="outline">
-          <mat-label>Desconto</mat-label>
-          <input matInput type="number" formControlName="desconto">
-        </mat-form-field>
+      <mat-form-field appearance="outline">
+        <mat-label>Unidade</mat-label>
+        <input matInput formControlName="unidade">
+      </mat-form-field>
 
-        <mat-form-field appearance="outline">
-          <mat-label>Frete</mat-label>
-          <input matInput type="number" formControlName="frete">
-        </mat-form-field>
+      <mat-form-field appearance="outline">
+        <mat-label>Quantidade</mat-label>
+        <input matInput type="number" formControlName="quantidade">
+      </mat-form-field>
 
-        <mat-form-field appearance="outline">
-          <mat-label>Seguro</mat-label>
-          <input matInput type="number" formControlName="seguro">
-        </mat-form-field>
+      <mat-form-field appearance="outline">
+        <mat-label>Valor Unitário</mat-label>
+        <input matInput type="number" formControlName="valorUnitario">
+      </mat-form-field>
 
-        <mat-form-field appearance="outline">
-          <mat-label>Outras Despesas</mat-label>
-          <input matInput type="number" formControlName="outrasDesp">
-        </mat-form-field>
+      <mat-form-field appearance="outline">
+        <mat-label>Desconto</mat-label>
+        <input matInput type="number" formControlName="desconto">
+      </mat-form-field>
 
-        <mat-form-field appearance="outline">
-          <mat-label>IPI</mat-label>
-          <input matInput type="number" formControlName="ipi">
-        </mat-form-field>
+      <mat-form-field appearance="outline">
+        <mat-label>Frete</mat-label>
+        <input matInput type="number" formControlName="frete">
+      </mat-form-field>
 
-        <mat-form-field appearance="outline">
-          <mat-label>PIS</mat-label>
-          <input matInput type="number" formControlName="pis">
-        </mat-form-field>
+      <mat-form-field appearance="outline">
+        <mat-label>Seguro</mat-label>
+        <input matInput type="number" formControlName="seguro">
+      </mat-form-field>
 
-        <mat-form-field appearance="outline">
-          <mat-label>COFINS</mat-label>
-          <input matInput type="number" formControlName="cofins">
-        </mat-form-field>
+      <mat-form-field appearance="outline">
+        <mat-label>Outras Despesas</mat-label>
+        <input matInput type="number" formControlName="outrasDesp">
+      </mat-form-field>
 
-        <mat-form-field appearance="outline">
-          <mat-label>ISS</mat-label>
-          <input matInput type="number" formControlName="iss">
-        </mat-form-field>
+      <mat-form-field appearance="outline">
+        <mat-label>Total Produto</mat-label>
+        <input matInput type="number" formControlName="vrTotalProd">
+      </mat-form-field>
+    </form>
+  </mat-tab>
 
-        <mat-form-field appearance="outline">
-          <mat-label>Alíquota ICMS (%)</mat-label>
-          <input matInput type="number" formControlName="aliquotaIcms">
-        </mat-form-field>
+  <!-- Aba: Impostos -->
+  <mat-tab label="Impostos">
+    <mat-tab-group>
+      <!-- Subaba: ICMS -->
+      <mat-tab label="ICMS">
+        <form [formGroup]="formProduto" class="grid grid-cols-1 md:grid-cols-3 gap-4">
+         <mat-form-field style="width: 400px;">
+            <mat-label>Origem da Mercadoria</mat-label>
+            <mat-select formControlName="origem">
+              <mat-option value="0">0 - Nacional</mat-option>
+              <mat-option value="1">1 - Importação Direta</mat-option>
+              <mat-option value="2">2 - Importação Mercado Interno</mat-option>
+              <mat-option value="3">3 - Nacional c/ conteúdo importado > 40%</mat-option>
+              <mat-option value="4">4 - Nacional conforme PPB</mat-option>
+              <mat-option value="5">5 - Nacional c/ conteúdo importado ≤ 40%</mat-option>
+              <mat-option value="6">6 - Importação s/ similar nacional</mat-option>
+              <mat-option value="7">7 - Mercado interno s/ similar nacional</mat-option>
+              <mat-option value="8">8 - Nacional c/ conteúdo importado ≤ 70%</mat-option>
+            </mat-select>
+          </mat-form-field>
 
-        <mat-form-field appearance="outline">
-          <mat-label>Total Produto</mat-label>
-          <input matInput type="number" formControlName="totalProd">
-        </mat-form-field>
+          <mat-form-field appearance="outline">
+            <mat-label>ICMS</mat-label>
+            <input matInput formControlName="icms">
+          </mat-form-field>
+        </form>
+      </mat-tab>
 
-      </form>
+      <!-- Subaba: PIS/COFINS -->
+      <mat-tab label="PIS/COFINS">
+        <form [formGroup]="formProduto" class="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <mat-form-field appearance="outline">
+            <mat-label>PIS</mat-label>
+            <input matInput formControlName="pis">
+          </mat-form-field>
 
-      <div class="mt-4">
-        <button mat-raised-button color="primary" (click)="adicionarProduto()" [disabled]="formProduto.invalid">
-          Adicionar Produto
-        </button>
-      </div>
-    </mat-card>
-  `
+          <mat-form-field appearance="outline">
+            <mat-label>COFINS</mat-label>
+            <input matInput formControlName="cofins">
+          </mat-form-field>
+        </form>
+      </mat-tab>
+
+      <!-- Subaba: Outros Impostos -->
+      <mat-tab label="Outros Impostos">
+        <form [formGroup]="formProduto" class="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <mat-form-field appearance="outline">
+            <mat-label>IPI</mat-label>
+            <input matInput formControlName="ipi">
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>ISS</mat-label>
+            <input matInput type="number" formControlName="iss">
+          </mat-form-field>
+        </form>
+      </mat-tab>
+    </mat-tab-group>
+  </mat-tab>
+</mat-tab-group>
+
+<!-- Botão para adicionar produto -->
+<div class="mt-4">
+  <button mat-raised-button color="primary" (click)="adicionarProduto()" [disabled]="formProduto.invalid">
+    Adicionar Produto
+  </button>
+</div>
+
+
+`
+  
 })
 export class ProdutoFormComponent {
   @Output() produtoAdicionado = new EventEmitter<any>();
@@ -160,13 +218,13 @@ export class ProdutoFormComponent {
       frete: [''],
       seguro: [''],
       outrasDesp: [''],
-      totalProd: [{ value: 0, disabled: true }],
+      vrTotalProd: [{ value: 0, disabled: true }],
       icms: [''],
       ipi: [''],
       pis: [''],
       cofins: [''],
       iss: [''],
-      aliquotaIcms: ['', Validators.required] // isso faz referencia ao input "aliquotaIcms"
+      aliquotaIcms: [''] // isso faz referencia ao input "aliquotaIcms"
       // ✅ agora sim, todos os campos serão enviados
     });
 
@@ -180,7 +238,7 @@ export class ProdutoFormComponent {
   adicionarProduto() {
     if (this.formProduto.valid) {
       // Habilita o campo para pegar o valor ao emitir
-      this.formProduto.get('totalProd')?.enable({ emitEvent: false });
+      this.formProduto.get('vrTotalProd')?.enable({ emitEvent: false });
 
       // Captura o valor com total incluso
       // Aqui o Angular incluir todos os campos declarados no FormGroup no Construtor
@@ -190,7 +248,7 @@ export class ProdutoFormComponent {
       this.produtoAdicionado.emit(produto);
 
        // Desativa novamente se quiser continuar deixando o campo bloqueado
-      this.formProduto.get('totalProd')?.disable({ emitEvent: false });
+      this.formProduto.get('vrTotalProd')?.disable({ emitEvent: false });
       
       // Reset padrão
       this.formProduto.reset({ quantidade: 1, valorUnitario: 0, desconto: 0 });
@@ -232,7 +290,7 @@ export class ProdutoFormComponent {
     const seguro = this.formProduto.get('seguro')!.value || 0;
     const outrasDesp = this.formProduto.get('outrasDesp')!.value || 0;
     const total = (qtde * unit) + ( - desconto + frete + seguro + outrasDesp);
-    this.formProduto.get('totalProd')!.setValue(total >= 0 ? total : 0);
+    this.formProduto.get('vrTotalProd')!.setValue(total >= 0 ? total : 0);
   }
 
  /*   atualizaValorTotal() {
