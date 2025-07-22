@@ -42,6 +42,7 @@ import { MatTabsModule } from '@angular/material/tabs';
     GeraisNfeComponent
 ],
   template: `
+
   <mat-tab-group>
   <mat-tab label="Dados Gerais">
     <app-geraisNfe-form [formGeral]="formGeral"></app-geraisNfe-form>
@@ -63,12 +64,7 @@ import { MatTabsModule } from '@angular/material/tabs';
     </app-produtos-tabela>
   </mat-tab>
 
-  <mat-tab label="Totais">
-    <app-totais-resumo 
-      [produtos]="produtos" 
-      [formTotal]="totaisForm">
-    </app-totais-resumo>
-  </mat-tab>
+  
 
   <mat-tab label="Transporte">
     <app-transporte-form [formTransporte]="formTransporte"></app-transporte-form>
@@ -78,6 +74,15 @@ import { MatTabsModule } from '@angular/material/tabs';
     <app-pagamento-form [formPagamento]="formPagamento"></app-pagamento-form>
   </mat-tab>
 </mat-tab-group>
+
+  <mat-tab-group>
+     <mat-tab label="Totais">
+       <app-totais-resumo 
+       [produtos]="produtos" 
+       [formTotal]="totaisForm">
+       </app-totais-resumo>
+    </mat-tab>
+  </mat-tab-group>
 
 `
 

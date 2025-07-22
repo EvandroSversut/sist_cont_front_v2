@@ -69,9 +69,19 @@ import { MatSelectModule } from '@angular/material/select';
         <input matInput formControlName="ncm">
       </mat-form-field>
 
-      <mat-form-field appearance="outline">
+      <mat-form-field appearance="outline" style="width: 600px;">
         <mat-label>CST</mat-label>
-        <input matInput formControlName="cst">
+            <mat-select formControlName="cst">
+              <mat-option value="0">00 - Venda Dentro do Estado - Operacao com ICMS destacado</mat-option>
+              <mat-option value="1">00 - Venda Para Outro Estado - ICMS com Aliquota Interest.</mat-option>
+              <mat-option value="2">40 - Venda Isenta - ICMS Isento</mat-option>
+              <mat-option value="3">102(CSOSN) - Simples Nacional (Emit e Dest) - Sem Destaque ICMS (Reg Diferenc)</mat-option>
+              <mat-option value="4">10 - Substituicao Tributaria - ICMS ST é Calculado e Retido</mat-option>
+              <mat-option value="5">41 - Remessa Para Conserto - Sem Incidencia de ICMS, CFOP Especifico</mat-option>
+              <mat-option value="6">Devolucao de Venda (CST = NF Origem) - Nota Espelho</mat-option>
+              <mat-option value="7">90 - Bonificacao sem Valor - Sem Tributacao/Sem Valor Financeiro</mat-option>
+              <mat-option value="8">41 - Exportacao Direta - ICMS Isento</mat-option>
+            </mat-select>
       </mat-form-field>
 
       <mat-form-field appearance="outline">
@@ -114,10 +124,10 @@ import { MatSelectModule } from '@angular/material/select';
         <input matInput type="number" formControlName="outrasDesp">
       </mat-form-field>
 
-      <mat-form-field appearance="outline">
-        <mat-label>Total Produto</mat-label>
-        <input matInput type="number" formControlName="vrTotalProd">
-      </mat-form-field>
+     <mat-form-field appearance="outline">
+  <mat-label>Total Produto</mat-label>
+  <input matInput formControlName="vrTotalProd" [value]="formProduto.get('vrTotalProd')?.value | currency:'BRL':'symbol-narrow'" readonly>
+</mat-form-field>
     </form>
   </mat-tab>
 
@@ -142,12 +152,34 @@ import { MatSelectModule } from '@angular/material/select';
             </mat-select>
           </mat-form-field>
 
+         <mat-form-field appearance="outline">
+            <mat-label>Base de Calculo</mat-label>
+            <input matInput formControlName="baseDeCalculo" [value]="formProduto.get('baseDeCalculo')?.value | currency:'BRL':'symbol'" readonly>
+        </mat-form-field>
+
+
           <mat-form-field appearance="outline">
-            <mat-label>ICMS</mat-label>
-            <input matInput formControlName="icms">
+            <mat-label>% ICMS</mat-label>
+                  <mat-select formControlName="icms">
+                  <mat-option value="4">4%</mat-option>
+                  <mat-option value="7">7%</mat-option>
+                  <mat-option value="12">12%</mat-option>
+                  <mat-option value="18">18%</mat-option>
+                  <mat-option value="20">20%</mat-option>
+                  <mat-option value="25">25%</mat-option>
+                  <mat-option value="30">30%</mat-option>
+               </mat-select>
           </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Valor do ICMS</mat-label>
+            <input matInput formControlName="vrDoIcms" [value]="formProduto.get('baseDeCalculo')?.value | currency:'BRL':'symbol'" readonly>
+        </mat-form-field>
+
         </form>
       </mat-tab>
+
+
 
       <!-- Subaba: PIS/COFINS -->
       <mat-tab label="PIS/COFINS">
@@ -224,7 +256,9 @@ export class ProdutoFormComponent {
       pis: [''],
       cofins: [''],
       iss: [''],
-      aliquotaIcms: [''] // isso faz referencia ao input "aliquotaIcms"
+      aliquotaIcms: [''], // isso faz referencia ao input "aliquotaIcms"
+      baseDeCalculo: [{ value: 0, disabled: true }],
+      vrDoIcms: [{ value: 0, disabled: true }],
       // ✅ agora sim, todos os campos serão enviados
     });
 
@@ -290,7 +324,15 @@ export class ProdutoFormComponent {
     const seguro = this.formProduto.get('seguro')!.value || 0;
     const outrasDesp = this.formProduto.get('outrasDesp')!.value || 0;
     const total = (qtde * unit) + ( - desconto + frete + seguro + outrasDesp);
-    this.formProduto.get('vrTotalProd')!.setValue(total >= 0 ? total : 0);
+    const icmsAliquota = Number(this.formProduto.get('icms')!.value) || 0;
+    // Este  { emitEvent: false } serve para nao dar loop infinito pois estava travando a tela.
+    this.formProduto.get('vrTotalProd')!.setValue(total, { emitEvent: false });
+    this.formProduto.get('baseDeCalculo')!.setValue(total, { emitEvent: false });
+
+     // Calcula o valor do ICMS
+  const valorIcms = total * (icmsAliquota / 100);
+  this.formProduto.get('vrDoIcms')!.setValue(valorIcms, { emitEvent: false });
+
   }
 
  /*   atualizaValorTotal() {
