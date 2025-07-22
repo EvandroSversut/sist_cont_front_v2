@@ -132,7 +132,7 @@ import { MatSelectModule } from '@angular/material/select';
   </mat-tab>
 
   <!-- Aba: Impostos -->
-  <mat-tab label="Impostos">
+  <mat-tab label="CÁLCULO DO IMPOSTO">
     <mat-tab-group>
       <!-- Subaba: ICMS -->
       <mat-tab label="ICMS">
@@ -153,8 +153,8 @@ import { MatSelectModule } from '@angular/material/select';
           </mat-form-field>
 
          <mat-form-field appearance="outline">
-            <mat-label>Base de Calculo</mat-label>
-            <input matInput formControlName="baseDeCalculo" [value]="formProduto.get('baseDeCalculo')?.value | currency:'BRL':'symbol'" readonly>
+            <mat-label>Base de Cálculo do ICMS</mat-label>
+            <input matInput [value]="formProduto.get('baseDeCalculo')?.value | currency:'BRL':'symbol'" readonly>
         </mat-form-field>
 
 
@@ -173,7 +173,22 @@ import { MatSelectModule } from '@angular/material/select';
 
           <mat-form-field appearance="outline">
             <mat-label>Valor do ICMS</mat-label>
-            <input matInput formControlName="vrDoIcms" [value]="formProduto.get('baseDeCalculo')?.value | currency:'BRL':'symbol'" readonly>
+            <input matInput [value]="formProduto.get('vrDoIcms')?.value | currency:'BRL':'symbol'" readonly>
+        </mat-form-field>
+
+         <mat-form-field appearance="outline">
+            <mat-label>Base Cálc. ICMS ST</mat-label>
+             <input matInput type="number" formControlName="bcIcmsSt">
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+            <mat-label>Valor ICMS Subst</mat-label>
+             <input matInput type="number" formControlName="vrIcmsSubst">
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+            <mat-label>Valor Imp. Importação</mat-label>
+             <input matInput type="number" formControlName="vrImpImport">
         </mat-form-field>
 
         </form>
@@ -185,7 +200,7 @@ import { MatSelectModule } from '@angular/material/select';
       <mat-tab label="PIS/COFINS">
         <form [formGroup]="formProduto" class="grid grid-cols-1 md:grid-cols-3 gap-4">
           <mat-form-field appearance="outline">
-            <mat-label>PIS</mat-label>
+            <mat-label>Valor</mat-label>
             <input matInput formControlName="pis">
           </mat-form-field>
 
@@ -256,7 +271,7 @@ export class ProdutoFormComponent {
       pis: [''],
       cofins: [''],
       iss: [''],
-      aliquotaIcms: [''], // isso faz referencia ao input "aliquotaIcms"
+      aliquotaIcms: ['', Validators.required], // isso faz referencia ao input "aliquotaIcms"
       baseDeCalculo: [{ value: 0, disabled: true }],
       vrDoIcms: [{ value: 0, disabled: true }],
       // ✅ agora sim, todos os campos serão enviados
@@ -264,8 +279,13 @@ export class ProdutoFormComponent {
 
     
     this.formProduto.valueChanges.subscribe(() => {
-    this.atualizaValorTotal();
+      this.atualizaValorTotal();
 });
+
+    this.formProduto.get('icms')?.valueChanges.subscribe(() => {
+      this.atualizaValorTotal();
+});
+
 
   }
 
@@ -294,7 +314,7 @@ export class ProdutoFormComponent {
         width: '800px'
       });
   
-      dialogRef.afterClosed().subscribe(result => {
+    dialogRef.afterClosed().subscribe(result => {
     console.log('Produto selecionado:', result);
     if (result) {
       this.produtoSelecionado = result;
