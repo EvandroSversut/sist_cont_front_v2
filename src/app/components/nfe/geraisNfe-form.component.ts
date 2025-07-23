@@ -28,7 +28,7 @@ import { MatIconModule } from '@angular/material/icon';
       <mat-card-title>Dados da NFe</mat-card-title>
       <form [formGroup]="formGeral" class="grid grid-cols-1 md:grid-cols-3 gap-4">
         <mat-form-field appearance="outline">
-          <mat-label>VERSAO LAYOUT: 7.00</mat-label>
+          <mat-label>VERSAO MANUAL E LAYOUT</mat-label>
           <input matInput formControlName="layout">
         </mat-form-field>
 

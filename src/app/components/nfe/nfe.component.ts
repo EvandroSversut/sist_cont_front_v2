@@ -108,7 +108,7 @@ export class NfeComponent {
 
     
 this.formGeral = this.fb.group({
-  layout: ['7.0'],
+  layout: ['Manual 7.0, Layout 4.00'],
   idChaveAcesso: ['45644654654654'], // ⚠️ o campo estava escrito como "Id Chave de Acesso", o correto é evitar espaços
   ufEmitente: ['SP'],
   codNumericoNFe: ['112233'],

@@ -16,6 +16,7 @@ import { MatExpansionModule } from '@angular/material/expansion';
 import { MatTabGroup, MatTabsModule } from "@angular/material/tabs";
 import { MatTab } from "../../../../node_modules/@angular/material/tabs/index";
 import { MatSelectModule } from '@angular/material/select';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 
 @Component({
@@ -32,7 +33,9 @@ import { MatSelectModule } from '@angular/material/select';
     MatAutocompleteModule,
     MatExpansionModule,
     MatTabsModule,
-    MatSelectModule
+    MatSelectModule,
+    MatTooltipModule,
+
 ],
   
  template: `
@@ -69,9 +72,42 @@ import { MatSelectModule } from '@angular/material/select';
         <input matInput formControlName="ncm">
       </mat-form-field>
 
-      <mat-form-field appearance="outline" style="width: 600px;">
+<!--  <mat-form-field appearance="outline" style="width: 600px;" matTooltip="Selecione o CST (Código de Situação Tributária) de acordo com a operação.">
         <mat-label>CST</mat-label>
             <mat-select formControlName="cst">
+              <mat-option value="0">00 - Venda Dentro do Estado - Operacao com ICMS destacado</mat-option>
+              <mat-option value="1">00 - Venda Para Outro Estado - ICMS com Aliquota Interest.</mat-option>
+              <mat-option value="2">40 - Venda Isenta - ICMS Isento</mat-option>
+              <mat-option value="3">102(CSOSN) - Simples Nacional (Emit e Dest) - Sem Destaque ICMS (Reg Diferenc)</mat-option>
+              <mat-option value="4">10 - Substituicao Tributaria - ICMS ST é Calculado e Retido</mat-option>
+              <mat-option value="5">41 - Remessa Para Conserto - Sem Incidencia de ICMS, CFOP Especifico</mat-option>
+              <mat-option value="6">Devolucao de Venda (CST = NF Origem) - Nota Espelho</mat-option>
+              <mat-option value="7">90 - Bonificacao sem Valor - Sem Tributacao/Sem Valor Financeiro</mat-option>
+              <mat-option value="8">41 - Exportacao Direta - ICMS Isento</mat-option>
+            </mat-select>
+      </mat-form-field>
+      -->
+
+      <mat-form-field appearance="outline" style="width: 500px;" matTooltip="Selecione o CST (Código de Situação Tributária) de acordo com a operação.">
+        <mat-label>CST</mat-label>
+            <mat-select formControlName="cst">
+              <mat-option value="0">00 - Tributada integralmente</mat-option>
+              <mat-option value="1">10 - Tributada e com cobrança do ICMS por Subst Trib</mat-option>
+              <mat-option value="2">20 - Com redução da BC</mat-option>
+              <mat-option value="3">30 - Isenta / não tributada e com cobrança do ICMS por Subst Trib</mat-option>
+              <mat-option value="4">40 - Isenta</mat-option>
+              <mat-option value="5">41 - Não tributada</mat-option>
+              <mat-option value="6">50 - Com Suspensão</mat-option>
+              <mat-option value="7">51 - Com diferimento</mat-option>
+              <mat-option value="8">60 - ICMS cobrado anteriormente por Subst Trib</mat-option>
+              <mat-option value="9">70 - Com redução da BC e cobrança do ICMS por Subst Trib</mat-option>
+              <mat-option value="10">90 - Outras</mat-option>
+            </mat-select>
+      </mat-form-field>
+
+       <mat-form-field appearance="outline" style="width: 700px;">
+        <mat-label>CST - SIMPLES NACIONAL</mat-label>
+            <mat-select formControlName="cstSimples">
               <mat-option value="0">00 - Venda Dentro do Estado - Operacao com ICMS destacado</mat-option>
               <mat-option value="1">00 - Venda Para Outro Estado - ICMS com Aliquota Interest.</mat-option>
               <mat-option value="2">40 - Venda Isenta - ICMS Isento</mat-option>
