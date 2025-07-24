@@ -17,6 +17,8 @@ import { MatTabGroup, MatTabsModule } from "@angular/material/tabs";
 import { MatTab } from "../../../../node_modules/@angular/material/tabs/index";
 import { MatSelectModule } from '@angular/material/select';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { AjudaCstDialogComponent } from '../dialogs/cst/ajuda-cst-dialog.component';
+import { AjudaCsosnDialogComponent } from '../dialogs/csosnSimples/ajuda-csosn-dialog.component';
 
 
 @Component({
@@ -37,7 +39,11 @@ import { MatTooltipModule } from '@angular/material/tooltip';
     MatTooltipModule,
 
 ],
+  styles: [`
+    
+  `],
   
+
  template: `
 <mat-tab-group>
   <!-- Aba: Produtos -->
@@ -87,9 +93,29 @@ import { MatTooltipModule } from '@angular/material/tooltip';
             </mat-select>
       </mat-form-field>
       -->
+      <mat-form-field appearance="outline" style="width: 300px;">
 
-      <mat-form-field appearance="outline" style="width: 500px;" matTooltip="Selecione o CST (Código de Situação Tributária) de acordo com a operação.">
-        <mat-label>CST</mat-label>
+        <mat-label>Origem do Produto</mat-label>
+            <mat-select formControlName="origem">
+              <mat-option value="0">0</mat-option>
+              <mat-option value="1">1</mat-option>
+              <mat-option value="2">2</mat-option>
+              <mat-option value="3">3</mat-option>
+              <mat-option value="4">4</mat-option>
+              <mat-option value="5">5</mat-option>
+              <mat-option value="6">6</mat-option>
+              <mat-option value="7">7</mat-option>
+            </mat-select>
+            
+          <button mat-icon-button matSuffix (click)="abrirAjudaCst()" aria-label="Ajuda">
+            <mat-icon>help_outline</mat-icon>
+          </button>
+
+
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" style="width: 600px;" matTooltip="Selecione o CST (Código de Situação Tributária) de acordo com a operação.">
+        <mat-label>Código da Situação Tributária CST</mat-label>
             <mat-select formControlName="cst">
               <mat-option value="0">00 - Tributada integralmente</mat-option>
               <mat-option value="1">10 - Tributada e com cobrança do ICMS por Subst Trib</mat-option>
@@ -106,7 +132,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
       </mat-form-field>
 
        <mat-form-field appearance="outline" style="width: 700px;">
-        <mat-label>CST - SIMPLES NACIONAL</mat-label>
+        <mat-label>CSOSN - SIMPLES NACIONAL</mat-label>
             <mat-select formControlName="cstSimples">
               <mat-option value="0">00 - Venda Dentro do Estado - Operacao com ICMS destacado</mat-option>
               <mat-option value="1">00 - Venda Para Outro Estado - ICMS com Aliquota Interest.</mat-option>
@@ -118,6 +144,11 @@ import { MatTooltipModule } from '@angular/material/tooltip';
               <mat-option value="7">90 - Bonificacao sem Valor - Sem Tributacao/Sem Valor Financeiro</mat-option>
               <mat-option value="8">41 - Exportacao Direta - ICMS Isento</mat-option>
             </mat-select>
+
+            <button mat-icon-button matSuffix (click)="abrirAjudaCst()" aria-label="Ajuda">
+              <mat-icon>help_outline</mat-icon>
+            </button>
+
       </mat-form-field>
 
       <mat-form-field appearance="outline">
@@ -410,5 +441,17 @@ export class ProdutoFormComponent {
       });
       this.atualizaValorTotal();
     }
+  }
+
+   abrirAjudaCst() {
+    this.dialog.open(AjudaCstDialogComponent, {
+      width: '500px'
+    });
+  }
+
+     abrirAjudaCsosn() {
+    this.dialog.open(AjudaCsosnDialogComponent, {
+      width: '500px'
+    });
   }
 }
