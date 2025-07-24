@@ -48,9 +48,18 @@ import { MatIconModule } from '@angular/material/icon';
           <input matInput formControlName="codNumericoNFe">
         </mat-form-field>
 
-        <mat-form-field appearance="outline">
+        <mat-form-field appearance="outline" style="width: 310px;">
           <mat-label>Natureza Operacao</mat-label>
-          <input matInput formControlName="natOperacao">
+           <mat-select formControlName="natOperacao">
+            <mat-option value="0">Venda de Mercadoria</mat-option>
+            <mat-option value="1">Prestação de Serviço</mat-option>
+            <mat-option value="2">Devolução</mat-option>
+            <mat-option value="3">Complemnento</mat-option>
+            <mat-option value="4">Retorno</mat-option>
+            <mat-option value="5">Venda Consignada</mat-option>
+            <mat-option value="6">Remessa</mat-option>
+            <mat-option value="7">Entrega Futura</mat-option>
+          </mat-select>
         </mat-form-field>
 
         <mat-form-field appearance="outline">
