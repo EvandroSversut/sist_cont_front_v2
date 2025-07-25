@@ -13,12 +13,14 @@ import { MatDialog } from '@angular/material/dialog';
 import { Produtos } from '../../model/produtos.model';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatExpansionModule } from '@angular/material/expansion';
-import { MatTabGroup, MatTabsModule } from "@angular/material/tabs";
+import { MatTabChangeEvent, MatTabGroup, MatTabsModule } from "@angular/material/tabs";
 import { MatTab } from "../../../../node_modules/@angular/material/tabs/index";
 import { MatSelectModule } from '@angular/material/select';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { AjudaCstDialogComponent } from '../dialogs/cst/ajuda-cst-dialog.component';
 import { AjudaCsosnDialogComponent } from '../dialogs/csosnSimples/ajuda-csosn-dialog.component';
+import { NfeRegimeService } from './services/nfe-regime.services';
+import { OnInit } from '@angular/core';
 
 
 @Component({
@@ -45,7 +47,7 @@ import { AjudaCsosnDialogComponent } from '../dialogs/csosnSimples/ajuda-csosn-d
   
 
  template: `
-<mat-tab-group>
+<mat-tab-group (selectedTabChange)="onTabChange($event)">
   <!-- Aba: Produtos -->
   <mat-tab label="Produtos">
     <form [formGroup]="formProduto" class="grid grid-cols-1 md:grid-cols-3 gap-4">
@@ -307,10 +309,13 @@ import { AjudaCsosnDialogComponent } from '../dialogs/csosnSimples/ajuda-csosn-d
 `
   
 })
-export class ProdutoFormComponent {
+export class ProdutoFormComponent implements OnInit{
   @Output() produtoAdicionado = new EventEmitter<any>();
 
   formProduto: FormGroup;
+
+  regimeSelecionado: string | null = null;
+
 
   produtoSelecionado!: Produtos;
   produtoCtrl = new FormControl();
@@ -318,7 +323,10 @@ export class ProdutoFormComponent {
   produtos: Produtos[] = [];
   produtosFiltrados: Produtos[] = [];
 
-  constructor(private fb: FormBuilder, private dialog: MatDialog) {
+  constructor(
+  private fb: FormBuilder,
+  private dialog: MatDialog,
+  private regimeService: NfeRegimeService) {
 
     this.formProduto = this.fb.group({
       codigo: ['', Validators.required],
@@ -341,6 +349,11 @@ export class ProdutoFormComponent {
       aliquotaIcms: ['', Validators.required], // isso faz referencia ao input "aliquotaIcms"
       baseDeCalculo: [{ value: 0, disabled: true }],
       vrDoIcms: [{ value: 0, disabled: true }],
+        // ✅ Adicione aqui o campo que estava faltando:
+      cst: [''],
+
+      // ✅ (opcional: já que também tem cstSimples no HTML)
+      cstSimples: [''],
       // ✅ agora sim, todos os campos serão enviados
     });
 
@@ -351,10 +364,23 @@ export class ProdutoFormComponent {
 
     this.formProduto.get('icms')?.valueChanges.subscribe(() => {
       this.atualizaValorTotal();
-});
+  });
+}
 
+ngOnInit(): void {
+  this.regimeService.regime$.subscribe(regime => {
+    this.regimeSelecionado = regime;
 
-  }
+    const isSimples = regime === '1';
+
+    // Aplica de imediato (como o campo ncm já está visível)
+    const ncmControl = this.formProduto.get('ncm');
+    if (isSimples) ncmControl?.disable({ emitEvent: false });
+    else ncmControl?.enable({ emitEvent: false });
+  });
+}
+
+  
 
   adicionarProduto() {
     if (this.formProduto.valid) {
@@ -454,4 +480,38 @@ export class ProdutoFormComponent {
       width: '500px'
     });
   }
+
+  
+onTabChange(event: MatTabChangeEvent) {
+  console.log('Aba selecionada:', event.index);
+  if (event.index === 0) {
+    // aba "Produtos"
+    this.aplicarRegrasDesabilitaCampos();
+  }
+}
+
+private aplicarRegrasDesabilitaCampos(): void {
+  const isSimples = this.regimeSelecionado === '1';
+
+  console.log('Regime selecionado no ProdutoFormComponent:', this.regimeSelecionado);
+
+  const cstControl = this.formProduto.get('cst');
+
+  if (!cstControl) {
+    console.warn('Campo cst ainda não está disponível');
+  }
+
+  if (cstControl) {
+    if (isSimples) {
+      cstControl.disable({ emitEvent: false });
+      console.log('CST desabilitado');
+    } else {
+      cstControl.enable({ emitEvent: false });
+      console.log('CST habilitado');
+    }
+  }
+}
+
+
+
 }

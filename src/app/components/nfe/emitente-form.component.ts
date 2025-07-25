@@ -10,6 +10,9 @@ import { MatCardModule } from '@angular/material/card';
 import { MatDialog } from '@angular/material/dialog';
 import { BuscaFornecedorDialogComponent } from '../dialogs/fornecedor/busca-fornecedor-dialog.component';
 import { MatIconModule } from '@angular/material/icon';
+import { NfeRegimeService } from './services/nfe-regime.services';
+import { OnInit } from '@angular/core';
+import { MatTabChangeEvent } from '@angular/material/tabs';
 
 @Component({
   selector: 'app-emitente-form',
@@ -78,10 +81,21 @@ import { MatIconModule } from '@angular/material/icon';
     </mat-card>
   `
 })
-export class EmitenteFormComponent {
+export class EmitenteFormComponent implements OnInit{
   @Input() formEmitente!: FormGroup;
+  
 
-  constructor(private dialog: MatDialog) {}
+  constructor(private dialog: MatDialog, 
+    private regimeService: NfeRegimeService) {
+      
+    }
+
+ngOnInit() {
+    this.formEmitente.get('crt')?.valueChanges.subscribe(value => {
+      this.regimeService.setRegime(value);
+    });
+  }
+
 
 abrirBuscaFornecedor() {
   const dialogRef = this.dialog.open(BuscaFornecedorDialogComponent, {
