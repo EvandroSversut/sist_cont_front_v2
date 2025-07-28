@@ -1,0 +1,24 @@
+<h2 mat-dialog-title>Ajuda - CST PIS/COFINS</h2>
+
+<mat-dialog-content>
+  <div style="max-height: 60vh; overflow-y: auto;">
+    <table style="width: 100%; border-collapse: collapse;">
+      <thead>
+        <tr>
+          <th style="text-align: left; border-bottom: 1px solid #ccc;">Código</th>
+          <th style="text-align: left; border-bottom: 1px solid #ccc;">Descrição</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let item of cstList">
+          <td style="padding: 8px;">{{ item.codigo }}</td>
+          <td style="padding: 8px;">{{ item.descricao }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button mat-dialog-close>Fechar</button>
+</mat-dialog-actions>

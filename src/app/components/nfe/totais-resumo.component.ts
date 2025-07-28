@@ -33,6 +33,11 @@ import { MatFormFieldModule } from '@angular/material/form-field';
         </mat-form-field>
 
         <mat-form-field appearance="outline">
+          <mat-label>Valor Total Serviços</mat-label>
+          <input matInput type="text" [value]="formTotal.get('vrTotalServ')?.value | currency:'BRL':'symbol':'1.2-2'" readonly>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
           <mat-label>Base de Cálculo</mat-label>
           <input matInput type="text" [value]="formTotal.get('baseCalculo')?.value | currency:'BRL':'symbol':'1.2-2'" readonly>
         </mat-form-field>

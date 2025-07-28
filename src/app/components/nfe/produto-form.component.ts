@@ -17,10 +17,12 @@ import { MatTabChangeEvent, MatTabGroup, MatTabsModule } from "@angular/material
 import { MatTab } from "../../../../node_modules/@angular/material/tabs/index";
 import { MatSelectModule } from '@angular/material/select';
 import { MatTooltipModule } from '@angular/material/tooltip';
-import { AjudaCstDialogComponent } from '../dialogs/cst/ajuda-cst-dialog.component';
+import { AjudaOrigemDialogComponent } from '../dialogs/origem/ajuda-origem-dialog.component';
 import { AjudaCsosnDialogComponent } from '../dialogs/csosnSimples/ajuda-csosn-dialog.component';
 import { NfeRegimeService } from './services/nfe-regime.services';
 import { OnInit } from '@angular/core';
+import { AjudaCstDialogComponent } from '../dialogs/cst/ajuda-cst-dialog.component';
+import { AjudastPisCofinsDialogComponent } from '../dialogs/st Pis Cofins/ajuda-stPisCofins-dialog.component';
 
 
 @Component({
@@ -49,7 +51,7 @@ import { OnInit } from '@angular/core';
  template: `
 <mat-tab-group (selectedTabChange)="onTabChange($event)">
   <!-- Aba: Produtos -->
-  <mat-tab label="Produtos">
+  <mat-tab label="Dados dos Produtos / Serviços">
     <form [formGroup]="formProduto" class="grid grid-cols-1 md:grid-cols-3 gap-4">
       <mat-form-field appearance="outline">
         <mat-label>Código</mat-label>
@@ -80,21 +82,15 @@ import { OnInit } from '@angular/core';
         <input matInput formControlName="ncm">
       </mat-form-field>
 
-<!--  <mat-form-field appearance="outline" style="width: 600px;" matTooltip="Selecione o CST (Código de Situação Tributária) de acordo com a operação.">
-        <mat-label>CST</mat-label>
-            <mat-select formControlName="cst">
-              <mat-option value="0">00 - Venda Dentro do Estado - Operacao com ICMS destacado</mat-option>
-              <mat-option value="1">00 - Venda Para Outro Estado - ICMS com Aliquota Interest.</mat-option>
-              <mat-option value="2">40 - Venda Isenta - ICMS Isento</mat-option>
-              <mat-option value="3">102(CSOSN) - Simples Nacional (Emit e Dest) - Sem Destaque ICMS (Reg Diferenc)</mat-option>
-              <mat-option value="4">10 - Substituicao Tributaria - ICMS ST é Calculado e Retido</mat-option>
-              <mat-option value="5">41 - Remessa Para Conserto - Sem Incidencia de ICMS, CFOP Especifico</mat-option>
-              <mat-option value="6">Devolucao de Venda (CST = NF Origem) - Nota Espelho</mat-option>
-              <mat-option value="7">90 - Bonificacao sem Valor - Sem Tributacao/Sem Valor Financeiro</mat-option>
-              <mat-option value="8">41 - Exportacao Direta - ICMS Isento</mat-option>
-            </mat-select>
-      </mat-form-field>
-      -->
+      <mat-form-field appearance="outline" style="width: 270px;">
+          <mat-label>O Produto tem Subs Trib. ?</mat-label>
+          <mat-select formControlName="produtoST">
+            <mat-option value="0">0 - Sim</mat-option>
+            <mat-option value="1">1 - Não</mat-option>
+          </mat-select>
+        </mat-form-field>
+
+
       <mat-form-field appearance="outline" style="width: 300px;">
 
         <mat-label>Origem do Produto</mat-label>
@@ -109,29 +105,36 @@ import { OnInit } from '@angular/core';
               <mat-option value="7">7</mat-option>
             </mat-select>
             
-          <button mat-icon-button matSuffix (click)="abrirAjudaCst()" aria-label="Ajuda">
+          <button mat-icon-button matSuffix (click)="abrirAjudaOrigem()" aria-label="Ajuda">
             <mat-icon>help_outline</mat-icon>
           </button>
 
 
       </mat-form-field>
 
-      <mat-form-field appearance="outline" style="width: 600px;" matTooltip="Selecione o CST (Código de Situação Tributária) de acordo com a operação.">
-        <mat-label>Código da Situação Tributária CST</mat-label>
-            <mat-select formControlName="cst">
-              <mat-option value="0">00 - Tributada integralmente</mat-option>
-              <mat-option value="1">10 - Tributada e com cobrança do ICMS por Subst Trib</mat-option>
-              <mat-option value="2">20 - Com redução da BC</mat-option>
-              <mat-option value="3">30 - Isenta / não tributada e com cobrança do ICMS por Subst Trib</mat-option>
-              <mat-option value="4">40 - Isenta</mat-option>
-              <mat-option value="5">41 - Não tributada</mat-option>
-              <mat-option value="6">50 - Com Suspensão</mat-option>
-              <mat-option value="7">51 - Com diferimento</mat-option>
-              <mat-option value="8">60 - ICMS cobrado anteriormente por Subst Trib</mat-option>
-              <mat-option value="9">70 - Com redução da BC e cobrança do ICMS por Subst Trib</mat-option>
-              <mat-option value="10">90 - Outras</mat-option>
-            </mat-select>
-      </mat-form-field>
+   
+  <mat-form-field appearance="outline" style="width: 600px;" matTooltip="Selecione o CST (Código de Situação Tributária) de acordo com a operação.">
+    <mat-label>Código da Situação Tributária CST</mat-label>
+    <mat-select [formControl]="cstControl">
+      <mat-option value="0">00 - Tributada integralmente</mat-option>
+      <mat-option value="1">10 - Tributada e com cobrança do ICMS por Subst Trib</mat-option>
+      <mat-option value="2">20 - Com redução da BC</mat-option>
+      <mat-option value="3">30 - Isenta / não tributada e com cobrança do ICMS por Subst Trib</mat-option>
+      <mat-option value="4">40 - Isenta</mat-option>
+      <mat-option value="5">41 - Não tributada</mat-option>
+      <mat-option value="6">50 - Com Suspensão</mat-option>
+      <mat-option value="7">51 - Com diferimento</mat-option>
+      <mat-option value="8">60 - ICMS cobrado anteriormente por Subst Trib</mat-option>
+      <mat-option value="9">70 - Com redução da BC e cobrança do ICMS por Subst Trib</mat-option>
+      <mat-option value="10">90 - Outras</mat-option>
+    </mat-select>
+
+   
+  </mat-form-field>
+
+      <button mat-icon-button matSuffix (click)="abrirAjudaCst()" aria-label="Ajuda">
+            <mat-icon>help_outline</mat-icon>
+        </button>
 
        <mat-form-field appearance="outline" style="width: 700px;">
         <mat-label>CSOSN - SIMPLES NACIONAL</mat-label>
@@ -147,11 +150,11 @@ import { OnInit } from '@angular/core';
               <mat-option value="8">41 - Exportacao Direta - ICMS Isento</mat-option>
             </mat-select>
 
-            <button mat-icon-button matSuffix (click)="abrirAjudaCst()" aria-label="Ajuda">
+      </mat-form-field>
+
+            <button mat-icon-button matSuffix (click)="abrirAjudaCsosn()" aria-label="Ajuda">
               <mat-icon>help_outline</mat-icon>
             </button>
-
-      </mat-form-field>
 
       <mat-form-field appearance="outline">
         <mat-label>CFOP</mat-label>
@@ -201,7 +204,7 @@ import { OnInit } from '@angular/core';
   </mat-tab>
 
   <!-- Aba: Impostos -->
-  <mat-tab label="CÁLCULO DO IMPOSTO">
+  <mat-tab label="Impostos">
     <mat-tab-group>
       <!-- Subaba: ICMS -->
       <mat-tab label="ICMS">
@@ -246,12 +249,12 @@ import { OnInit } from '@angular/core';
         </mat-form-field>
 
          <mat-form-field appearance="outline">
-            <mat-label>Base Cálc. ICMS ST</mat-label>
+            <mat-label>Base ICMS ST</mat-label>
              <input matInput type="number" formControlName="bcIcmsSt">
         </mat-form-field>
 
         <mat-form-field appearance="outline">
-            <mat-label>Valor ICMS Subst</mat-label>
+            <mat-label>Valor ICMS ST</mat-label>
              <input matInput type="number" formControlName="vrIcmsSubst">
         </mat-form-field>
 
@@ -269,33 +272,90 @@ import { OnInit } from '@angular/core';
       <mat-tab label="PIS/COFINS">
         <form [formGroup]="formProduto" class="grid grid-cols-1 md:grid-cols-3 gap-4">
           <mat-form-field appearance="outline">
-            <mat-label>Valor</mat-label>
-            <input matInput formControlName="pis">
-          </mat-form-field>
+            <mat-label>Situacao Tributaria</mat-label>
+            <input matInput formControlName="st">
+              </mat-form-field>
+
+                <button mat-icon-button matTooltip="Ver tabela CST" (click)="abrirDialogAjudaStPisCofins()">
+                  <mat-icon>help_outline</mat-icon>
+                </button>
 
           <mat-form-field appearance="outline">
-            <mat-label>COFINS</mat-label>
-            <input matInput formControlName="cofins">
+            <mat-label>Outro campos pis cofin</mat-label>
+            <input matInput formControlName="outroCampoPisCofins">
           </mat-form-field>
         </form>
       </mat-tab>
 
-      <!-- Subaba: Outros Impostos -->
-      <mat-tab label="Outros Impostos">
+      <!-- Subaba: IPI -->
+      <mat-tab label="IPI">
         <form [formGroup]="formProduto" class="grid grid-cols-1 md:grid-cols-3 gap-4">
           <mat-form-field appearance="outline">
-            <mat-label>IPI</mat-label>
-            <input matInput formControlName="ipi">
+            <mat-label>Situação Tributaria</mat-label>
+            <input matInput formControlName="situacaoTrib">
           </mat-form-field>
 
           <mat-form-field appearance="outline">
-            <mat-label>ISS</mat-label>
-            <input matInput type="number" formControlName="iss">
+            <mat-label>Codigo de Enquadramento</mat-label>
+            <input matInput type="number" formControlName="codEnquadr">
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Aliquota</mat-label>
+            <input matInput type="number" formControlName="aliqIpi">
           </mat-form-field>
         </form>
       </mat-tab>
+
+            <!-- Subaba: Retenções -->
+      <mat-tab label="Retenções">
+        <form [formGroup]="formProduto" class="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <mat-form-field appearance="outline">
+            <mat-label>IRRF</mat-label>
+            <input matInput formControlName="irrf">
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Pis / Cofins</mat-label>
+            <input matInput type="number" formControlName="pisCofins">
+          </mat-form-field>
+        </form>
+      </mat-tab>
+
+      
     </mat-tab-group>
   </mat-tab>
+
+    <!-- Aba: Estoque -->
+  <mat-tab label="Estoque">
+    <mat-tab-group>
+      <!-- Subaba: Descricao -->
+      <mat-tab label="Dados dos Produto">
+        <form [formGroup]="formProduto" class="grid grid-cols-1 md:grid-cols-3 gap-4">
+         <mat-form-field style="width: 400px;">
+            <mat-label>Nome do produto</mat-label>
+          
+             <input matInput type="number" formControlName="dadosProd">          </mat-form-field>
+           
+        </form>
+      </mat-tab>
+
+
+
+      <!-- Subaba: Outras inform do estoque -->
+      <mat-tab label="Outras Informacoes">
+        <form [formGroup]="formProduto" class="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <mat-form-field appearance="outline">
+            <mat-label>outras inform</mat-label>
+            <input matInput formControlName="outross">
+          </mat-form-field>
+          </form>
+      </mat-tab>
+         
+      
+    </mat-tab-group>
+  </mat-tab>
+
 </mat-tab-group>
 
 <!-- Botão para adicionar produto -->
@@ -316,6 +376,8 @@ export class ProdutoFormComponent implements OnInit{
 
   regimeSelecionado: string | null = null;
 
+  cstControl!: FormControl;
+  cstCsosnControl!: FormControl;
 
   produtoSelecionado!: Produtos;
   produtoCtrl = new FormControl();
@@ -323,6 +385,7 @@ export class ProdutoFormComponent implements OnInit{
   produtos: Produtos[] = [];
   produtosFiltrados: Produtos[] = [];
 
+  
   constructor(
   private fb: FormBuilder,
   private dialog: MatDialog,
@@ -332,6 +395,7 @@ export class ProdutoFormComponent implements OnInit{
       codigo: ['', Validators.required],
       descricao: ['', Validators.required],
       ncm: ['', Validators.required],
+      origem: ['', Validators.required],
       unidade: ['', Validators.required],
       cfop: ['', Validators.required],
       quantidade: ['', [Validators.required, Validators.min(0.0001)]],
@@ -350,11 +414,12 @@ export class ProdutoFormComponent implements OnInit{
       baseDeCalculo: [{ value: 0, disabled: true }],
       vrDoIcms: [{ value: 0, disabled: true }],
         // ✅ Adicione aqui o campo que estava faltando:
-      cst: [''],
+      cst: [{ value: null, disabled: false }, Validators.required],
 
       // ✅ (opcional: já que também tem cstSimples no HTML)
-      cstSimples: [''],
+      cstSimples: [{ value: null, disabled: false }, Validators.required],
       // ✅ agora sim, todos os campos serão enviados
+      
     });
 
     
@@ -365,22 +430,23 @@ export class ProdutoFormComponent implements OnInit{
     this.formProduto.get('icms')?.valueChanges.subscribe(() => {
       this.atualizaValorTotal();
   });
+
+  
 }
+
 
 ngOnInit(): void {
   this.regimeService.regime$.subscribe(regime => {
     this.regimeSelecionado = regime;
 
-    const isSimples = regime === '1';
-
-    // Aplica de imediato (como o campo ncm já está visível)
-    const ncmControl = this.formProduto.get('ncm');
-    if (isSimples) ncmControl?.disable({ emitEvent: false });
-    else ncmControl?.enable({ emitEvent: false });
+    // Aplica a regra para todos os campos, incluindo CST e NCM
+    this.aplicarRegrasDesabilitaCampos();
   });
+
+  this.cstControl = this.formProduto.get('cst') as FormControl;
+  this.cstCsosnControl = this.formProduto.get('cstSimples') as FormControl;
 }
 
-  
 
   adicionarProduto() {
     if (this.formProduto.valid) {
@@ -469,6 +535,11 @@ ngOnInit(): void {
     }
   }
 
+  abrirAjudaOrigem() {
+    this.dialog.open(AjudaOrigemDialogComponent, {
+      width: '500px'
+    });
+  }
    abrirAjudaCst() {
     this.dialog.open(AjudaCstDialogComponent, {
       width: '500px'
@@ -481,9 +552,16 @@ ngOnInit(): void {
     });
   }
 
+  abrirDialogAjudaStPisCofins() {
+    this.dialog.open(AjudastPisCofinsDialogComponent, {
+      width: '600px',
+      maxHeight: '100vh',
+    });
+  }
+
   
 onTabChange(event: MatTabChangeEvent) {
-  console.log('Aba selecionada:', event.index);
+  console.log('🚀 Troca de aba detectada:', event.index);
   if (event.index === 0) {
     // aba "Produtos"
     this.aplicarRegrasDesabilitaCampos();
@@ -492,26 +570,25 @@ onTabChange(event: MatTabChangeEvent) {
 
 private aplicarRegrasDesabilitaCampos(): void {
   const isSimples = this.regimeSelecionado === '1';
+  const isNormal = this.regimeSelecionado === '3';
 
   console.log('Regime selecionado no ProdutoFormComponent:', this.regimeSelecionado);
 
-  const cstControl = this.formProduto.get('cst');
 
-  if (!cstControl) {
-    console.warn('Campo cst ainda não está disponível');
-  }
+  // CST
+    const cstControl = this.formProduto.get('cst');
+    const cstSimplesControl = this.formProduto.get('cstSimples');
 
-  if (cstControl) {
     if (isSimples) {
-      cstControl.disable({ emitEvent: false });
-      console.log('CST desabilitado');
+      cstControl?.disable({ emitEvent: false });
+      cstSimplesControl?.enable({ emitEvent: false });
+    } else if (isNormal) {
+      cstSimplesControl?.disable({ emitEvent: false });
+      cstControl?.enable({ emitEvent: false });
     } else {
-      cstControl.enable({ emitEvent: false });
-      console.log('CST habilitado');
+      // Excesso sublimite ou vazio → habilita ambos (ou personalize se quiser)
+      cstControl?.enable({ emitEvent: false });
+      cstSimplesControl?.enable({ emitEvent: false });
     }
   }
-}
-
-
-
 }

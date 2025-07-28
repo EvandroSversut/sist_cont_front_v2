@@ -69,9 +69,10 @@ import { MatTabChangeEvent } from '@angular/material/tabs';
           <input matInput formControlName="cnae">
         </mat-form-field>
 
-        <mat-form-field appearance="outline">
+        <mat-form-field appearance="outline" style="width: 310px;">
           <mat-label>Regime Tributário</mat-label>
           <mat-select formControlName="crt">
+            <mat-option value="" disabled selected>Selecione o regime</mat-option>
             <mat-option value="1">Simples Nacional</mat-option>
             <mat-option value="2">Simples Nacional - excesso sublimite</mat-option>
             <mat-option value="3">Regime Normal</mat-option>
@@ -92,7 +93,11 @@ export class EmitenteFormComponent implements OnInit{
 
 ngOnInit() {
     this.formEmitente.get('crt')?.valueChanges.subscribe(value => {
+      console.log('crt ' + value + ' selecionado!!');
+         
+
       this.regimeService.setRegime(value);
+      
     });
   }
 

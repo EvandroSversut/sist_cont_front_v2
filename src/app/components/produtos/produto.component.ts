@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
@@ -12,6 +12,11 @@ import { MatCardModule } from '@angular/material/card';
 import { MatTableDataSource } from '@angular/material/table';
 import { ProdutoService } from '../../services/produto.service';
 import { Produtos } from '../../model/produtos.model';
+import { MatTooltip } from '@angular/material/tooltip';
+import { AjudaCestDialogComponent } from '../dialogs/cest/ajuda-cest-dialog.component';
+import { MatDialog } from '@angular/material/dialog';
+import { MatAutocompleteModule } from "@angular/material/autocomplete";
+import { MatSelectModule } from '@angular/material/select';
 
 @Component({
   selector: 'app-produto',
@@ -27,8 +32,11 @@ import { Produtos } from '../../model/produtos.model';
     MatIconModule,
     MatTableModule,
     MatTabsModule,
-    MatCardModule
-  ]
+    MatCardModule,
+    MatTooltip,
+    MatSelectModule, 
+    ReactiveFormsModule
+]
 })
 export class ProdutoComponent implements OnInit {
 
@@ -48,7 +56,7 @@ export class ProdutoComponent implements OnInit {
   displayedColumns: string[] = ['id', 'nomeProduto', 'unidade', 'descricao', 'acoes'];
   dataSource = new MatTableDataSource<Produtos>();
 
-  constructor(private service: ProdutoService) {}
+  constructor(private service: ProdutoService,   private dialog: MatDialog,) {}
 
   ngOnInit(): void {
     this.listar();
@@ -106,4 +114,11 @@ export class ProdutoComponent implements OnInit {
       (p.descricao?.toLowerCase().includes(termo) ?? false)
     );
   }
+
+    abrirDialogAjudaStPisCofins() {
+      this.dialog.open(AjudaCestDialogComponent, {
+        width: '600px',
+        maxHeight: '100vh',
+      });
+    }
 }

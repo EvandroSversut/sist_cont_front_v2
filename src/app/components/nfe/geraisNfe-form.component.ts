@@ -152,13 +152,6 @@ import { MatIconModule } from '@angular/material/icon';
         </mat-select>
         </mat-form-field>
 
-        <mat-form-field appearance="outline">
-          <mat-label>Destinatario Final</mat-label>
-          <mat-select formControlName="consumidorFinal">
-            <mat-option value="0">0 - Intermediario</mat-option>
-            <mat-option value="1">1 - Consumidor Final</mat-option>
-          </mat-select>
-        </mat-form-field>
 
          <mat-form-field appearance="outline">
           <mat-label>Venda Presencial ?</mat-label>

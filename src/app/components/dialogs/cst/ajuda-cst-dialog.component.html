@@ -1,18 +1,85 @@
-<h2 mat-dialog-title>Ajuda sobre CST</h2>
+<div style="max-height: 500px; overflow-y: auto; padding-right: 10px;">
+<h2>O que é o CST?</h2>
+<p style="font-size: 14px; margin-top: 0.4rem;">
+  O <strong>CST (Código de Situação Tributária)</strong> indica como o ICMS está sendo tratado na operação da nota fiscal.
+  A escolha correta depende do regime tributário da empresa e da natureza da operação.
+</p>
+<div style="margin-top: 1rem; font-size: 14px;">
+  <em><strong>Importante:</strong> Empresas do <u>Simples Nacional</u> utilizam o <strong>CSOSN</strong> no lugar do CST. O CST é usado por empresas do <u>Lucro Real</u> ou <u>Lucro Presumido</u> (Regime Normal).</em>
+</div>
 
-<mat-dialog-content>
-  <p><strong>0</strong>: Nacional, exceto as indicadas nos códigos 3 a 5.</p>
-  <p><strong>1</strong>: Estrangeira - Importação direta, exceto a indicada no código 6.</p>
-  <p><strong>2</strong>: Estrangeira - Adquirida no mercado interno, exceto a indicada no código 7.</p>
-  <p><strong>3</strong>: Nacional, mercadoria ou bem com Conteúdo de Importação superior a 40%.</p>
-  <p><strong>4</strong>: Nacional, cuja produção tenha sido feita em conformidade com os processos
-                                produtivos básicos de que tratam o Decreto-Lei nº 288/67 e as Leis nºs 8.248/91,
-                                8.387/91, 10.176/01 e 11.484/07.</p>
-  <p><strong>5</strong>: Nacional, mercadoria ou bem com Conteúdo de Importação inferior ou igual a 40%.</p>
-  <p><strong>6</strong>: Estrangeira - Importação direta, sem similar nacional, constante em lista de Resolução CAMEX.</p>
-  <p><strong>7</strong>: Estrangeira - Adquirida no mercado interno, sem similar nacional, constante em lista de Resolução CAMEX.</p>
-</mat-dialog-content>
+<h3 style="margin-top: .4rem;">Códigos CST mais comuns:</h3>
+<table style="width: 100%; border-collapse: collapse; margin-top: 1rem;">
+  <thead>
+    <tr>
+      <th style="border: 1px solid #ccc; padding: 8px;">Código</th>
+      <th style="border: 1px solid #ccc; padding: 8px;">Descrição</th>
+      <th style="border: 1px solid #ccc; padding: 8px;">Explicação Simplificada</th>
+    </tr>
+  </thead>
+  <tbody style="font-size: 12px;">
+    <tr>
+      <td style="border: 1px solid #ccc; padding: 8px;">00</td>
+      <td style="border: 1px solid #ccc; padding: 8px;">Tributada integralmente</td>
+      <td style="border: 1px solid #ccc; padding: 8px;">Operação totalmente tributada com ICMS.</td>
+    </tr>
+    <tr>
+      <td style="border: 1px solid #ccc; padding: 8px;">10</td>
+      <td style="border: 1px solid #ccc; padding: 8px;">Tributada com cobrança de ICMS por ST</td>
+      <td style="border: 1px solid #ccc; padding: 8px;">Parte é paga normalmente e parte é retida por substituição tributária.</td>
+    </tr>
+    <tr>
+      <td style="border: 1px solid #ccc; padding: 8px;">20</td>
+      <td style="border: 1px solid #ccc; padding: 8px;">Com redução de base de cálculo</td>
+      <td style="border: 1px solid #ccc; padding: 8px;">ICMS calculado sobre base reduzida.</td>
+    </tr>
+    <tr>
+      <td style="border: 1px solid #ccc; padding: 8px;">30</td>
+      <td style="border: 1px solid #ccc; padding: 8px;">Isenta ou não tributada com ST</td>
+      <td style="border: 1px solid #ccc; padding: 8px;">Sem ICMS direto, mas com retenção antecipada (ST).</td>
+    </tr>
+    <tr>
+      <td style="border: 1px solid #ccc; padding: 8px;">40</td>
+      <td style="border: 1px solid #ccc; padding: 8px;">Isenta</td>
+      <td style="border: 1px solid #ccc; padding: 8px;">Operação isenta de ICMS.</td>
+    </tr>
+    <tr>
+      <td style="border: 1px solid #ccc; padding: 8px;">41</td>
+      <td style="border: 1px solid #ccc; padding: 8px;">Não tributada</td>
+      <td style="border: 1px solid #ccc; padding: 8px;">Sem incidência de ICMS, como exportações.</td>
+    </tr>
+    <tr>
+      <td style="border: 1px solid #ccc; padding: 8px;">50</td>
+      <td style="border: 1px solid #ccc; padding: 8px;">Suspensão</td>
+      <td style="border: 1px solid #ccc; padding: 8px;">ICMS suspenso temporariamente.</td>
+    </tr>
+    <tr>
+      <td style="border: 1px solid #ccc; padding: 8px;">51</td>
+      <td style="border: 1px solid #ccc; padding: 8px;">Diferimento</td>
+      <td style="border: 1px solid #ccc; padding: 8px;">Pagamento do ICMS adiado.</td>
+    </tr>
+    <tr>
+      <td style="border: 1px solid #ccc; padding: 8px;">60</td>
+      <td style="border: 1px solid #ccc; padding: 8px;">ICMS cobrado anteriormente por ST</td>
+      <td style="border: 1px solid #ccc; padding: 8px;">ICMS já retido por outro contribuinte da cadeia.</td>
+    </tr>
+    <tr>
+      <td style="border: 1px solid #ccc; padding: 8px;">70</td>
+      <td style="border: 1px solid #ccc; padding: 8px;">Redução de base + ST</td>
+      <td style="border: 1px solid #ccc; padding: 8px;">Redução da base com substituição tributária.</td>
+    </tr>
+    <tr>
+      <td style="border: 1px solid #ccc; padding: 8px;">90</td>
+      <td style="border: 1px solid #ccc; padding: 8px;">Outros</td>
+      <td style="border: 1px solid #ccc; padding: 8px;">Situações específicas. Use somente com orientação contábil.</td>
+    </tr>
+  </tbody>
+</table>
 
-<mat-dialog-actions align="end">
-  <button mat-button mat-dialog-close>Fechar</button>
-</mat-dialog-actions>
+<h3 style="margin-top: 1.5rem;">Dicas:</h3>
+<ul>
+  <li>Consulte seu contador em caso de dúvida.</li>
+  <li>A escolha errada pode gerar erro na NF-e ou problemas fiscais.</li>
+  <li>Empresas do <strong>Simples Nacional</strong> devem usar o campo <strong>CSOSN</strong> no lugar do CST.</li>
+</ul>
+</div>

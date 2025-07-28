@@ -28,12 +28,32 @@
             <input matInput [(ngModel)]="produto.ncm" name="ncm" required>
           </mat-form-field>
 
+          <mat-form-field appearance="outline" matTooltip="CEST - Codigo da Situação Tributária.">
+            <mat-label>CEST</mat-label>
+            <input matInput [(ngModel)]="produto.ncm" name="ncm" required>
+          </mat-form-field>
+          
+          <mat-form-field appearance="outline">
+            <mat-label>O Produto tem Subst Trib ?</mat-label>
+            <input matInput [(ngModel)]="produto.ncm" name="stt" required>
+          </mat-form-field>
+
+          
+              <button mat-icon-button matTooltip="Ver tabela CST" (click)="abrirDialogAjudaStPisCofins()">
+                <mat-icon>help_outline</mat-icon>
+              </button>
+
         </div>
       </mat-tab>
 
       <!-- Aba Outros -->
       <mat-tab label="Outros">
         <div class="form-grid">
+
+          <mat-form-field appearance="outline">
+            <mat-label>Categoria</mat-label>
+            <input matInput >
+          </mat-form-field>
 
           <mat-form-field appearance="outline" class="full-width">
             <mat-label>Descrição</mat-label>

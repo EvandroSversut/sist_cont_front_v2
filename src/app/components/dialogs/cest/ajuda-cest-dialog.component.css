@@ -1,0 +1,8 @@
+mat-dialog-content {
+  max-height: 400px;
+  overflow: auto;
+}
+
+p {
+  margin: 5px 0;
+}

@@ -87,6 +87,15 @@ import { MatDialog } from '@angular/material/dialog';
             <mat-option value="9">Não contribuinte</mat-option>
           </mat-select>
         </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Destinatario Final</mat-label>
+          <mat-select formControlName="consumidorFinal">
+            <mat-option value="0">0 - Intermediario</mat-option>
+            <mat-option value="1">1 - Consumidor Final</mat-option>
+          </mat-select>
+        </mat-form-field>
+
       </form>
     </mat-card>
   `
