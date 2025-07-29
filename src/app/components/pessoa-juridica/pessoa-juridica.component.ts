@@ -110,7 +110,8 @@ export class PessoaJuridicaComponent {
       bairro: '',
       cep: '',
       cidade: '',
-      uf: ''
+      uf: '',
+      ibge: ''
     };
   }
 

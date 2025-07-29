@@ -101,14 +101,19 @@ export class IbgeFormComponent {
      this.carregarIbges(); // carrega ao iniciar
   }
  
-  salvar() {
-    if (this.formIbge.valid) {
-      this.ibgeService.salvar(this.formIbge.value).subscribe({
-        next: () => alert('Salvo com sucesso!'),
-        error: err => alert('Erro ao salvar: ' + err.message)
-      });
-    }
+salvar() {
+  if (this.formIbge.valid) {
+    this.ibgeService.salvar(this.formIbge.value).subscribe({
+      next: () => {
+        this.formIbge.reset();               // limpa o formulário
+        this.carregarIbges();                // ✅ recarrega a lista
+        alert('Salvo com sucesso!');
+      },
+      error: err => alert('Erro ao salvar: ' + err.message)
+    });
   }
+}
+
 
   carregarIbges() {
     this.ibgeService.listar().subscribe({

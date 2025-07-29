@@ -17,5 +17,6 @@ export interface JuridicaDTO {
   cep: string;
   cidade: string;
   uf: string;
+  ibge: string;
   
 }
