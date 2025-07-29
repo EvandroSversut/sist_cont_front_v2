@@ -8,6 +8,7 @@ import { UsuarioComponent } from './components/usuario/usuario.component';
 import { ComprasComponent } from './components/compras/compras.component';
 import { ProdutoComponent } from './components/produtos/produto.component';
 import { NfeComponent } from './components/nfe/nfe.component';
+import { IbgeFormComponent } from './components/ibge/ibge-form.component';
 
 export const routes: Routes = [
 
@@ -21,6 +22,7 @@ export const routes: Routes = [
   { path: 'compras', component: ComprasComponent, canActivate: [authGuard] },
   { path: 'produtos', component: ProdutoComponent, canActivate: [authGuard] },
   { path: 'nfe', component: NfeComponent },
+   { path: 'ibge', component: IbgeFormComponent },
   { path: '', redirectTo: 'nfe', pathMatch: 'full' }
 ];
 
