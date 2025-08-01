@@ -20,6 +20,11 @@ export class IbgeService {
 
   listar(): Observable<Ibge[]> {
   return this.http.get<Ibge[]>(this.api);
-}
+  }
 
+  getEstados(): Observable<Ibge[]> {
+    return this.http.get<Ibge[]>(this.api);
+  }
+
+  
 }

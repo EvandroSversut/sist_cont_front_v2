@@ -16,6 +16,8 @@ import { JuridicaDTO } from '../../dto/juridica.dto';
 import { PessoaJuridicaService } from '../../services/pessoa-juridica.service';
 import { PessoaJuridica } from '../../model/pessoa-juridica';
 import { Pessoa } from '../../model/pessoa.model';
+import { BuscaIbgeDialogComponent } from '../dialogs/ibge/busca-ibge-dialog.component';
+import { MatDialog } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-pessoa-juridica',
@@ -24,8 +26,7 @@ import { Pessoa } from '../../model/pessoa.model';
     CommonModule,
     FormsModule,
     RouterModule,
-    HttpClientModule,
-
+    
     // ✅ Importação dos módulos do Angular Material
     MatTabsModule,
     MatFormFieldModule,
@@ -51,7 +52,9 @@ export class PessoaJuridicaComponent {
 
   constructor(
     private service: PessoaJuridicaService,
-    private router: Router
+    private router: Router,
+    private dialog: MatDialog  
+      
   ) {}
 
   ngOnInit() {
@@ -62,7 +65,7 @@ export class PessoaJuridicaComponent {
   
   buscar() { /* ... */ }
   
-  excluir(id: number) { /* ... */ }
+
   novo() { this.limparFormulario(); }
   limparFormulario() { this.pessoaJur = this.novaPessoa(); }
   tratarErro(err: any) { /* ... */ }
@@ -119,6 +122,34 @@ export class PessoaJuridicaComponent {
   this.pessoaJur = { ...juridica }; // <-- Clona o objeto para o formulário
    console.log('Editando:', this.pessoaJur);
   }
+
+  abrirBuscaIbge() {
+    const dialogRef = this.dialog.open(BuscaIbgeDialogComponent, {
+      width: '800px'
+    });
+
+    dialogRef.afterClosed().subscribe((resultado) => {
+      if (resultado) {
+        this.pessoaJur.ibge = resultado.codIbge; // 👈 Preenche o input com o código IBGE
+      }
+    })
+}
+
+  excluir(id: number) {
+  if (confirm('Tem certeza que deseja excluir esta Pessoa Jurídica?')) {
+    this.service.excluir(id).subscribe({
+      next: () => {
+        alert('Pessoa Jurídica excluída com sucesso!');
+        this.carregarTabela(); // Atualiza a tabela após excluir
+      },
+      error: (erro) => {
+        console.error('Erro ao excluir:', erro);
+        alert('Erro ao excluir Pessoa Jurídica');
+      }
+    });
+  }
+}
+
 }
 
     //idPessoaFisica: usuario.idPessoaFisica || usuario.id,

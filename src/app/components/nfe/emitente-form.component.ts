@@ -65,6 +65,11 @@ import { MatTabChangeEvent } from '@angular/material/tabs';
         </mat-form-field>
 
         <mat-form-field appearance="outline">
+          <mat-label>Cod IBGE</mat-label>
+          <input matInput formControlName="ibge">
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
           <mat-label>CNAE</mat-label>
           <input matInput formControlName="cnae">
         </mat-form-field>
@@ -116,12 +121,14 @@ dialogRef.afterClosed().subscribe(result => {
 
     this.formEmitente.patchValue({
       
+      // Aqui define o que vai ser populado nos input
       razaoSocial: result.razaoSocial,
       cnpj: result.cnpj,
       nomeFantasia: result.nomeFantasia,
       ie: result.inscEstadual,  // Aqui corrigido!
       uf: result.uf,
       municipio: result.cidade, // <-- Corrigido
+      ibge: result.ibge,
       cnae: result.cnae,
       crt: result.crt
     });

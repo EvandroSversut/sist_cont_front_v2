@@ -147,6 +147,7 @@ console.log(this.formGeral.get('totais')?.value);
       ie: ['12345678', Validators.required],
       uf: ['SP', Validators.required],
       municipio: ['São Paulo', Validators.required],
+      ibge: ['', Validators.required],
       crt: ['', Validators.required],
       cnae: ['45.55.22', Validators.required]       
     });

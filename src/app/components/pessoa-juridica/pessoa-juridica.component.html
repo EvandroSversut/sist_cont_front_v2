@@ -55,8 +55,14 @@
           
           <mat-form-field appearance="outline">
             <mat-label>Cod IBGE</mat-label>
-            <input matInput [(ngModel)]="pessoaJur.ibge" name="ibge">
+            <input matInput [(ngModel)]="pessoaJur.ibge" name="ibge" required>
           </mat-form-field>
+
+          <!--O type=button diz para nao submeter este botao, 
+          tornando-o independente do formulario e aprenas executar o click-->
+          <button mat-icon-button color="primary" type="button" (click)="abrirBuscaIbge()">
+            <mat-icon>search</mat-icon>
+          </button>
 
         </div>
       </mat-tab>

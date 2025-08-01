@@ -22,4 +22,9 @@ export class PessoaJuridicaService {
   listar(): Observable<JuridicaDTO[]> {
     return this.http.get<JuridicaDTO[]>(this.apiUrl);
   }
+
+  excluir(id: number) {
+  return this.http.delete(`${this.apiUrl}/${id}`);
+}
+
 }
