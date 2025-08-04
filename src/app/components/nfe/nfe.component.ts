@@ -160,6 +160,7 @@ console.log(this.formGeral.get('totais')?.value);
       ie: ['445566', Validators.required],
       uf: ['sp', Validators.required],
       municipio: ['birigui', Validators.required],
+      ibge: ['', Validators.required],
       indIEDest: ['1', Validators.required],
       crt: ['1', Validators.required],
       });

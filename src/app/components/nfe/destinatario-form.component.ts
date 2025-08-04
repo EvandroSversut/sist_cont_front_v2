@@ -65,6 +65,11 @@ import { MatDialog } from '@angular/material/dialog';
           <input matInput formControlName="municipio">
         </mat-form-field>
 
+       <mat-form-field appearance="outline">
+          <mat-label>Cod IBGE</mat-label>
+          <input matInput formControlName="ibge">
+        </mat-form-field>
+
         <mat-form-field appearance="outline">
           <mat-label>CNAE</mat-label>
           <input matInput formControlName="cnae">
@@ -129,14 +134,15 @@ export class DestinatarioFormComponent {
       console.log('Fornecedor selecionado:', result);  // <-- Aqui imprime o que o Dialog retornou
 
       if (result) {
-        console.log('Campos do formEmitente:', this.formDestinatario.controls);
+        console.log('Campos do formDestinatario:', this.formDestinatario.controls);
         this.formDestinatario.patchValue({ 
           razaoSocial: result.razaoSocial, 
           cnpj: result.cnpj,
           nomeFantasia: result.nomeFantasia,
-          ie: result.inscEstadual,  // Aqui corrigido!
+          ie: result.inscEstadual,
           uf: result.uf,
-          municipio: result.cidade, // <-- Corrigido
+          municipio: result.cidade,
+          ibge: result.ibge,
           cnae: result.cnae,
           crt: result.crt
         });

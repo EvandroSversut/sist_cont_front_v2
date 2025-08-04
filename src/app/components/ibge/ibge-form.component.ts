@@ -7,6 +7,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { Ibge, IbgeService } from '../../services/ibge.service';
 import { MatTableModule } from '@angular/material/table';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 @Component({
   selector: 'app-ibge-form',
@@ -18,35 +19,58 @@ import { MatTableModule } from '@angular/material/table';
     MatInputModule, 
     MatButtonModule,
     ReactiveFormsModule,
-    MatTableModule
+    MatTableModule,
+    MatTooltipModule
                      ],
       
   template: `
-<form [formGroup]="formIbge" (ngSubmit)="salvar()">
+<form [formGroup]="formIbge" (ngSubmit)="salvar()" class="form-container">
   <mat-card>
-    <mat-card-title>Tabela IBGE</mat-card-title>
+    <mat-card-title>Cadastro IBGE</mat-card-title>
     <mat-card-content>
 
-      <mat-form-field class="full-width">
-        <mat-label>Cod IBGE</mat-label>
-        <input matInput formControlName="codIbge">
-      </mat-form-field>
+  <div class="form-row">
+    <mat-form-field class="field">
+      <mat-label>UF</mat-label>
+      <input matInput formControlName="ufIbge">
+    </mat-form-field>
 
-      <mat-form-field class="full-width">
-        <mat-label>Nome IBGE</mat-label>
-        <input matInput formControlName="nomeIbge">
-      </mat-form-field>
+    <mat-form-field class="field" matTooltip="2 digitos do cod da unid federativa + 5 dig do ibge.">
+      <mat-label>Cod IBGE</mat-label>
+      <input matInput formControlName="codIbge" maxlength="7">
+    </mat-form-field>
+  </div>
 
-      <mat-form-field class="full-width">
-        <mat-label>UF IBGE</mat-label>
-        <input matInput formControlName="ufIbge">
-      </mat-form-field>
+  <div class="form-row">
+    <mat-form-field class="field">
+      <mat-label>Nome do Estado</mat-label>
+      <input matInput formControlName="nomeEstado">
+    </mat-form-field>
 
-      <button mat-raised-button color="primary" type="submit" [disabled]="formIbge.invalid">
-        Salvar
-      </button>
+    <mat-form-field class="field">
+      <mat-label>Nome do Município</mat-label>
+      <input matInput formControlName="nomeMun">
+    </mat-form-field>
+  </div>
 
-    </mat-card-content>
+  <div class="form-row">
+    <mat-form-field class="field">
+      <mat-label>Código da UF</mat-label>
+      <input matInput formControlName="codUF" maxlength="2">
+    </mat-form-field>
+
+    <mat-form-field class="field">
+      <mat-label>Região</mat-label>
+      <input matInput formControlName="regiao">
+    </mat-form-field>
+  </div>
+
+  <button mat-raised-button color="primary" type="submit" [disabled]="formIbge.invalid">
+    Salvar
+  </button>
+
+</mat-card-content>
+
   </mat-card>
 </form>
 
@@ -58,22 +82,28 @@ import { MatTableModule } from '@angular/material/table';
   <mat-card-content>
     <table mat-table [dataSource]="dataSource" class="mat-elevation-z8 full-width">
 
-      <!-- Cod IBGE -->
-      <ng-container matColumnDef="codIbge">
-        <th mat-header-cell *matHeaderCellDef> Código </th>
-        <td mat-cell *matCellDef="let row"> {{row.codIbge}} </td>
-      </ng-container>
-
-      <!-- Nome IBGE -->
-      <ng-container matColumnDef="nomeIbge">
-        <th mat-header-cell *matHeaderCellDef> Nome </th>
-        <td mat-cell *matCellDef="let row"> {{row.nomeIbge}} </td>
-      </ng-container>
-
       <!-- UF IBGE -->
       <ng-container matColumnDef="ufIbge">
         <th mat-header-cell *matHeaderCellDef> UF </th>
         <td mat-cell *matCellDef="let row"> {{row.ufIbge}} </td>
+      </ng-container>
+
+      <!-- Cod IBGE -->
+      <ng-container matColumnDef="nomeEstado">
+        <th mat-header-cell *matHeaderCellDef> Nome Estado </th>
+        <td mat-cell *matCellDef="let row"> {{row.nomeEstado}} </td>
+      </ng-container>
+
+      <!-- Nome IBGE -->
+      <ng-container matColumnDef="codIbge">
+        <th mat-header-cell *matHeaderCellDef> Cod Ibge </th>
+        <td mat-cell *matCellDef="let row"> {{row.codIbge}} </td>
+      </ng-container>
+
+      <!-- UF IBGE -->
+      <ng-container matColumnDef="regiao">
+        <th mat-header-cell *matHeaderCellDef> Regiao </th>
+        <td mat-cell *matCellDef="let row"> {{row.regiao}} </td>
       </ng-container>
 
       <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
@@ -84,18 +114,43 @@ import { MatTableModule } from '@angular/material/table';
 </mat-card>
 
   `,
-  styles: [`.full-width { width: 100%; margin-bottom: 16px; }`]
+  styles: [`
+  .form-container {
+    margin-top: 40px; /* ajuste esse valor conforme a altura do seu menu */
+  }
+
+  .full-width {
+    width: 100%;
+    margin-bottom: 16px;
+  }
+
+  .form-row {
+    display: flex;
+    gap: 16px;
+    margin-bottom: 16px;
+    flex-wrap: wrap;
+  }
+
+  .field {
+    flex: 1;
+    min-width: 200px;
+  }
+`]
+
 })
 export class IbgeFormComponent {
   formIbge: FormGroup;
-  displayedColumns: string[] = ['codIbge', 'nomeIbge', 'ufIbge'];
+  displayedColumns: string[] = ['ufIbge','nomeEstado','codIbge', 'regiao'];
   dataSource: Ibge[] = [];
 
   constructor(private fb: FormBuilder, private ibgeService: IbgeService) {
     this.formIbge = this.fb.group({
+      ufIbge: ['', Validators.required],
       codIbge: ['', Validators.required],
-      nomeIbge: ['', Validators.required],
-      ufIbge: ['', Validators.required]
+      nomeEstado: ['', Validators.required],
+      nomeMun: ['', Validators.required],
+      codUf: ['', Validators.required],
+      regiao: ['', Validators.required]
     });
 
      this.carregarIbges(); // carrega ao iniciar
