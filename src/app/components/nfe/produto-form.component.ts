@@ -91,18 +91,20 @@ import { AjudastPisCofinsDialogComponent } from '../dialogs/st Pis Cofins/ajuda-
         </mat-form-field>
 
 
-      <mat-form-field appearance="outline" style="width: 300px;">
+      <mat-form-field appearance="outline" style="width: 700px;">
 
         <mat-label>Origem do Produto</mat-label>
             <mat-select formControlName="origem">
-              <mat-option value="0">0</mat-option>
-              <mat-option value="1">1</mat-option>
-              <mat-option value="2">2</mat-option>
-              <mat-option value="3">3</mat-option>
-              <mat-option value="4">4</mat-option>
-              <mat-option value="5">5</mat-option>
-              <mat-option value="6">6</mat-option>
-              <mat-option value="7">7</mat-option>
+              <mat-option value="0">0 - Nacional</mat-option>
+              <mat-option value="1">1 - Estrangeira - Importação direta, exceto a indicada no código 6.</mat-option>
+              <mat-option value="2">2 - Estrangeira - Adquirida no mercado interno, exceto a indicada no código 7.</mat-option>
+              <mat-option value="3">3 - Nacional, mercadoria ou bem com Conteúdo de Importação superior a 40%.</mat-option>
+              <mat-option value="4">4 - Nacional, cuja produção tenha sido feita em conformidade com os processos
+                                produtivos básicos de que tratam o Decreto-Lei nº 288/67 e as Leis nºs 8.248/91,
+                                8.387/91, 10.176/01 e 11.484/07.</mat-option>
+              <mat-option value="5">5 - Nacional, mercadoria ou bem com Conteúdo de Importação inferior ou igual a 40%.</mat-option>
+              <mat-option value="6">6 - Estrangeira - Importação direta, sem similar nacional, constante em lista de Resolução CAMEX.</mat-option>
+              <mat-option value="7">7 - Estrangeira - Adquirida no mercado interno, sem similar nacional, constante em lista de Resolução CAMEX.</mat-option>
             </mat-select>
             
           <button mat-icon-button matSuffix (click)="abrirAjudaOrigem()" aria-label="Ajuda">
