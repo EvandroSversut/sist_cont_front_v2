@@ -58,7 +58,7 @@ import { AjudastPisCofinsDialogComponent } from '../dialogs/st Pis Cofins/ajuda-
         <input matInput formControlName="codigo">
       </mat-form-field>
 
-      <mat-form-field appearance="outline">
+      <mat-form-field appearance="fill">
         <mat-label>Descrição</mat-label>
         <input type="text" matInput [matAutocomplete]="autoProduto" [formControl]="produtoCtrl">
         <mat-autocomplete #autoProduto="matAutocomplete" (optionSelected)="selecionaProduto($event.option.value)">
@@ -91,28 +91,7 @@ import { AjudastPisCofinsDialogComponent } from '../dialogs/st Pis Cofins/ajuda-
         </mat-form-field>
 
 
-      <mat-form-field appearance="outline" style="width: 700px;">
 
-        <mat-label>Origem do Produto</mat-label>
-            <mat-select formControlName="origem">
-              <mat-option value="0">0 - Nacional</mat-option>
-              <mat-option value="1">1 - Estrangeira - Importação direta, exceto a indicada no código 6.</mat-option>
-              <mat-option value="2">2 - Estrangeira - Adquirida no mercado interno, exceto a indicada no código 7.</mat-option>
-              <mat-option value="3">3 - Nacional, mercadoria ou bem com Conteúdo de Importação superior a 40%.</mat-option>
-              <mat-option value="4">4 - Nacional, cuja produção tenha sido feita em conformidade com os processos
-                                produtivos básicos de que tratam o Decreto-Lei nº 288/67 e as Leis nºs 8.248/91,
-                                8.387/91, 10.176/01 e 11.484/07.</mat-option>
-              <mat-option value="5">5 - Nacional, mercadoria ou bem com Conteúdo de Importação inferior ou igual a 40%.</mat-option>
-              <mat-option value="6">6 - Estrangeira - Importação direta, sem similar nacional, constante em lista de Resolução CAMEX.</mat-option>
-              <mat-option value="7">7 - Estrangeira - Adquirida no mercado interno, sem similar nacional, constante em lista de Resolução CAMEX.</mat-option>
-            </mat-select>
-            
-          <button mat-icon-button matSuffix (click)="abrirAjudaOrigem()" aria-label="Ajuda">
-            <mat-icon>help_outline</mat-icon>
-          </button>
-
-
-      </mat-form-field>
 
    
   <mat-form-field appearance="outline" style="width: 600px;" matTooltip="Selecione o CST (Código de Situação Tributária) de acordo com a operação.">
@@ -207,24 +186,37 @@ import { AjudastPisCofinsDialogComponent } from '../dialogs/st Pis Cofins/ajuda-
 
   <!-- Aba: Impostos -->
   <mat-tab label="Impostos">
+
     <mat-tab-group>
       <!-- Subaba: ICMS -->
+   <mat-form-field appearance="outline">
+      <mat-label>Base de Calculo Icms</mat-label>
+      <input matInput formControlName="vrTotalProd" [value]="formProduto.get('vrTotalProd')?.value | currency:'BRL':'symbol-narrow'" readonly>
+    </mat-form-field>
+
       <mat-tab label="ICMS">
         <form [formGroup]="formProduto" class="grid grid-cols-1 md:grid-cols-3 gap-4">
-         <mat-form-field style="width: 400px;">
-            <mat-label>Origem da Mercadoria</mat-label>
+      <mat-form-field appearance="outline" style="width: 700px;">
+        <mat-label>Origem do Produto</mat-label>
             <mat-select formControlName="origem">
               <mat-option value="0">0 - Nacional</mat-option>
-              <mat-option value="1">1 - Importação Direta</mat-option>
-              <mat-option value="2">2 - Importação Mercado Interno</mat-option>
-              <mat-option value="3">3 - Nacional c/ conteúdo importado > 40%</mat-option>
-              <mat-option value="4">4 - Nacional conforme PPB</mat-option>
-              <mat-option value="5">5 - Nacional c/ conteúdo importado ≤ 40%</mat-option>
-              <mat-option value="6">6 - Importação s/ similar nacional</mat-option>
-              <mat-option value="7">7 - Mercado interno s/ similar nacional</mat-option>
-              <mat-option value="8">8 - Nacional c/ conteúdo importado ≤ 70%</mat-option>
+              <mat-option value="1">1 - Estrangeira - Importação direta, exceto a indicada no código 6.</mat-option>
+              <mat-option value="2">2 - Estrangeira - Adquirida no mercado interno, exceto a indicada no código 7.</mat-option>
+              <mat-option value="3">3 - Nacional, mercadoria ou bem com Conteúdo de Importação superior a 40%.</mat-option>
+              <mat-option value="4">4 - Nacional, cuja produção tenha sido feita em conformidade com os processos
+                                produtivos básicos de que tratam o Decreto-Lei nº 288/67 e as Leis nºs 8.248/91,
+                                8.387/91, 10.176/01 e 11.484/07.</mat-option>
+              <mat-option value="5">5 - Nacional, mercadoria ou bem com Conteúdo de Importação inferior ou igual a 40%.</mat-option>
+              <mat-option value="6">6 - Estrangeira - Importação direta, sem similar nacional, constante em lista de Resolução CAMEX.</mat-option>
+              <mat-option value="7">7 - Estrangeira - Adquirida no mercado interno, sem similar nacional, constante em lista de Resolução CAMEX.</mat-option>
             </mat-select>
-          </mat-form-field>
+            
+          <button mat-icon-button matSuffix (click)="abrirAjudaOrigem()" aria-label="Ajuda">
+            <mat-icon>help_outline</mat-icon>
+          </button>
+
+
+      </mat-form-field>
 
          <mat-form-field appearance="outline">
             <mat-label>Base de Cálculo do ICMS</mat-label>
@@ -234,7 +226,7 @@ import { AjudastPisCofinsDialogComponent } from '../dialogs/st Pis Cofins/ajuda-
 
           <mat-form-field appearance="outline">
             <mat-label>% ICMS</mat-label>
-                  <mat-select formControlName="icms">
+                  <mat-select formControlName="aliqIcms">
                   <mat-option value="4">4%</mat-option>
                   <mat-option value="7">7%</mat-option>
                   <mat-option value="12">12%</mat-option>
@@ -273,7 +265,13 @@ import { AjudastPisCofinsDialogComponent } from '../dialogs/st Pis Cofins/ajuda-
       <!-- Subaba: PIS/COFINS -->
       <mat-tab label="PIS/COFINS">
         <form [formGroup]="formProduto" class="grid grid-cols-1 md:grid-cols-3 gap-4">
-          <mat-form-field appearance="outline">
+
+          <mat-form-field appearance="fill">
+            <mat-label>Base de Cálculo PIS/COFINS</mat-label>
+            <input matInput [value]="formProduto.get('baseDeCalculo')?.value | currency:'BRL':'symbol'" readonly>
+          </mat-form-field>
+
+          <mat-form-field appearance="fill">
             <mat-label>Situacao Tributaria</mat-label>
             <input matInput formControlName="st">
               </mat-form-field>
@@ -412,7 +410,7 @@ export class ProdutoFormComponent implements OnInit{
       pis: [''],
       cofins: [''],
       iss: [''],
-      aliquotaIcms: ['', Validators.required], // isso faz referencia ao input "aliquotaIcms"
+      aliqIcms: ['', Validators.required], // isso faz referencia ao input "aliquotaIcms"
       baseDeCalculo: [{ value: 0, disabled: true }],
       vrDoIcms: [{ value: 0, disabled: true }],
         // ✅ Adicione aqui o campo que estava faltando:
@@ -429,7 +427,7 @@ export class ProdutoFormComponent implements OnInit{
       this.atualizaValorTotal();
 });
 
-    this.formProduto.get('icms')?.valueChanges.subscribe(() => {
+    this.formProduto.get('aliqIcms')?.valueChanges.subscribe(() => {
       this.atualizaValorTotal();
   });
 
@@ -505,7 +503,7 @@ ngOnInit(): void {
     const seguro = this.formProduto.get('seguro')!.value || 0;
     const outrasDesp = this.formProduto.get('outrasDesp')!.value || 0;
     const total = (qtde * unit) + ( - desconto + frete + seguro + outrasDesp);
-    const icmsAliquota = Number(this.formProduto.get('icms')!.value) || 0;
+    const icmsAliquota = Number(this.formProduto.get('aliqIcms')!.value) || 0;
     // Este  { emitEvent: false } serve para nao dar loop infinito pois estava travando a tela.
     this.formProduto.get('vrTotalProd')!.setValue(total, { emitEvent: false });
     this.formProduto.get('baseDeCalculo')!.setValue(total, { emitEvent: false });
