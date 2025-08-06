@@ -72,17 +72,17 @@ import { AjudastPisCofinsDialogComponent } from '../dialogs/st Pis Cofins/ajuda-
         <mat-icon>search</mat-icon>
       </button>
 
-      <mat-form-field appearance="outline">
+      <mat-form-field appearance="fill">
         <mat-label>Código de Barras</mat-label>
         <input matInput formControlName="codBarras">
       </mat-form-field>
 
-      <mat-form-field appearance="outline">
+      <mat-form-field appearance="fill">
         <mat-label>NCM</mat-label>
         <input matInput formControlName="ncm">
       </mat-form-field>
 
-      <mat-form-field appearance="outline" style="width: 270px;">
+      <mat-form-field appearance="fill" style="width: 270px;">
           <mat-label>O Produto tem Subs Trib. ?</mat-label>
           <mat-select formControlName="produtoST">
             <mat-option value="0">0 - Sim</mat-option>
@@ -90,11 +90,8 @@ import { AjudastPisCofinsDialogComponent } from '../dialogs/st Pis Cofins/ajuda-
           </mat-select>
         </mat-form-field>
 
-
-
-
-   
-  <mat-form-field appearance="outline" style="width: 600px;" matTooltip="Selecione o CST (Código de Situação Tributária) de acordo com a operação.">
+  
+  <mat-form-field appearance="fill" style="width: 600px;" matTooltip="Selecione o CST (Código de Situação Tributária) de acordo com a operação.">
     <mat-label>Código da Situação Tributária CST</mat-label>
     <mat-select [formControl]="cstControl">
       <mat-option value="0">00 - Tributada integralmente</mat-option>
@@ -117,7 +114,7 @@ import { AjudastPisCofinsDialogComponent } from '../dialogs/st Pis Cofins/ajuda-
             <mat-icon>help_outline</mat-icon>
         </button>
 
-       <mat-form-field appearance="outline" style="width: 700px;">
+       <mat-form-field appearance="fill" style="width: 700px;">
         <mat-label>CSOSN - SIMPLES NACIONAL</mat-label>
             <mat-select formControlName="cstSimples">
               <mat-option value="0">00 - Venda Dentro do Estado - Operacao com ICMS destacado</mat-option>
@@ -137,37 +134,37 @@ import { AjudastPisCofinsDialogComponent } from '../dialogs/st Pis Cofins/ajuda-
               <mat-icon>help_outline</mat-icon>
             </button>
 
-      <mat-form-field appearance="outline">
+      <mat-form-field appearance="fill">
         <mat-label>CFOP</mat-label>
         <input matInput formControlName="cfop">
       </mat-form-field>
 
-      <mat-form-field appearance="outline">
+      <mat-form-field appearance="fill">
         <mat-label>Unidade</mat-label>
         <input matInput formControlName="unidade">
       </mat-form-field>
 
-      <mat-form-field appearance="outline">
+      <mat-form-field appearance="fill">
         <mat-label>Quantidade</mat-label>
         <input matInput type="number" formControlName="quantidade">
       </mat-form-field>
 
-      <mat-form-field appearance="outline">
+      <mat-form-field appearance="fill">
         <mat-label>Valor Unitário</mat-label>
         <input matInput type="number" formControlName="valorUnitario">
       </mat-form-field>
 
-      <mat-form-field appearance="outline">
+      <mat-form-field appearance="fill">
         <mat-label>Desconto</mat-label>
         <input matInput type="number" formControlName="desconto">
       </mat-form-field>
 
-      <mat-form-field appearance="outline">
+      <mat-form-field appearance="fill">
         <mat-label>Frete</mat-label>
         <input matInput type="number" formControlName="frete">
       </mat-form-field>
 
-      <mat-form-field appearance="outline">
+      <mat-form-field appearance="fill">
         <mat-label>Seguro</mat-label>
         <input matInput type="number" formControlName="seguro">
       </mat-form-field>
