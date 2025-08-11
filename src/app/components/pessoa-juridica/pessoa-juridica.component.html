@@ -8,62 +8,51 @@
       <mat-tab label="Dados Pessoa Juridica">
         <div class="form-grid">
 
-          <mat-form-field appearance="outline">
+          <mat-form-field appearance="fill">
             <mat-label>Id Pj</mat-label>
             <input matInput [(ngModel)]="pessoaJur.id" name="idJur">
           </mat-form-field>
 
-          <mat-form-field appearance="outline">
+          <mat-form-field appearance="fill">
             <mat-label>Razao Social</mat-label>
             <input matInput [(ngModel)]="pessoaJur.razaoSocial" name="razaoSocial">
           </mat-form-field>
 
-          <mat-form-field appearance="outline">
+          <mat-form-field appearance="fill">
             <mat-label>Nome Fantasia</mat-label>
             <input matInput [(ngModel)]="pessoaJur.nomeFantasia" name="nomeFantasia">
           </mat-form-field>
 
-          <mat-form-field appearance="outline">
+          <mat-form-field appearance="fill">
             <mat-label>CNPJ</mat-label>
             <input matInput [(ngModel)]="pessoaJur.cnpj" name="cnpj">
           </mat-form-field>
 
-          <mat-form-field appearance="outline">
+          <mat-form-field appearance="fill">
             <mat-label>Inscricao Estadual</mat-label>
             <input matInput [(ngModel)]="pessoaJur.inscEstadual" name="inscEstadual">
           </mat-form-field>
 
-          <mat-form-field appearance="outline">
+          <mat-form-field appearance="fill">
             <mat-label>CNAE</mat-label>
             <input matInput [(ngModel)]="pessoaJur.cnae" name="cnae">
           </mat-form-field>
 
-          <mat-form-field appearance="outline">
+          <mat-form-field appearance="fill">
             <mat-label>Inscricao Municipal</mat-label>
             <input matInput [(ngModel)]="pessoaJur.inscMunicipal" name="inscMunicipal">
           </mat-form-field>
 
-           <mat-form-field appearance="outline">
+           <mat-form-field appearance="fill">
             <mat-label>Telefone</mat-label>
             <input matInput [(ngModel)]="pessoaJur.telefone" name="telefone">
           </mat-form-field>
 
-           <mat-form-field appearance="outline">
+           <mat-form-field appearance="fill">
             <mat-label>Email</mat-label>
             <input matInput [(ngModel)]="pessoaJur.email" name="email">
           </mat-form-field>
           
-          <mat-form-field appearance="outline">
-            <mat-label>Cod IBGE</mat-label>
-            <input matInput [(ngModel)]="pessoaJur.ibge" name="ibge" required>
-          </mat-form-field>
-
-          <!--O type=button diz para nao submeter este botao, 
-          tornando-o independente do formulario e aprenas executar o click-->
-          <button mat-icon-button color="primary" type="button" (click)="abrirBuscaIbge()">
-            <mat-icon>search</mat-icon>
-          </button>
-
         </div>
       </mat-tab>
 
@@ -71,52 +60,69 @@
       <mat-tab label="Endereço">
         <div class="form-grid">
 
-          <mat-form-field appearance="outline">
+        <mat-form-field appearance="fill">
+            <mat-label>CEP</mat-label>
+            <input matInput [(ngModel)]="pessoaJur.cep" (blur)="buscarCep()" name="cep" placeholder="CEP">
+        </mat-form-field>
+
+        <!--A BUSCA DO CEP E FEITA AO DESFOCAR (ACIMA), MAS SE QUISER PODE USAR ESTE BOTAO TBEM
+        <button mat-icon-button color="primary" type="button" (click)="buscarCep()">
+            <mat-icon>search</mat-icon>
+        </button>  -->
+
+          <mat-form-field appearance="fill">
             <mat-label>Rua</mat-label>
             <input matInput [(ngModel)]="pessoaJur.rua" name="rua">
           </mat-form-field>
 
-          <mat-form-field appearance="outline">
+          <mat-form-field appearance="fill">
             <mat-label>Número</mat-label>
             <input matInput [(ngModel)]="pessoaJur.numero" name="numero">
           </mat-form-field>
 
-          <mat-form-field appearance="outline">
+          <mat-form-field appearance="fill">
             <mat-label>Complemento</mat-label>
             <input matInput [(ngModel)]="pessoaJur.complemento" name="complemento">
           </mat-form-field>
 
-          <mat-form-field appearance="outline">
+          <mat-form-field appearance="fill">
             <mat-label>Bairro</mat-label>
             <input matInput [(ngModel)]="pessoaJur.bairro" name="bairro">
           </mat-form-field>
 
-          <mat-form-field appearance="outline">
-            <mat-label>CEP</mat-label>
-            <input matInput [(ngModel)]="pessoaJur.cep" name="cep">
-          </mat-form-field>
-
-          <mat-form-field appearance="outline">
+          <mat-form-field appearance="fill">
             <mat-label>Cidade</mat-label>
-            <input matInput [(ngModel)]="pessoaJur.cidade" name="cidade">
+            <input matInput [(ngModel)]="pessoaJur.cidade" name="cidade" readonly>
+          </mat-form-field>
+          
+           <!--O type=button diz para nao submeter este botao, 
+          tornando-o independente do formulario e aprenas executar o click-->
+          <button mat-icon-button color="primary" type="button" (click)="abrirBuscaIbge()">
+            <mat-icon>search</mat-icon>
+          </button>
+
+          <mat-form-field appearance="fill">
+            <mat-label>Cod IBGE</mat-label>
+            <input matInput [(ngModel)]="pessoaJur.ibge" name="ibge" required readonly>
           </mat-form-field>
 
-          <mat-form-field appearance="outline">
+          <mat-form-field appearance="fill">
             <mat-label>UF</mat-label>
-            <input matInput [(ngModel)]="pessoaJur.uf" name="uf">
+            <input matInput [(ngModel)]="pessoaJur.uf" name="uf" readonly>
           </mat-form-field>
+
         </div>
       </mat-tab>
 
       <!-- Aba Usuário  -->
       <mat-tab label="Outros">
         <div class="form-grid">
-          <mat-form-field appearance="outline">
+          <mat-form-field appearance="fill">
             <mat-label>Outros campo</mat-label>
             <input matInput [(ngModel)]="pessoaJur.email" name="outro1">
           </mat-form-field>
 
-          <mat-form-field appearance="outline">
+          <mat-form-field appearance="fill">
             <mat-label>Outro2</mat-label>
             <input matInput [(ngModel)]="pessoaJur.email" name="outro2">
           </mat-form-field>

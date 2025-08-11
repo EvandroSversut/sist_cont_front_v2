@@ -1,6 +1,6 @@
-import { Component, inject, Inject } from '@angular/core';
+import { Component, inject, Inject, ViewChild } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { MatTableModule } from '@angular/material/table';
+import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatIconModule } from '@angular/material/icon';
 import { MatNativeDateModule } from '@angular/material/core';
 import { CommonModule } from '@angular/common';
@@ -18,6 +18,7 @@ import { JuridicaDTO } from '../../../dto/juridica.dto';
 import { ibge } from '../../../model/ibge.model';
 import { Ibge, IbgeService } from '../../../services/ibge.service';
 import { IbgeDTO } from '../../../dto/ibge.dto';
+import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
 
 
 
@@ -39,42 +40,50 @@ import { IbgeDTO } from '../../../dto/ibge.dto';
     MatButtonModule,
     MatIconModule,
     MatTableModule,
-    MatDialogModule
+    MatDialogModule, 
+    MatPaginatorModule
   ]
 })
 export class BuscaIbgeDialogComponent {
 
-  ibgeService = inject(IbgeService);
+  displayedColumns: string[] = ['ufIbge', 'nomeMun', 'codIbge', 'acoes'];
+  dataSource = new MatTableDataSource<Ibge>();
+  totalRegistros = 0;
+  
   estadosFiltrados: Ibge[] = [];
   estados: Ibge[] = [];  
   estadoSelecionado!: Ibge;
   carregando = false;
   filtro = '';
+  @ViewChild(MatPaginator) paginator!: MatPaginator;
 
-    constructor(
-    public dialogRef: MatDialogRef<BuscaIbgeDialogComponent>,
+     // ✅ Injetar o MatDialogRef
+  constructor(
+    private ibgeService: IbgeService,
+    private dialogRef: MatDialogRef<BuscaIbgeDialogComponent>
+  ) {}
     
-    @Inject(MAT_DIALOG_DATA) public data: any
-  ) {
-    this.carregarFornecedores();
+  ngOnInit() {
+    this.carregarMunicipios(0, 10);
   }
 
-  carregarFornecedores() {
-    this.ibgeService.getEstados().subscribe(data => {
-      console.log('Estados carregados:', data);  // <-- Aqui imprime os dados recebidos da API
-      this.estados = data;
-      this.estadosFiltrados = data;
+  carregarMunicipios(page: number, size: number) {
+    this.ibgeService.listar(this.filtro, page, size).subscribe(res => {
+      this.dataSource.data = res.content;
+      this.totalRegistros = res.totalElements;
     });
   }
     aplicarFiltro() {
-    const valor = this.filtro.trim().toLowerCase();
-    this.estadosFiltrados = this.estados.filter(f => 
-      f.nomeIbge.toLowerCase().includes(valor) || f.ufIbge.includes(valor)
-    );
+    this.paginator.pageIndex = 0;
+    this.carregarMunicipios(0, this.paginator.pageSize || 10);
+  }
+
+   onPaginateChange(event: any) {
+    this.carregarMunicipios(event.pageIndex, event.pageSize);
   }
 
     selecionar(f: ibge) {
-    console.log('Estado selecionado no dialog:', f);
+    console.log('Cidade selecionada no dialog:', f);
     this.dialogRef.close(f);
   }
 

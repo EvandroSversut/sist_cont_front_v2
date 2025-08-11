@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClient, HttpClientModule } from '@angular/common/http';
 
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -18,6 +18,7 @@ import { PessoaJuridica } from '../../model/pessoa-juridica';
 import { Pessoa } from '../../model/pessoa.model';
 import { BuscaIbgeDialogComponent } from '../dialogs/ibge/busca-ibge-dialog.component';
 import { MatDialog } from '@angular/material/dialog';
+import { CepResponse, CepService } from '../../services/cep.service';
 
 @Component({
   selector: 'app-pessoa-juridica',
@@ -46,6 +47,7 @@ export class PessoaJuridicaComponent {
   usuarios: JuridicaDTO[] = []; // <- sua lista da tabela
   filtro: string = '';
   mensagemErro = '';
+   mensagemErro2: string | null = null;
   
   displayedColumns: string[] = ['nome', 'email', 'cnpj', 'acoes']; // nome das colunas
   dataSource = new MatTableDataSource<JuridicaDTO>();
@@ -53,7 +55,9 @@ export class PessoaJuridicaComponent {
   constructor(
     private service: PessoaJuridicaService,
     private router: Router,
-    private dialog: MatDialog  
+    private dialog: MatDialog,
+    private cepService: CepService,
+    private http: HttpClient 
       
   ) {}
 
@@ -130,7 +134,10 @@ export class PessoaJuridicaComponent {
 
     dialogRef.afterClosed().subscribe((resultado) => {
       if (resultado) {
-        this.pessoaJur.ibge = resultado.codIbge; // 👈 Preenche o input com o código IBGE
+         this.pessoaJur.cidade = resultado.nomeMun; // 👈 Preenche o input com o selecionado
+        this.pessoaJur.ibge = resultado.codIbgeCompl;
+        this.pessoaJur.uf = resultado.ufIbge;
+        
       }
     })
 }
@@ -150,6 +157,39 @@ export class PessoaJuridicaComponent {
   }
 }
 
+ buscarCep() {
+    if (!this.pessoaJur.cep) {
+      console.log('🚫 CEP vazio, nada a fazer');
+      this.mensagemErro = 'Informe o CEP antes de buscar.';
+      return;
+    }
+
+    console.log('🔍 Chamando serviço de CEP para:', this.pessoaJur.cep);
+
+    this.cepService.buscarCep(this.pessoaJur.cep).subscribe({
+      next: (res: CepResponse) => {
+        console.log('📦 Resposta recebida do CEP service:', res);
+
+        if (res?.cep) {
+          console.log('✅ CEP encontrado, preenchendo dados...');
+          this.pessoaJur.rua = res.logradouro;
+          this.pessoaJur.bairro = res.bairro;
+          this.pessoaJur.cidade = res.localidade;
+          this.pessoaJur.uf = res.uf;
+          this.pessoaJur.complemento = res.complemento;
+          this.pessoaJur.ibge = res.ibge || '';
+          this.mensagemErro2 = null;
+        } else {
+          console.warn('⚠️ CEP não encontrado na resposta');
+          this.mensagemErro = 'CEP não encontrado.';
+        }
+      },
+      error: (err) => {
+        console.error('💥 Erro ao buscar CEP:', err);
+        this.mensagemErro = 'Erro ao buscar o CEP.';
+      }
+    });
+  }
 }
 
     //idPessoaFisica: usuario.idPessoaFisica || usuario.id,

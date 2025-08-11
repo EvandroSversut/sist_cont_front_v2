@@ -30,12 +30,12 @@ import { MatTabChangeEvent } from '@angular/material/tabs';
     <mat-card>
       <mat-card-title style="margin-bottom: 20px;">Dados do Emitente</mat-card-title>
       <form [formGroup]="formEmitente" class="grid grid-cols-1 md:grid-cols-3 gap-4">
-        <mat-form-field appearance="outline">
+        <mat-form-field appearance="fill">
           <mat-label>CNPJ ou CPF</mat-label>
           <input matInput formControlName="cnpj">
         </mat-form-field>
 
-        <mat-form-field appearance="outline">
+        <mat-form-field appearance="fill">
           <mat-label>Razão Social / Nome</mat-label>
           <input matInput formControlName="razaoSocial">
         </mat-form-field>
@@ -44,37 +44,37 @@ import { MatTabChangeEvent } from '@angular/material/tabs';
           <mat-icon>search</mat-icon>
         </button>
 
-        <mat-form-field appearance="outline">
+        <mat-form-field appearance="fill">
           <mat-label>Nome Fantasia</mat-label>
           <input matInput formControlName="nomeFantasia">
         </mat-form-field>
 
-        <mat-form-field appearance="outline">
+        <mat-form-field appearance="fill">
           <mat-label>Inscrição Estadual</mat-label>
           <input matInput formControlName="ie">
         </mat-form-field>
 
-        <mat-form-field appearance="outline">
+        <mat-form-field appearance="fill">
           <mat-label>UF</mat-label>
           <input matInput formControlName="uf">
         </mat-form-field>
 
-        <mat-form-field appearance="outline">
+        <mat-form-field appearance="fill">
           <mat-label>Município</mat-label>
           <input matInput formControlName="municipio">
         </mat-form-field>
 
-        <mat-form-field appearance="outline">
+        <mat-form-field appearance="fill">
           <mat-label>Cod IBGE</mat-label>
           <input matInput formControlName="ibge">
         </mat-form-field>
 
-        <mat-form-field appearance="outline">
+        <mat-form-field appearance="fill">
           <mat-label>CNAE</mat-label>
           <input matInput formControlName="cnae">
         </mat-form-field>
 
-        <mat-form-field appearance="outline" style="width: 310px;">
+        <mat-form-field appearance="fill" style="width: 310px;">
           <mat-label>Regime Tributário</mat-label>
           <mat-select formControlName="crt">
             <mat-option value="" disabled selected>Selecione o regime</mat-option>

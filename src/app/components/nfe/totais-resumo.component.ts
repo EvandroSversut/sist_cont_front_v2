@@ -27,27 +27,27 @@ import { MatFormFieldModule } from '@angular/material/form-field';
       <mat-card-title></mat-card-title>
       <form [formGroup]="formTotal" class="grid grid-cols-1 md:grid-cols-3 gap-4">
 
-        <mat-form-field appearance="outline">
+        <mat-form-field appearance="fill">
           <mat-label>Valor Total Produtos</mat-label>
           <input matInput type="text" [value]="formTotal.get('vrTotalProd')?.value | currency:'BRL':'symbol':'1.2-2'" readonly>
         </mat-form-field>
 
-        <mat-form-field appearance="outline">
+        <mat-form-field appearance="fill">
           <mat-label>Valor Total Serviços</mat-label>
           <input matInput type="text" [value]="formTotal.get('vrTotalServ')?.value | currency:'BRL':'symbol':'1.2-2'" readonly>
         </mat-form-field>
 
-        <mat-form-field appearance="outline">
+        <mat-form-field appearance="fill">
           <mat-label>Base de Cálculo</mat-label>
           <input matInput type="text" [value]="formTotal.get('baseCalculo')?.value | currency:'BRL':'symbol':'1.2-2'" readonly>
         </mat-form-field>
 
-        <mat-form-field appearance="outline">
+        <mat-form-field appearance="fill">
           <mat-label>Valor ICMS</mat-label>
           <input matInput type="text" [value]="formTotal.get('vrIcms')?.value | currency:'BRL':'symbol':'1.2-2'" readonly>
         </mat-form-field>
       
-        <mat-form-field appearance="outline">
+        <mat-form-field appearance="fill">
           <mat-label>Valor Total NF-e</mat-label>
           <input matInput type="text" [value]="formTotal.get('vrTotalNfe')?.value | currency:'BRL':'symbol':'1.2-2'" readonly>
         </mat-form-field>

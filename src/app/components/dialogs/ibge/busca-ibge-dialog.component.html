@@ -3,23 +3,23 @@
 
   <mat-form-field style="width: 100%;">
     <mat-label>Filtrar</mat-label>
-    <input matInput [(ngModel)]="filtro" (input)="aplicarFiltro()" placeholder="Digite nome ou codigo">
+    <input matInput [(ngModel)]="filtro" (keyup)="aplicarFiltro()" placeholder="Digite nome, UF ou código">
   </mat-form-field>
 
-  <table mat-table [dataSource]="estadosFiltrados" class="mat-elevation-z8">
+  <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
 
     <ng-container matColumnDef="ufIbge">
-      <th mat-header-cell *matHeaderCellDef>UF Ibge</th>
+      <th mat-header-cell *matHeaderCellDef>UF</th>
       <td mat-cell *matCellDef="let f">{{f.ufIbge}}</td>
     </ng-container>
 
-    <ng-container matColumnDef="nomeIbge">
-      <th mat-header-cell *matHeaderCellDef>Estado</th>
-      <td mat-cell *matCellDef="let f">{{f.nomeEstado}}</td>
+    <ng-container matColumnDef="nomeMun">
+      <th mat-header-cell *matHeaderCellDef>Município</th>
+      <td mat-cell *matCellDef="let f">{{f.nomeMun}}</td>
     </ng-container>
 
     <ng-container matColumnDef="codIbge">
-      <th mat-header-cell *matHeaderCellDef>Cod Ibge</th>
+      <th mat-header-cell *matHeaderCellDef>Cód IBGE</th>
       <td mat-cell *matCellDef="let f">{{f.codIbge}}</td>
     </ng-container>
 
@@ -30,10 +30,16 @@
       </td>
     </ng-container>
 
-    <tr mat-header-row *matHeaderRowDef="['ufIbge', 'nomeIbge','codIbge', 'acoes']"></tr>
-    <tr mat-row *matRowDef="let row; columns: ['ufIbge', 'nomeIbge','codIbge', 'acoes'];"></tr>
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
 
   </table>
+
+  <mat-paginator [length]="totalRegistros"
+                 [pageSize]="10"
+                 [pageSizeOptions]="[5, 10, 20, 50]"
+                 (page)="onPaginateChange($event)">
+  </mat-paginator>
 
 </mat-dialog-content>
 

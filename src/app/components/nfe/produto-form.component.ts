@@ -44,7 +44,7 @@ import { AjudastPisCofinsDialogComponent } from '../dialogs/st Pis Cofins/ajuda-
 
 ],
   styles: [`
-    
+  
   `],
   
 
@@ -53,7 +53,7 @@ import { AjudastPisCofinsDialogComponent } from '../dialogs/st Pis Cofins/ajuda-
   <!-- Aba: Produtos -->
   <mat-tab label="Dados dos Produtos / Serviços">
     <form [formGroup]="formProduto" class="grid grid-cols-1 md:grid-cols-3 gap-4">
-      <mat-form-field appearance="outline">
+      <mat-form-field appearance="fill">
         <mat-label>Código</mat-label>
         <input matInput formControlName="codigo">
       </mat-form-field>
@@ -186,14 +186,14 @@ import { AjudastPisCofinsDialogComponent } from '../dialogs/st Pis Cofins/ajuda-
 
     <mat-tab-group>
       <!-- Subaba: ICMS -->
-   <mat-form-field appearance="outline">
+   <mat-form-field appearance="fill">
       <mat-label>Base de Calculo Icms</mat-label>
       <input matInput formControlName="vrTotalProd" [value]="formProduto.get('vrTotalProd')?.value | currency:'BRL':'symbol-narrow'" readonly>
     </mat-form-field>
 
       <mat-tab label="ICMS">
         <form [formGroup]="formProduto" class="grid grid-cols-1 md:grid-cols-3 gap-4">
-      <mat-form-field appearance="outline" style="width: 700px;">
+      <mat-form-field appearance="fill" style="width: 700px;">
         <mat-label>Origem do Produto</mat-label>
             <mat-select formControlName="origem">
               <mat-option value="0">0 - Nacional</mat-option>
@@ -215,13 +215,13 @@ import { AjudastPisCofinsDialogComponent } from '../dialogs/st Pis Cofins/ajuda-
 
       </mat-form-field>
 
-         <mat-form-field appearance="outline">
+         <mat-form-field appearance="fill">
             <mat-label>Base de Cálculo do ICMS</mat-label>
             <input matInput [value]="formProduto.get('baseDeCalculo')?.value | currency:'BRL':'symbol'" readonly>
         </mat-form-field>
 
 
-          <mat-form-field appearance="outline">
+          <mat-form-field appearance="fill">
             <mat-label>% ICMS</mat-label>
                   <mat-select formControlName="aliqIcms">
                   <mat-option value="4">4%</mat-option>
@@ -234,22 +234,22 @@ import { AjudastPisCofinsDialogComponent } from '../dialogs/st Pis Cofins/ajuda-
                </mat-select>
           </mat-form-field>
 
-          <mat-form-field appearance="outline">
+          <mat-form-field appearance="fill">
             <mat-label>Valor do ICMS</mat-label>
             <input matInput [value]="formProduto.get('vrDoIcms')?.value | currency:'BRL':'symbol'" readonly>
         </mat-form-field>
 
-         <mat-form-field appearance="outline">
+         <mat-form-field appearance="fill">
             <mat-label>Base ICMS ST</mat-label>
              <input matInput type="number" formControlName="bcIcmsSt">
         </mat-form-field>
 
-        <mat-form-field appearance="outline">
+        <mat-form-field appearance="fill">
             <mat-label>Valor ICMS ST</mat-label>
              <input matInput type="number" formControlName="vrIcmsSubst">
         </mat-form-field>
 
-        <mat-form-field appearance="outline">
+        <mat-form-field appearance="fill">
             <mat-label>Valor Imp. Importação</mat-label>
              <input matInput type="number" formControlName="vrImpImport">
         </mat-form-field>
@@ -268,16 +268,50 @@ import { AjudastPisCofinsDialogComponent } from '../dialogs/st Pis Cofins/ajuda-
             <input matInput [value]="formProduto.get('baseDeCalculo')?.value | currency:'BRL':'symbol'" readonly>
           </mat-form-field>
 
-          <mat-form-field appearance="fill">
-            <mat-label>Situacao Tributaria</mat-label>
-            <input matInput formControlName="st">
-              </mat-form-field>
+    <mat-form-field appearance="fill" style="width: 600px;">
+        <mat-label>Situação Tributária</mat-label>
+        <mat-select formControlName="st">
+          <mat-option value="01">01 - Operação Tributável com Alíquota Básica</mat-option>
+          <mat-option value="02">02 - Operação Tributável com Alíquota Diferenciada</mat-option>
+          <mat-option value="03">03 - Operação Tributável com Alíquota por Unidade</mat-option>
+          <mat-option value="04">04 - Operação Tributável Monofásica - Substituição Tributária</mat-option>
+          <mat-option value="05">05 - Operação Tributável Monofásica - Alíquota por Unidade</mat-option>
+          <mat-option value="06">06 - Operação Tributável Monofásica - Alíquota Diferenciada</mat-option>
+          <mat-option value="07">07 - Operação Isenta</mat-option>
+          <mat-option value="08">08 - Operação Sem Incidência</mat-option>
+          <mat-option value="09">09 - Operação com Suspensão</mat-option>
+          <mat-option value="49">49 - Outras Operações</mat-option>
+          <mat-option value="50">50 - Operação com Suspensão (ex: processamento)</mat-option>
+          <mat-option value="51">51 - Operação com Alíquota Zero</mat-option>
+          <mat-option value="52">52 - Operação com Alíquota Zero (ex: exportação)</mat-option>
+          <mat-option value="53">53 - Operação Isenta de Contribuições</mat-option>
+          <mat-option value="54">54 - Operação Não Tributável</mat-option>
+          <mat-option value="55">55 - Operação com Suspensão para Segmentos Específicos</mat-option>
+          <mat-option value="56">56 - Operação Tributável com Alíquota Reduzida</mat-option>
+          <mat-option value="60">60 - Crédito Presumido</mat-option>
+          <mat-option value="61">61 - Crédito da Atividade Rural</mat-option>
+          <mat-option value="62">62 - Crédito de Aquisições para Comercialização</mat-option>
+          <mat-option value="63">63 - Crédito de Aquisições para Industrialização</mat-option>
+          <mat-option value="64">64 - Crédito de Serviços</mat-option>
+          <mat-option value="65">65 - Crédito de Energia Elétrica</mat-option>
+          <mat-option value="66">66 - Crédito de Arrendamento Mercantil</mat-option>
+          <mat-option value="67">67 - Crédito de Subvenção para Custeio ou Investimento</mat-option>
+          <mat-option value="70">70 - Crédito de Ativo Imobilizado</mat-option>
+          <mat-option value="71">71 - Crédito de Bens de Ativo Imobilizado</mat-option>
+          <mat-option value="72">72 - Crédito de Bens para Revenda</mat-option>
+          <mat-option value="73">73 - Crédito de Bens para Industrialização</mat-option>
+          <mat-option value="74">74 - Crédito de Serviços para Uso Próprio ou Consumo</mat-option>
+          <mat-option value="75">75 - Crédito de Energia Elétrica para Uso Próprio ou Consumo</mat-option>
+          <mat-option value="98">98 - Outras Situações</mat-option>
+          <mat-option value="99">99 - Outras Situações Não Especificadas</mat-option>
+        </mat-select>
+</mat-form-field>
 
                 <button mat-icon-button matTooltip="Ver tabela CST" (click)="abrirDialogAjudaStPisCofins()">
                   <mat-icon>help_outline</mat-icon>
                 </button>
 
-          <mat-form-field appearance="outline">
+          <mat-form-field appearance="fill">
             <mat-label>Outro campos pis cofin</mat-label>
             <input matInput formControlName="outroCampoPisCofins">
           </mat-form-field>
@@ -287,17 +321,17 @@ import { AjudastPisCofinsDialogComponent } from '../dialogs/st Pis Cofins/ajuda-
       <!-- Subaba: IPI -->
       <mat-tab label="IPI">
         <form [formGroup]="formProduto" class="grid grid-cols-1 md:grid-cols-3 gap-4">
-          <mat-form-field appearance="outline">
+          <mat-form-field appearance="fill">
             <mat-label>Situação Tributaria</mat-label>
             <input matInput formControlName="situacaoTrib">
           </mat-form-field>
 
-          <mat-form-field appearance="outline">
+          <mat-form-field appearance="fill">
             <mat-label>Codigo de Enquadramento</mat-label>
             <input matInput type="number" formControlName="codEnquadr">
           </mat-form-field>
 
-          <mat-form-field appearance="outline">
+          <mat-form-field appearance="fill">
             <mat-label>Aliquota</mat-label>
             <input matInput type="number" formControlName="aliqIpi">
           </mat-form-field>
@@ -307,12 +341,12 @@ import { AjudastPisCofinsDialogComponent } from '../dialogs/st Pis Cofins/ajuda-
             <!-- Subaba: Retenções -->
       <mat-tab label="Retenções">
         <form [formGroup]="formProduto" class="grid grid-cols-1 md:grid-cols-3 gap-4">
-          <mat-form-field appearance="outline">
+          <mat-form-field appearance="fill">
             <mat-label>IRRF</mat-label>
             <input matInput formControlName="irrf">
           </mat-form-field>
 
-          <mat-form-field appearance="outline">
+          <mat-form-field appearance="fill">
             <mat-label>Pis / Cofins</mat-label>
             <input matInput type="number" formControlName="pisCofins">
           </mat-form-field>
@@ -342,7 +376,7 @@ import { AjudastPisCofinsDialogComponent } from '../dialogs/st Pis Cofins/ajuda-
       <!-- Subaba: Outras inform do estoque -->
       <mat-tab label="Outras Informacoes">
         <form [formGroup]="formProduto" class="grid grid-cols-1 md:grid-cols-3 gap-4">
-          <mat-form-field appearance="outline">
+          <mat-form-field appearance="fill">
             <mat-label>outras inform</mat-label>
             <input matInput formControlName="outross">
           </mat-form-field>

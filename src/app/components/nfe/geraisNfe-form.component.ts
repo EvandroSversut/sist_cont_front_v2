@@ -1,6 +1,6 @@
 // 📁 src/app/components/nfe/emitente-form.component.ts
 
-import { Component, Input, SimpleChanges } from '@angular/core';
+import { Component, Input, SimpleChanges, ViewEncapsulation } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -23,6 +23,9 @@ import { MatIconModule } from '@angular/material/icon';
     MatCardModule,
     MatIconModule
   ],
+
+  
+
   template: `
     <mat-card>
       <mat-card-title>Dados da NFe</mat-card-title>
@@ -38,17 +41,17 @@ import { MatIconModule } from '@angular/material/icon';
         </mat-form-field>
 
     <mat-card-title>Identificação da NFe</mat-card-title>
-        <mat-form-field appearance="outline">
+        <mat-form-field appearance="fill">
           <mat-label>UF do Emitente</mat-label>
           <input matInput formControlName="ufEmitente">
         </mat-form-field>
 
-        <mat-form-field appearance="outline">
+        <mat-form-field appearance="fill">
           <mat-label>Cod Numerico NFe</mat-label>
           <input matInput formControlName="codNumericoNFe">
         </mat-form-field>
 
-        <mat-form-field appearance="outline" style="width: 310px;">
+        <mat-form-field appearance="fill" style="width: 310px;">
           <mat-label>Natureza Operacao</mat-label>
            <mat-select formControlName="natOperacao">
             <mat-option value="0">Venda de Mercadoria</mat-option>
@@ -62,7 +65,7 @@ import { MatIconModule } from '@angular/material/icon';
           </mat-select>
         </mat-form-field>
 
-        <mat-form-field appearance="outline">
+        <mat-form-field appearance="fill">
           <mat-label>Modelo da NFe</mat-label>
           <mat-select formControlName="crt">
             <mat-option value="55">NF-e (55)</mat-option>
@@ -71,17 +74,17 @@ import { MatIconModule } from '@angular/material/icon';
           </mat-select>
         </mat-form-field>
 
-        <mat-form-field appearance="outline">
+        <mat-form-field appearance="fill">
           <mat-label>Serie do Documento</mat-label>
           <input matInput formControlName="serie">
         </mat-form-field>
 
-        <mat-form-field appearance="outline">
+        <mat-form-field appearance="fill">
           <mat-label>Numero da NF-e</mat-label>
           <input matInput formControlName="numeroNFe">
         </mat-form-field>
 
-        <mat-form-field appearance="outline" style="width: 300px;">
+        <mat-form-field appearance="fill" style="width: 300px;">
           <mat-label>Data/Hora Emissao</mat-label>
           <input matInput formControlName="dtHrEmissao" readonly>
         </mat-form-field>
@@ -91,7 +94,7 @@ import { MatIconModule } from '@angular/material/icon';
           <input matInput formControlName="dtHrSaida">
         </mat-form-field>
 
-        <mat-form-field appearance="outline">
+        <mat-form-field appearance="fill">
           <mat-label>Tipo</mat-label>
           <mat-select formControlName="tipo">
             <mat-option value="0">Entrada</mat-option>
@@ -99,7 +102,7 @@ import { MatIconModule } from '@angular/material/icon';
         </mat-select>
         </mat-form-field>
 
-        <mat-form-field appearance="outline">
+        <mat-form-field appearance="fill">
           <mat-label>Destino da Operaçao</mat-label>
           <mat-select formControlName="destinoOpe">
             <mat-option value="1">Interna</mat-option>
@@ -108,12 +111,12 @@ import { MatIconModule } from '@angular/material/icon';
         </mat-select>
         </mat-form-field>
 
-        <mat-form-field appearance="outline">
+        <mat-form-field appearance="fill">
           <mat-label>Cod Municipio FG - IBGE</mat-label>
           <input matInput formControlName="ibge">
         </mat-form-field>
 
-        <mat-form-field appearance="outline">
+        <mat-form-field appearance="fill">
           <mat-label>Formato do DANFE</mat-label>
           <mat-select formControlName="formDanfe">
             <mat-option value="1">1 - Normal</mat-option>
@@ -121,7 +124,7 @@ import { MatIconModule } from '@angular/material/icon';
            </mat-select>
         </mat-form-field>
 
-        <mat-form-field appearance="outline">
+        <mat-form-field appearance="fill">
           <mat-label>Tipo de Emissao</mat-label>
           <mat-select formControlName="tipoEmissao">
             <mat-option value="normal">Normal</mat-option>
@@ -129,12 +132,12 @@ import { MatIconModule } from '@angular/material/icon';
         </mat-select>
         </mat-form-field>
 
-        <mat-form-field appearance="outline">
+        <mat-form-field appearance="fill">
           <mat-label>Digito Verificador da Chave</mat-label>
           <input matInput formControlName="digitoChave">
         </mat-form-field>
 
-         <mat-form-field appearance="outline">
+         <mat-form-field appearance="fill">
           <mat-label>Ambiente</mat-label>
           <mat-select formControlName="ambiente">
             <mat-option value="1">1 - Produção</mat-option>
@@ -142,7 +145,7 @@ import { MatIconModule } from '@angular/material/icon';
         </mat-select>
         </mat-form-field>
 
-         <mat-form-field appearance="outline">
+         <mat-form-field appearance="fill">
           <mat-label>Finalidade</mat-label>
           <mat-select formControlName="finalidade">
             <mat-option value="1">1 - Normal</mat-option>
@@ -153,7 +156,7 @@ import { MatIconModule } from '@angular/material/icon';
         </mat-form-field>
 
 
-         <mat-form-field appearance="outline">
+         <mat-form-field appearance="fill">
           <mat-label>Venda Presencial ?</mat-label>
           <mat-select formControlName="vendaPresencial">
             <mat-option value="1">Sim</mat-option>
@@ -161,7 +164,7 @@ import { MatIconModule } from '@angular/material/icon';
           </mat-select>
         </mat-form-field>
 
-        <mat-form-field appearance="outline">
+        <mat-form-field appearance="fill">
           <mat-label>Houve Intermediador/Marketplane ?</mat-label>
           <mat-select formControlName="indIntermed">
             <mat-option value="1">Sim</mat-option>
@@ -169,7 +172,7 @@ import { MatIconModule } from '@angular/material/icon';
           </mat-select>
         </mat-form-field>
 
-        <mat-form-field appearance="outline">
+        <mat-form-field appearance="fill">
           <mat-label>Processo e Versão Emissor</mat-label>
           <input matInput formControlName="processoVersaoEmissor">
         </mat-form-field>

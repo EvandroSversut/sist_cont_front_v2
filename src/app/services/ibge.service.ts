@@ -1,30 +1,40 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
 export interface Ibge {
-  codIbge: string;
-  nomeIbge: string;
   ufIbge: string;
+  codIbgeCompl: string;
+  nomeUf: string;
+  nomeMun: string;
+  codUf: string;
+  regiao: string;
+}
+
+export interface PageResponse<T> {
+  content: T[];
+  totalElements: number;
+  totalPages: number;
+  size: number;
+  number: number;
 }
 
 @Injectable({ providedIn: 'root' })
 export class IbgeService {
-  private api = 'http://localhost:8080/api/ibge';
+  private apiUrl = 'http://localhost:8080/api/ibge';
 
   constructor(private http: HttpClient) {}
 
-  salvar(data: any): Observable<any> {
-    return this.http.post(this.api, data);
+  listar(filtro: string = '', page: number = 0, size: number = 10): Observable<PageResponse<Ibge>> {
+    let params = new HttpParams()
+      .set('filtro', filtro)
+      .set('page', page)
+      .set('size', size);
+
+    return this.http.get<PageResponse<Ibge>>(this.apiUrl, { params });
   }
 
-  listar(): Observable<Ibge[]> {
-  return this.http.get<Ibge[]>(this.api);
+  salvar(ibge: Ibge): Observable<Ibge> {
+    return this.http.post<Ibge>(this.apiUrl, ibge);
   }
-
-  getEstados(): Observable<Ibge[]> {
-    return this.http.get<Ibge[]>(this.api);
-  }
-
-  
 }
