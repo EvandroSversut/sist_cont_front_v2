@@ -9,8 +9,11 @@
         <div class="form-grid">
 
           <mat-form-field appearance="fill">
-            <mat-label>Id Pj</mat-label>
-            <input matInput [(ngModel)]="pessoaJur.id" name="idJur">
+            <mat-label>CNPJ</mat-label>
+            <input matInput [(ngModel)]="pessoaJur.cnpj" name="cnpj">
+            <button mat-icon-button matSuffix color="primary" type="button" (click)="buscarCnpj()">
+              <mat-icon>search</mat-icon>
+            </button>
           </mat-form-field>
 
           <mat-form-field appearance="fill">
@@ -21,11 +24,6 @@
           <mat-form-field appearance="fill">
             <mat-label>Nome Fantasia</mat-label>
             <input matInput [(ngModel)]="pessoaJur.nomeFantasia" name="nomeFantasia">
-          </mat-form-field>
-
-          <mat-form-field appearance="fill">
-            <mat-label>CNPJ</mat-label>
-            <input matInput [(ngModel)]="pessoaJur.cnpj" name="cnpj">
           </mat-form-field>
 
           <mat-form-field appearance="fill">
@@ -156,7 +154,7 @@
       <input matInput [(ngModel)]="filtro" placeholder="Por nome ou email">
     </mat-form-field>
 
-    <button mat-raised-button color="primary" (click)="buscar()">Buscar</button>
+    <button mat-raised-button color="primary" (click)="buscarCnpj()">Buscar</button>
 
     <!-- Inicio da tabela -->
     <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">

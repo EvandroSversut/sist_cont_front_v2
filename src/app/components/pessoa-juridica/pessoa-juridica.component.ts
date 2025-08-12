@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
+import { FormBuilder, FormGroup, FormsModule, Validators } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 
@@ -19,6 +19,7 @@ import { Pessoa } from '../../model/pessoa.model';
 import { BuscaIbgeDialogComponent } from '../dialogs/ibge/busca-ibge-dialog.component';
 import { MatDialog } from '@angular/material/dialog';
 import { CepResponse, CepService } from '../../services/cep.service';
+import { CnpjService } from '../../services/cnpj.service';
 
 @Component({
   selector: 'app-pessoa-juridica',
@@ -52,23 +53,84 @@ export class PessoaJuridicaComponent {
   displayedColumns: string[] = ['nome', 'email', 'cnpj', 'acoes']; // nome das colunas
   dataSource = new MatTableDataSource<JuridicaDTO>();
 
+  form!: FormGroup;
+
   constructor(
     private service: PessoaJuridicaService,
     private router: Router,
     private dialog: MatDialog,
     private cepService: CepService,
-    private http: HttpClient 
+    private http: HttpClient,
+    private fb: FormBuilder,
+    private cnpjService: CnpjService
       
-  ) {}
+  ) {
+    this.form = this.fb.group({
+      cnpj: ['', Validators.required],
+      razao_social: [''],
+      nome_fantasia: ['']
+    })
+  }
 
   ngOnInit() {
     this.carregarTabela();
-    this.buscar();
+    //this.buscar();
   }
 
   
-  buscar() { /* ... */ }
-  
+  buscarCnpj() {
+    console.log('🔍 Buscando CNPJ:', this.pessoaJur.cnpj);
+       
+    this.cnpjService.consultarCnpj(this.pessoaJur.cnpj).subscribe({
+      next: (dados) => {
+        console.log('📦 Dados recebidos da BrasilAPI:', dados);
+
+          this.pessoaJur.razaoSocial = dados.razao_social || '';
+          this.pessoaJur.nomeFantasia = dados.nome_fantasia || '';
+          this.pessoaJur.cep = dados.cep || '';
+          this.pessoaJur.rua = dados.logradouro || '';
+          this.pessoaJur.numero = dados.numero || '';
+          this.pessoaJur.bairro = dados.bairro || '';
+          this.pessoaJur.cidade = dados.municipio || '';
+          this.pessoaJur.ibge = dados.codigo_municipio_ibge || '';
+          this.pessoaJur.uf = dados.uf || '';
+          this.pessoaJur.complemento = dados.complemento || '';
+          this.pessoaJur.cnae = dados.cnae_fiscal || '';
+          this.pessoaJur.telefone = dados.ddd_telefone_1 || '';
+      },
+      error: (err) => {
+        console.error('❌ Erro ao consultar CNPJ:', err);
+      }
+    });
+  }
+
+  buscarCnpj2() {
+  const cnpjLimpo = this.pessoaJur.cnpj?.replace(/\D/g, ''); // remove pontos e traços
+  console.log('🔍 Buscando CNPJ:', cnpjLimpo);
+
+  this.http.get(`https://brasilapi.com.br/api/cnpj/v1/${cnpjLimpo}`)
+    .subscribe({
+      next: (dados: any) => {
+        console.log('📦 Dados recebidos da BrasilAPI:', dados);
+
+        // Preenchendo os campos do formulário
+        this.pessoaJur.razaoSocial = dados.razao_social || '';
+        this.pessoaJur.nomeFantasia = dados.nome_fantasia || '';
+        this.pessoaJur.cep = dados.cep || '';
+       // this.pessoaJur.logradouro = dados.logradouro || '';
+        this.pessoaJur.numero = dados.numero || '';
+        this.pessoaJur.bairro = dados.bairro || '';
+       // this.pessoaJur.municipio = dados.municipio || '';
+        this.pessoaJur.uf = dados.uf || '';
+      },
+      error: (err) => {
+        console.error('❌ Erro ao buscar CNPJ:', err);
+        alert('CNPJ inválido ou não encontrado.');
+      }
+    });
+}
+
+
 
   novo() { this.limparFormulario(); }
   limparFormulario() { this.pessoaJur = this.novaPessoa(); }
