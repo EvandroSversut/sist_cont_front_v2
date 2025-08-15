@@ -131,10 +131,10 @@ this.formGeral = this.fb.group({
   indIntermed: [],
   processoVersaoEmissor: ['2'],
   totais: this.fb.group({ // 👈 esse é o FormGroup aninhado
-    baseCalculo: [''],
-    vrIcms: [''],
-    vrTotalProd: [''],
-    vrTotalNfe: ['']
+    baseCalculo: [0],
+    vrIcms: [0],
+    vrTotalProd: [0],
+    vrTotalNfe: [0]
   })
   
 });
@@ -232,6 +232,10 @@ console.log(this.formGeral.get('totais')?.value);
     
   adicionarProduto(produto: any) {
     //this.produtos.push(produto);
+   produto.quantidade    = Number(produto.quantidade)    || 0;
+  produto.valorUnitario = Number(produto.valorUnitario) || 0;
+  produto.desconto      = Number(produto.desconto)      || 0;
+  produto.aliquotaIcms  = Number(produto.aliquotaIcms)  || 0;
     console.log('📦 Produtos que serão enviados:', JSON.stringify(this.produtos, null, 2));
     
     this.produtos = [...this.produtos, produto]; // cria novo array. 🔁 força atualização da tabela
@@ -246,11 +250,13 @@ console.log(this.formGeral.get('totais')?.value);
   const totalBruto = this.produtos.reduce((acc, p) => acc + (p.quantidade * p.valorUnitario), 0);
   const totalDesconto = this.produtos.reduce((acc, p) => acc + p.desconto, 0);
   const totalIcms = this.produtos.reduce((acc, p) => {
-    const base = p.quantidade * p.valorUnitario - p.desconto;
+    const base = p.quantidade * p.valorUnitario - (p.desconto || 0);
+    console.log('Produto:', p.nome, 'Base:', base, 'Aliquota:', p.aliquotaIcms);
     return acc + ((base * p.aliquotaIcms) / 100);
   }, 0);
   const totalLiquido = totalBruto - totalDesconto;
 
+  console.log('Valor do icms ----->>>>>' + totalIcms);
   this.totaisForm.patchValue({
     baseCalculo: totalBruto - totalDesconto,
     vrIcms: totalIcms,
