@@ -235,7 +235,7 @@ console.log(this.formGeral.get('totais')?.value);
    produto.quantidade    = Number(produto.quantidade)    || 0;
   produto.valorUnitario = Number(produto.valorUnitario) || 0;
   produto.desconto      = Number(produto.desconto)      || 0;
-  produto.aliquotaIcms  = Number(produto.aliquotaIcms)  || 0;
+  produto.aliquotaIcms  = Number(produto.aliqIcms)  || 0;
     console.log('📦 Produtos que serão enviados:', JSON.stringify(this.produtos, null, 2));
     
     this.produtos = [...this.produtos, produto]; // cria novo array. 🔁 força atualização da tabela
