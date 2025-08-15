@@ -239,24 +239,13 @@ import { AjudastPisCofinsDialogComponent } from '../dialogs/st Pis Cofins/ajuda-
             <input matInput [value]="formProduto.get('vrDoIcms')?.value | currency:'BRL':'symbol'" readonly>
         </mat-form-field>
 
-         <mat-form-field appearance="fill">
-            <mat-label>Base ICMS ST</mat-label>
-             <input matInput type="number" formControlName="bcIcmsSt">
-        </mat-form-field>
-
         <mat-form-field appearance="fill">
-            <mat-label>Valor ICMS ST</mat-label>
-             <input matInput type="number" formControlName="vrIcmsSubst">
-        </mat-form-field>
-
-        <mat-form-field appearance="fill">
-            <mat-label>Valor Imp. Importação</mat-label>
+            <mat-label>Valor do IPI</mat-label>
              <input matInput type="number" formControlName="vrImpImport">
         </mat-form-field>
 
         </form>
       </mat-tab>
-
 
 
       <!-- Subaba: PIS/COFINS -->

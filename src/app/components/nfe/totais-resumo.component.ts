@@ -25,26 +25,12 @@ import { MatIconModule } from '@angular/material/icon';
     <form [formGroup]="formTotal" class="grid grid-cols-1 md:grid-cols-3 gap-4">
 
       <mat-form-field appearance="fill">
-        <mat-label>Valor Total Produtos</mat-label>
-        <input matInput type="text"
-               [value]="formTotal.get('vrTotalProd')?.value | currency:'BRL':'symbol':'1.2-2'"
-               readonly>
-      </mat-form-field>
-
-      <mat-form-field appearance="fill">
-        <mat-label>Valor Total Serviços</mat-label>
-        <input matInput type="text"
-               [value]="formTotal.get('vrTotalServ')?.value | currency:'BRL':'symbol':'1.2-2'"
-               readonly>
-      </mat-form-field>
-
-      <mat-form-field appearance="fill">
-        <mat-label>Base de Cálculo</mat-label>
+        <mat-label>Base de Cálculo do Icms</mat-label>
         <input matInput type="text"
                [value]="formTotal.get('baseCalculo')?.value | currency:'BRL':'symbol':'1.2-2'"
                readonly>
       </mat-form-field>
-
+      
       <mat-form-field appearance="fill">
         <mat-label>Valor ICMS</mat-label>
         <input matInput type="text"
@@ -53,7 +39,63 @@ import { MatIconModule } from '@angular/material/icon';
       </mat-form-field>
 
       <mat-form-field appearance="fill">
-        <mat-label>Valor Total NF-e</mat-label>
+        <mat-label>Base Cálculo Icms Substituicao</mat-label>
+        <input matInput type="text"
+               [value]="formTotal.get('vrTotalProd')?.value | currency:'BRL':'symbol':'1.2-2'"
+               readonly>
+      </mat-form-field>
+
+      <mat-form-field appearance="fill">
+        <mat-label>Valor do Icms Substituicao</mat-label>
+        <input matInput type="text"
+               [value]="formTotal.get('vrTotalProd')?.value | currency:'BRL':'symbol':'1.2-2'"
+               readonly>
+      </mat-form-field>
+
+      <mat-form-field appearance="fill">
+        <mat-label>Valor Total dos Produtos</mat-label>
+        <input matInput type="text"
+               [value]="formTotal.get('vrTotalServ')?.value | currency:'BRL':'symbol':'1.2-2'"
+               readonly>
+      </mat-form-field>
+      
+      <mat-form-field appearance="fill">
+        <mat-label>Valor do Frete</mat-label>
+        <input matInput type="text"
+               [value]="formTotal.get('vrTotalServ')?.value | currency:'BRL':'symbol':'1.2-2'"
+               readonly>
+      </mat-form-field>
+      
+      <mat-form-field appearance="fill">
+        <mat-label>Valor do Seguro</mat-label>
+        <input matInput type="text"
+               [value]="formTotal.get('vrTotalServ')?.value | currency:'BRL':'symbol':'1.2-2'"
+               readonly>
+      </mat-form-field>
+
+      <mat-form-field appearance="fill">
+        <mat-label>Desconto</mat-label>
+        <input matInput type="text"
+               [value]="formTotal.get('vrTotalServ')?.value | currency:'BRL':'symbol':'1.2-2'"
+               readonly>
+      </mat-form-field>
+
+      <mat-form-field appearance="fill">
+        <mat-label>Outras Despesas Acessorias</mat-label>
+        <input matInput type="text"
+               [value]="formTotal.get('vrTotalServ')?.value | currency:'BRL':'symbol':'1.2-2'"
+               readonly>
+      </mat-form-field>
+
+      <mat-form-field appearance="fill">
+        <mat-label>Valor do IPI</mat-label>
+        <input matInput type="text"
+               [value]="formTotal.get('vrTotalServ')?.value | currency:'BRL':'symbol':'1.2-2'"
+               readonly>
+      </mat-form-field>
+
+      <mat-form-field appearance="fill">
+        <mat-label>Valor Total da Nota</mat-label>
         <input matInput type="text"
                [value]="formTotal.get('vrTotalNfe')?.value | currency:'BRL':'symbol':'1.2-2'"
                readonly>
