@@ -32,7 +32,7 @@ import { MatIconModule } from '@angular/material/icon';
       </mat-form-field>
       
       <mat-form-field appearance="fill">
-        <mat-label>Valor ICMS</mat-label>
+        <mat-label>Valor do ICMS</mat-label>
         <input matInput type="text"
                [value]="formTotal.get('vrIcms')?.value | currency:'BRL':'symbol':'1.2-2'"
                readonly>

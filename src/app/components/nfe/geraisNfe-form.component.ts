@@ -30,12 +30,12 @@ import { MatIconModule } from '@angular/material/icon';
     <mat-card>
       <mat-card-title>Dados da NFe</mat-card-title>
       <form [formGroup]="formGeral" class="grid grid-cols-1 md:grid-cols-3 gap-4">
-        <mat-form-field appearance="outline">
+        <mat-form-field appearance="fill">
           <mat-label>VERSAO MANUAL E LAYOUT</mat-label>
           <input matInput formControlName="layout">
         </mat-form-field>
 
-        <mat-form-field appearance="outline">
+        <mat-form-field appearance="fill">
           <mat-label>Id Chave de Acesso</mat-label>
           <input matInput formControlName="idChaveAcesso">
         </mat-form-field>
@@ -89,7 +89,7 @@ import { MatIconModule } from '@angular/material/icon';
           <input matInput formControlName="dtHrEmissao" readonly>
         </mat-form-field>
 
-        <mat-form-field appearance="outline">
+        <mat-form-field appearance="fill">
           <mat-label>Data/Hora Saida - opcional</mat-label>
           <input matInput formControlName="dtHrSaida">
         </mat-form-field>

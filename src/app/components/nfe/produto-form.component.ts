@@ -154,7 +154,7 @@ import { AjudastPisCofinsDialogComponent } from '../dialogs/st Pis Cofins/ajuda-
         <input matInput type="number" formControlName="valorUnitario">
       </mat-form-field>
 
-      <mat-form-field appearance="fill">
+       <mat-form-field appearance="fill">
         <mat-label>Desconto</mat-label>
         <input matInput type="number" formControlName="desconto">
       </mat-form-field>
@@ -239,10 +239,7 @@ import { AjudastPisCofinsDialogComponent } from '../dialogs/st Pis Cofins/ajuda-
             <input matInput [value]="formProduto.get('vrDoIcms')?.value | currency:'BRL':'symbol'" readonly>
         </mat-form-field>
 
-        <mat-form-field appearance="fill">
-            <mat-label>Valor do IPI</mat-label>
-             <input matInput type="number" formControlName="vrImpImport">
-        </mat-form-field>
+ 
 
         </form>
       </mat-tab>
@@ -252,13 +249,8 @@ import { AjudastPisCofinsDialogComponent } from '../dialogs/st Pis Cofins/ajuda-
       <mat-tab label="PIS/COFINS">
         <form [formGroup]="formProduto" class="grid grid-cols-1 md:grid-cols-3 gap-4">
 
-          <mat-form-field appearance="fill">
-            <mat-label>Base de Cálculo PIS/COFINS</mat-label>
-            <input matInput [value]="formProduto.get('baseDeCalculo')?.value | currency:'BRL':'symbol'" readonly>
-          </mat-form-field>
-
     <mat-form-field appearance="fill" style="width: 600px;">
-        <mat-label>Situação Tributária</mat-label>
+        <mat-label>Situação Tributária Pis/Cofins</mat-label>
         <mat-select formControlName="st">
           <mat-option value="01">01 - Operação Tributável com Alíquota Básica</mat-option>
           <mat-option value="02">02 - Operação Tributável com Alíquota Diferenciada</mat-option>
@@ -301,8 +293,26 @@ import { AjudastPisCofinsDialogComponent } from '../dialogs/st Pis Cofins/ajuda-
                 </button>
 
           <mat-form-field appearance="fill">
-            <mat-label>Outro campos pis cofin</mat-label>
-            <input matInput formControlName="outroCampoPisCofins">
+            <mat-label>Base de Cálculo PIS/COFINS</mat-label>
+            <input matInput [value]="formProduto.get('baseDeCalculo')?.value | currency:'BRL':'symbol'" readonly>
+          </mat-form-field>
+
+          <mat-form-field appearance="fill" style="width: 400px;">
+            <mat-label>Regime de Apuração Pis/Cofins</mat-label>
+                  <mat-select formControlName="regimePisCofins">
+                  <mat-option value="0">Cumulativo -> Pis 0,65% , Cofins 3,0%</mat-option>
+                  <mat-option value="1">Não Cumulativo -> Pis 1,65% , Cofins 7,6%</mat-option>
+            </mat-select>
+          </mat-form-field>
+
+          <mat-form-field appearance="fill">
+            <mat-label>Valor do PIS</mat-label>
+                 <input matInput [value]="formProduto.get('vrPis')?.value | currency:'BRL':'symbol'" readonly>
+          </mat-form-field>
+
+          <mat-form-field appearance="fill">
+            <mat-label>Valor do Cofins</mat-label>
+            <input matInput [value]="formProduto.get('vrCofins')?.value | currency:'BRL':'symbol'" readonly>
           </mat-form-field>
         </form>
       </mat-tab>
@@ -325,6 +335,33 @@ import { AjudastPisCofinsDialogComponent } from '../dialogs/st Pis Cofins/ajuda-
             <input matInput type="number" formControlName="aliqIpi">
           </mat-form-field>
         </form>
+
+        <mat-form-field appearance="fill">
+            <mat-label>Valor do IPI</mat-label>
+             <input matInput type="number" formControlName="vrIpi">
+        </mat-form-field>
+
+      </mat-tab>
+
+            <!-- Subaba: ISS -->
+      <mat-tab label="ISS">
+        <form [formGroup]="formProduto" class="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <mat-form-field appearance="fill">
+            <mat-label>Valor Total dos Serviços</mat-label>
+            <input matInput formControlName="vrTotalServ">
+          </mat-form-field>
+
+          <mat-form-field appearance="fill">
+            <mat-label>Base Cálculo ISSQN</mat-label>
+            <input matInput type="number" formControlName="bcISSQN">
+          </mat-form-field>
+
+          <mat-form-field appearance="fill">
+            <mat-label>Valor ISSQN</mat-label>
+            <input matInput type="number" formControlName="vrISSQN">
+          </mat-form-field>
+        </form>
+
       </mat-tab>
 
             <!-- Subaba: Retenções -->
@@ -427,8 +464,6 @@ export class ProdutoFormComponent implements OnInit{
       vrTotalProd: [{ value: 0, disabled: true }],
       icms: [''],
       ipi: [''],
-      pis: [''],
-      cofins: [''],
       iss: [''],
       aliqIcms: ['', Validators.required], // isso faz referencia ao input "aliquotaIcms"
       baseDeCalculo: [{ value: 0, disabled: true }],
@@ -440,6 +475,10 @@ export class ProdutoFormComponent implements OnInit{
       cstSimples: [{ value: null, disabled: false }, Validators.required],
       // ✅ agora sim, todos os campos serão enviados
       
+      // PIS/COFINS
+      regimePisCofins: [null, Validators.required],
+      vrPis: [''],
+      vrCofins: ['']
     });
 
     
@@ -465,6 +504,11 @@ ngOnInit(): void {
 
   this.cstControl = this.formProduto.get('cst') as FormControl;
   this.cstCsosnControl = this.formProduto.get('cstSimples') as FormControl;
+
+  // Dispara o evento de calculo do pis cofins assim que selecionar o regime
+  this.formProduto.get('regimePisCofins')!.valueChanges.subscribe(() => {
+    this.calcularPisCofins();
+  });
 }
 
 
@@ -532,8 +576,42 @@ ngOnInit(): void {
   const valorIcms = total * (icmsAliquota / 100);
   this.formProduto.get('vrDoIcms')!.setValue(valorIcms, { emitEvent: false });
 
+      this.calcularPisCofins();
   }
 
+  calcularPisCofins(){
+    const base = Number(this.formProduto.get('baseDeCalculo')?.value) || 0;
+    const regime = this.formProduto.get('regimePisCofins')?.value;
+    console.log('Entrou no calculo do pis cofins mas nao selecionou o regime!!');
+    
+
+    if (regime !== '0' && regime !== '1'){
+      // ainda nao selecionado
+      return;
+    }
+
+    let aliquotaPis = 0;
+    let aliquotaCofins = 0;
+
+    if (regime === '0') { // Cumulativo
+      aliquotaPis = 0.0065;
+      aliquotaCofins = 0.03;
+    } else if (regime === '1') { // Não Cumulativo
+      aliquotaPis = 0.0165;
+      aliquotaCofins = 0.076;
+    }
+    const valorPis = base * aliquotaPis;
+    const valorCofins = base * aliquotaCofins;
+    console.log('Valor do Pis ' + valorPis);
+    console.log('Valor do Cofins ' + valorCofins);
+
+    this.formProduto.patchValue({
+      vrPis: valorPis,
+      vrCofins: valorCofins },
+      { emitEvent: false});
+    
+    }
+  
  /*   atualizaValorTotal() {
     const qtde = this.formItem.get('quantidade')!.value || 0;
     const unit = this.formItem.get('valorUnitario')!.value || 0;
