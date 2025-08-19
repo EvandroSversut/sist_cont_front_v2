@@ -159,22 +159,7 @@ import { AjudastPisCofinsDialogComponent } from '../dialogs/st Pis Cofins/ajuda-
         <input matInput type="number" formControlName="desconto">
       </mat-form-field>
 
-      <mat-form-field appearance="fill">
-        <mat-label>Frete</mat-label>
-        <input matInput type="number" formControlName="frete">
-      </mat-form-field>
-
-      <mat-form-field appearance="fill">
-        <mat-label>Seguro</mat-label>
-        <input matInput type="number" formControlName="seguro">
-      </mat-form-field>
-
       <mat-form-field appearance="outline">
-        <mat-label>Outras Despesas</mat-label>
-        <input matInput type="number" formControlName="outrasDesp">
-      </mat-form-field>
-
-     <mat-form-field appearance="outline">
   <mat-label>Total Produto</mat-label>
   <input matInput formControlName="vrTotalProd" [value]="formProduto.get('vrTotalProd')?.value | currency:'BRL':'symbol-narrow'" readonly>
 </mat-form-field>
@@ -193,7 +178,7 @@ import { AjudastPisCofinsDialogComponent } from '../dialogs/st Pis Cofins/ajuda-
 
       <mat-tab label="ICMS">
         <form [formGroup]="formProduto" class="grid grid-cols-1 md:grid-cols-3 gap-4">
-      <mat-form-field appearance="fill" style="width: 700px;">
+      <mat-form-field appearance="fill" style="width: 600px;">
         <mat-label>Origem do Produto</mat-label>
             <mat-select formControlName="origem">
               <mat-option value="0">0 - Nacional</mat-option>
@@ -476,7 +461,7 @@ export class ProdutoFormComponent implements OnInit{
       // ✅ agora sim, todos os campos serão enviados
       
       // PIS/COFINS
-      regimePisCofins: [null, Validators.required],
+      regimePisCofins: [''],
       vrPis: [''],
       vrCofins: ['']
     });
@@ -563,10 +548,10 @@ ngOnInit(): void {
     const qtde = this.formProduto.get('quantidade')!.value || 0;
     const unit = this.formProduto.get('valorUnitario')!.value || 0;
     const desconto = this.formProduto.get('desconto')!.value || 0;
-    const frete = this.formProduto.get('frete')!.value || 0;
-    const seguro = this.formProduto.get('seguro')!.value || 0;
-    const outrasDesp = this.formProduto.get('outrasDesp')!.value || 0;
-    const total = (qtde * unit) + ( - desconto + frete + seguro + outrasDesp);
+    //const frete = this.formProduto.get('frete')!.value || 0;
+    //const seguro = this.formProduto.get('seguro')!.value || 0;
+    //const outrasDesp = this.formProduto.get('outrasDesp')!.value || 0;
+    const total = (qtde * unit) - desconto;
     const icmsAliquota = Number(this.formProduto.get('aliqIcms')!.value) || 0;
     // Este  { emitEvent: false } serve para nao dar loop infinito pois estava travando a tela.
     this.formProduto.get('vrTotalProd')!.setValue(total, { emitEvent: false });

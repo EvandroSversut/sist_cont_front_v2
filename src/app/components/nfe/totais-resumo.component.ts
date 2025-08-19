@@ -39,58 +39,58 @@ import { MatIconModule } from '@angular/material/icon';
       </mat-form-field>
 
       <mat-form-field appearance="fill">
-        <mat-label>Base Cálculo Icms Substituicao</mat-label>
+        <mat-label>Base Cálculo Icms Subst.</mat-label>
         <input matInput type="text"
-               [value]="formTotal.get('vrTotalProd')?.value | currency:'BRL':'symbol':'1.2-2'"
+               [value]="formTotal.get('bcIcmsST')?.value | currency:'BRL':'symbol':'1.2-2'"
                readonly>
       </mat-form-field>
 
       <mat-form-field appearance="fill">
-        <mat-label>Valor do Icms Substituicao</mat-label>
+        <mat-label>Valor Icms Subst.</mat-label>
         <input matInput type="text"
-               [value]="formTotal.get('vrTotalProd')?.value | currency:'BRL':'symbol':'1.2-2'"
+               [value]="formTotal.get('vrIcmsST')?.value | currency:'BRL':'symbol':'1.2-2'"
                readonly>
       </mat-form-field>
 
       <mat-form-field appearance="fill">
         <mat-label>Valor Total dos Produtos</mat-label>
         <input matInput type="text"
-               [value]="formTotal.get('vrTotalServ')?.value | currency:'BRL':'symbol':'1.2-2'"
+               [value]="formTotal.get('vrTotalProd')?.value | currency:'BRL':'symbol':'1.2-2'"
                readonly>
       </mat-form-field>
       
       <mat-form-field appearance="fill">
         <mat-label>Valor do Frete</mat-label>
         <input matInput type="text"
-               [value]="formTotal.get('vrTotalServ')?.value | currency:'BRL':'symbol':'1.2-2'"
+               [value]="formTotal.get('vrFrete')?.value | currency:'BRL':'symbol':'1.2-2'"
                readonly>
       </mat-form-field>
       
       <mat-form-field appearance="fill">
         <mat-label>Valor do Seguro</mat-label>
         <input matInput type="text"
-               [value]="formTotal.get('vrTotalServ')?.value | currency:'BRL':'symbol':'1.2-2'"
+               [value]="formTotal.get('vrSeguro')?.value | currency:'BRL':'symbol':'1.2-2'"
                readonly>
       </mat-form-field>
 
       <mat-form-field appearance="fill">
         <mat-label>Desconto</mat-label>
         <input matInput type="text"
-               [value]="formTotal.get('vrTotalServ')?.value | currency:'BRL':'symbol':'1.2-2'"
+               [value]="formTotal.get('vrDesconto')?.value | currency:'BRL':'symbol':'1.2-2'"
                readonly>
       </mat-form-field>
 
       <mat-form-field appearance="fill">
         <mat-label>Outras Despesas Acessorias</mat-label>
         <input matInput type="text"
-               [value]="formTotal.get('vrTotalServ')?.value | currency:'BRL':'symbol':'1.2-2'"
+               [value]="formTotal.get('vrOutraDesp')?.value | currency:'BRL':'symbol':'1.2-2'"
                readonly>
       </mat-form-field>
 
       <mat-form-field appearance="fill">
         <mat-label>Valor do IPI</mat-label>
         <input matInput type="text"
-               [value]="formTotal.get('vrTotalServ')?.value | currency:'BRL':'symbol':'1.2-2'"
+               [value]="formTotal.get('vrIPI')?.value | currency:'BRL':'symbol':'1.2-2'"
                readonly>
       </mat-form-field>
 
