@@ -505,9 +505,9 @@ ngOnInit(): void {
       // Captura o valor com total incluso
       // Aqui o Angular incluir todos os campos declarados no FormGroup no Construtor
       // mesmo que nao apareca na tabela.
-      const produto = this.formProduto.getRawValue();
-
-      this.produtoAdicionado.emit(produto);
+      
+      const produto = this.formProduto.getRawValue(); // <-- Aqui o Angular coleta TODOS os inputs declarados no FormGroup
+      this.produtoAdicionado.emit(produto); // <-- Envia para o componente pai (NfeComponent)
 
        // Desativa novamente se quiser continuar deixando o campo bloqueado
       this.formProduto.get('vrTotalProd')?.disable({ emitEvent: false });

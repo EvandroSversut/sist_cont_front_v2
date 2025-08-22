@@ -84,6 +84,12 @@ import { MatTabsModule } from '@angular/material/tabs';
     </mat-tab>
   </mat-tab-group>
 
+  <div style="display: flex; justify-content: flex-end; padding-right: 100px;">
+  <button mat-raised-button color="primary" (click)="salvarNfe()">
+    Salvar Compra
+  </button>
+</div>
+
 `
 
 })
@@ -233,14 +239,15 @@ console.log(this.formGeral.get('totais')?.value);
   adicionarProduto(produto: any) {
     //this.produtos.push(produto);
    produto.quantidade    = Number(produto.quantidade)    || 0;
-  produto.valorUnitario = Number(produto.valorUnitario) || 0;
-  produto.desconto      = Number(produto.desconto)      || 0;
-  produto.aliquotaIcms  = Number(produto.aliqIcms)  || 0;
-    console.log('📦 Produtos que serão enviados:', JSON.stringify(this.produtos, null, 2));
+   produto.valorUnitario = Number(produto.valorUnitario) || 0;
+   produto.desconto      = Number(produto.desconto)      || 0;
+   produto.aliquotaIcms  = Number(produto.aliqIcms)  || 0;
+   console.log('📦 Produtos que serão enviados:', JSON.stringify(this.produtos, null, 2));
     
     this.produtos = [...this.produtos, produto]; // cria novo array. 🔁 força atualização da tabela
 
     console.log('➕ Produto adicionado:', produto);
+    console.log('📦 Produtos que serão enviados:', JSON.stringify(this.produtos, null, 2));
 
     this.atualizarTotais();
     
@@ -275,12 +282,14 @@ console.log(this.formGeral.get('totais')?.value);
   
 
   salvarNfe() {
-    console.log('📑 Dados Gerais:', this.formGeral.value);
-    console.log('Emitente válido?', this.formEmitente.valid);
-    console.log('Destinatário válido?', this.formDestinatario.valid);
-    console.log('Produtos:', this.produtos);
-    console.log('Emitente:', this.formEmitente.value);
-    console.log('Destinatário:', this.formDestinatario.value);
+    //console.log('📑 Dados Gerais:', this.formGeral.value);
+    console.log('%c📑 Dados Gerais:', 'color: purple;', this.formGeral.value);
+    console.log('%c🏢 Emitente (válido?):', 'color: green;', this.formEmitente.valid, this.formEmitente.value);
+    console.log('%c🎯 Destinatário (válido?):', 'color: green;', this.formDestinatario.valid, this.formDestinatario.value);
+    console.log('%c📦 Produtos:', 'color: orange;', this.produtos);
+    console.log('%c🚚 Transporte:', 'color: teal;', this.formTransporte.value);
+    console.log('%c💵 Pagamento:', 'color: brown;', this.formPagamento.value);
+
 
     if (this.formEmitente.invalid || this.formDestinatario.invalid || this.produtos.length === 0) {
       alert('Preencha todos os dados corretamente e adicione pelo menos um produto.');
@@ -301,21 +310,16 @@ console.log(this.formGeral.get('totais')?.value);
       pagamento: this.formPagamento.value
     };
 
-
-    console.log('📤 Emitente:', this.formEmitente.value);
-    console.log('📤 Destinatário:', this.formDestinatario.value);
-    console.log('📦 Produtos:', this.produtos);
-    console.log('🚚 Transporte:', this.formTransporte.value);
-    console.log('💵 Pagamento:', this.formPagamento.value);
-  
+    console.log('%c📤 OBJETO FINAL ENVIADO AO BACKEND:', 'color: red; font-weight: bold;', JSON.stringify(notaFiscal, null, 2));
+    
     // No futuro: enviar todos os dados para o backend
     this.nfeService.enviarNotaFiscal(notaFiscal).subscribe({
     next: (res) => {
-      console.log('✅ NF-e salva com sucesso:', res);
+      console.log('%c✅ NF-e salva com sucesso:', 'color: green; font-weight: bold;', res);
       alert('NF-e salva com sucesso!');
     },
     error: (err) => {
-      console.error('❌ Erro ao salvar NF-e:', err);
+      console.error('%c❌ Erro ao salvar NF-e:', 'color: red; font-weight: bold;', err);
       alert('Erro ao salvar a NF-e. Verifique os dados e tente novamente.');
     }
   });
