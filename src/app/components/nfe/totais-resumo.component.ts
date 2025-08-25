@@ -6,6 +6,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { MatIconModule } from '@angular/material/icon';
+import { Produto } from '../../model/produto.model';
 
 @Component({
   selector: 'app-totais-resumo',
@@ -116,18 +117,18 @@ import { MatIconModule } from '@angular/material/icon';
   `
 })
 export class TotaisResumoComponent {
-  private _produtos: any[] = [];
+  private _produtos: Produto[] = [];
   private _formTotal!: FormGroup;
 
   constructor(private cdr: ChangeDetectorRef) {}
 
   // ===== Inputs com setters para recalcular assim que mudarem =====
   @Input()
-  set produtos(value: any[]) {
+  set produto(value: Produto[]) { // 👈 agora tipado corretamente
     this._produtos = value || [];
     this.recalcularEPatch();
   }
-  get produtos() { return this._produtos; }
+  get produtos(): Produto[] { return this._produtos; }
 
   @Input()
   set formTotal(value: FormGroup) {
@@ -149,7 +150,7 @@ export class TotaisResumoComponent {
   get totalIcms(): number {
     return this._produtos.reduce((acc, p) => {
       const base = toNum(p.quantidade) * toNum(p.valorUnitario) - toNum(p.desconto);
-      return acc + (base * toNum(p.aliquotaIcms) / 100);
+      return acc + (base * toNum(p.aliqIcms) / 100);
     }, 0);
   }
 

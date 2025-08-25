@@ -112,12 +112,16 @@ export class DestinatarioFormComponent {
   
     ngOnInit() {
     this.formDestinatario.get('indIEDest')?.valueChanges.subscribe(value => {
+      console.log('%c🔔 Destinatário → Indicador IE alterado:', 'color: blue;', value);
+
       const ieControl = this.formDestinatario.get('ie');
       if (value === '1') {
         ieControl?.setValidators([Validators.required]);
+        console.log('%c⚠️ IE agora é obrigatório', 'color: red;');
       } else {
         ieControl?.clearValidators();
         ieControl?.setValue('');
+        console.log('%cℹ️ IE limpo por não ser contribuinte ICMS', 'color: gray;');
       }
       ieControl?.updateValueAndValidity();
     });
@@ -131,7 +135,7 @@ export class DestinatarioFormComponent {
   
     dialogRef.afterClosed().subscribe(result => {
 
-      console.log('Fornecedor selecionado:', result);  // <-- Aqui imprime o que o Dialog retornou
+      console.log('%c📂 Destinatário → Fornecedor selecionado no Dialog:', 'color: orange;', result);
 
       if (result) {
         console.log('Campos do formDestinatario:', this.formDestinatario.controls);
@@ -146,6 +150,8 @@ export class DestinatarioFormComponent {
           cnae: result.cnae,
           crt: result.crt
         });
+        console.log('%c✅ Destinatário → Form atualizado:', 'color: green;', this.formDestinatario.value);
+    
       }
     });
    }

@@ -23,7 +23,7 @@ import { NfeRegimeService } from './services/nfe-regime.services';
 import { OnInit } from '@angular/core';
 import { AjudaCstDialogComponent } from '../dialogs/cst/ajuda-cst-dialog.component';
 import { AjudastPisCofinsDialogComponent } from '../dialogs/st Pis Cofins/ajuda-stPisCofins-dialog.component';
-
+import { Produto } from '../../model/produto.model';
 
 @Component({
   selector: 'app-produto-form',
@@ -93,7 +93,7 @@ import { AjudastPisCofinsDialogComponent } from '../dialogs/st Pis Cofins/ajuda-
   
   <mat-form-field appearance="fill" style="width: 600px;" matTooltip="Selecione o CST (Código de Situação Tributária) de acordo com a operação.">
     <mat-label>Código da Situação Tributária CST</mat-label>
-    <mat-select [formControl]="cstControl">
+    <mat-select formControlName="cst">
       <mat-option value="0">00 - Tributada integralmente</mat-option>
       <mat-option value="1">10 - Tributada e com cobrança do ICMS por Subst Trib</mat-option>
       <mat-option value="2">20 - Com redução da BC</mat-option>
@@ -116,7 +116,7 @@ import { AjudastPisCofinsDialogComponent } from '../dialogs/st Pis Cofins/ajuda-
 
        <mat-form-field appearance="fill" style="width: 700px;">
         <mat-label>CSOSN - SIMPLES NACIONAL</mat-label>
-            <mat-select formControlName="cstSimples">
+            <mat-select formControlName="csosn">
               <mat-option value="0">00 - Venda Dentro do Estado - Operacao com ICMS destacado</mat-option>
               <mat-option value="1">00 - Venda Para Outro Estado - ICMS com Aliquota Interest.</mat-option>
               <mat-option value="2">40 - Venda Isenta - ICMS Isento</mat-option>
@@ -202,7 +202,7 @@ import { AjudastPisCofinsDialogComponent } from '../dialogs/st Pis Cofins/ajuda-
 
          <mat-form-field appearance="fill">
             <mat-label>Base de Cálculo do ICMS</mat-label>
-            <input matInput [value]="formProduto.get('baseDeCalculo')?.value | currency:'BRL':'symbol'" readonly>
+            <input matInput [value]="formProduto.get('bcIcmsProd')?.value | currency:'BRL':'symbol'" readonly>
         </mat-form-field>
 
 
@@ -236,7 +236,7 @@ import { AjudastPisCofinsDialogComponent } from '../dialogs/st Pis Cofins/ajuda-
 
     <mat-form-field appearance="fill" style="width: 600px;">
         <mat-label>Situação Tributária Pis/Cofins</mat-label>
-        <mat-select formControlName="st">
+        <mat-select formControlName="stPisCofins">
           <mat-option value="01">01 - Operação Tributável com Alíquota Básica</mat-option>
           <mat-option value="02">02 - Operação Tributável com Alíquota Diferenciada</mat-option>
           <mat-option value="03">03 - Operação Tributável com Alíquota por Unidade</mat-option>
@@ -279,12 +279,12 @@ import { AjudastPisCofinsDialogComponent } from '../dialogs/st Pis Cofins/ajuda-
 
           <mat-form-field appearance="fill">
             <mat-label>Base de Cálculo PIS/COFINS</mat-label>
-            <input matInput [value]="formProduto.get('baseDeCalculo')?.value | currency:'BRL':'symbol'" readonly>
+            <input matInput [value]="formProduto.get('bcPisCofins')?.value | currency:'BRL':'symbol'" readonly>
           </mat-form-field>
 
           <mat-form-field appearance="fill" style="width: 400px;">
             <mat-label>Regime de Apuração Pis/Cofins</mat-label>
-                  <mat-select formControlName="regimePisCofins">
+                  <mat-select formControlName="regimeApuPisCofins">
                   <mat-option value="0">Cumulativo -> Pis 0,65% , Cofins 3,0%</mat-option>
                   <mat-option value="1">Não Cumulativo -> Pis 1,65% , Cofins 7,6%</mat-option>
             </mat-select>
@@ -307,23 +307,23 @@ import { AjudastPisCofinsDialogComponent } from '../dialogs/st Pis Cofins/ajuda-
         <form [formGroup]="formProduto" class="grid grid-cols-1 md:grid-cols-3 gap-4">
           <mat-form-field appearance="fill">
             <mat-label>Situação Tributaria</mat-label>
-            <input matInput formControlName="situacaoTrib">
+            <input matInput formControlName="stIPI">
           </mat-form-field>
 
           <mat-form-field appearance="fill">
             <mat-label>Codigo de Enquadramento</mat-label>
-            <input matInput type="number" formControlName="codEnquadr">
+            <input matInput type="number" formControlName="codIPI">
           </mat-form-field>
 
           <mat-form-field appearance="fill">
             <mat-label>Aliquota</mat-label>
-            <input matInput type="number" formControlName="aliqIpi">
+            <input matInput type="number" formControlName="aliqIPI">
           </mat-form-field>
         </form>
 
         <mat-form-field appearance="fill">
             <mat-label>Valor do IPI</mat-label>
-             <input matInput type="number" formControlName="vrIpi">
+             <input matInput type="number" formControlName="vrIPI">
         </mat-form-field>
 
       </mat-tab>
@@ -354,12 +354,12 @@ import { AjudastPisCofinsDialogComponent } from '../dialogs/st Pis Cofins/ajuda-
         <form [formGroup]="formProduto" class="grid grid-cols-1 md:grid-cols-3 gap-4">
           <mat-form-field appearance="fill">
             <mat-label>IRRF</mat-label>
-            <input matInput formControlName="irrf">
+            <input matInput formControlName="retIrrf">
           </mat-form-field>
 
           <mat-form-field appearance="fill">
             <mat-label>Pis / Cofins</mat-label>
-            <input matInput type="number" formControlName="pisCofins">
+            <input matInput type="number" formControlName="retPisCofins">
           </mat-form-field>
         </form>
       </mat-tab>
@@ -412,8 +412,10 @@ import { AjudastPisCofinsDialogComponent } from '../dialogs/st Pis Cofins/ajuda-
   
 })
 export class ProdutoFormComponent implements OnInit{
-  @Output() produtoAdicionado = new EventEmitter<any>();
+  // EventEmitter produtoAdicionado: o “carteiro” que leva o objeto do filho para o pai.
+  @Output() produtoAdicionado = new EventEmitter<Produto>();
 
+  // Aqui guarda os valores de cada <input> do produto (ncm, cfop, quantidade, etc).
   formProduto: FormGroup;
 
   regimeSelecionado: string | null = null;
@@ -436,34 +438,35 @@ export class ProdutoFormComponent implements OnInit{
     this.formProduto = this.fb.group({
       codigo: ['', Validators.required],
       descricao: ['', Validators.required],
+      codBarras: [''],
       ncm: ['', Validators.required],
-      origem: ['', Validators.required],
-      unidade: ['', Validators.required],
+      produtoST: [''],
+      cst: [{ value: null, disabled: false }, Validators.required],
+      csosn: [{ value: null, disabled: false }, Validators.required],
       cfop: ['', Validators.required],
+      unidade: ['', Validators.required],
       quantidade: ['', [Validators.required, Validators.min(0.0001)]],
       valorUnitario: ['', Validators.required],
       desconto: [''],
-      frete: [''],
-      seguro: [''],
-      outrasDesp: [''],
       vrTotalProd: [{ value: 0, disabled: true }],
-      icms: [''],
-      ipi: [''],
-      iss: [''],
+      origem: ['', Validators.required],
+      bcIcmsProd: [{ value: 0, disabled: true }],
       aliqIcms: ['', Validators.required], // isso faz referencia ao input "aliquotaIcms"
-      baseDeCalculo: [{ value: 0, disabled: true }],
       vrDoIcms: [{ value: 0, disabled: true }],
-        // ✅ Adicione aqui o campo que estava faltando:
-      cst: [{ value: null, disabled: false }, Validators.required],
-
-      // ✅ (opcional: já que também tem cstSimples no HTML)
-      cstSimples: [{ value: null, disabled: false }, Validators.required],
-      // ✅ agora sim, todos os campos serão enviados
-      
-      // PIS/COFINS
-      regimePisCofins: [''],
+      stPisCofins: [''],
+      bcPisCofins:[''],
+      regimeApuPisCofins: [''],
       vrPis: [''],
-      vrCofins: ['']
+      vrCofins: [''],
+      stIPI: [''],
+      codIPI:[''],
+      aliqIPI: [''],
+      vrIPI: [''],
+      vrTotalServ: [''],
+      bcISSQN: [''],
+      vrISSQN: [''],
+      retIRRf: [''],
+      retPisCofins: [''],
     });
 
     
@@ -496,7 +499,7 @@ ngOnInit(): void {
   });
 }
 
-
+  
   adicionarProduto() {
     if (this.formProduto.valid) {
       // Habilita o campo para pegar o valor ao emitir
@@ -506,7 +509,13 @@ ngOnInit(): void {
       // Aqui o Angular incluir todos os campos declarados no FormGroup no Construtor
       // mesmo que nao apareca na tabela.
       
-      const produto = this.formProduto.getRawValue(); // <-- Aqui o Angular coleta TODOS os inputs declarados no FormGroup
+      // getRawValue pega inclusive campos desabilitados (se houver)
+      const produto: Produto = this.formProduto.getRawValue(); // <-- Aqui o Angular coleta TODOS os inputs declarados no FormGroup
+      console.log('%c➕ Produto adicionado:', 'color: orange;', produto);
+      
+      //👉 É exatamente nesse momento que o produto “sai do filho” e “chega no pai”.
+      // Aqui vai direto para o pai:
+      //         <app-produto-form (produtoAdicionado)="onProdutoAdicionado($event)"></app-produto-form>
       this.produtoAdicionado.emit(produto); // <-- Envia para o componente pai (NfeComponent)
 
        // Desativa novamente se quiser continuar deixando o campo bloqueado
@@ -514,8 +523,12 @@ ngOnInit(): void {
       
       // Reset padrão
       this.formProduto.reset({ quantidade: 1, valorUnitario: 0, desconto: 0 });
-    }
+
+      console.log('%c📦 ProdutoForm → Resetado para novo cadastro', 'color: gray;');
+   } else {
+      console.warn('%c⚠️ ProdutoForm inválido:', 'color: red;', this.formProduto.errors);
   }
+}
 
     abrirBuscaProduto() {
       const dialogRef = this.dialog.open(BuscaProdutoDialogComponent, {
@@ -530,6 +543,7 @@ ngOnInit(): void {
    
       // o primeiro codigo à esquerda é o input do html: <input matInput formControlName="codigo">
       // o segundo codigo à direita é o que vem do banco ou objeto selecionado no dialog
+      // Até aqui, só o componente filho sabe desse valor. Ainda não chegou no pai.
       this.formProduto.patchValue({
         codigo: result.id,                          
         descricao: result.nomeProduto,
@@ -555,7 +569,7 @@ ngOnInit(): void {
     const icmsAliquota = Number(this.formProduto.get('aliqIcms')!.value) || 0;
     // Este  { emitEvent: false } serve para nao dar loop infinito pois estava travando a tela.
     this.formProduto.get('vrTotalProd')!.setValue(total, { emitEvent: false });
-    this.formProduto.get('baseDeCalculo')!.setValue(total, { emitEvent: false });
+    this.formProduto.get('bcIcmsProd')!.setValue(total, { emitEvent: false });
 
      // Calcula o valor do ICMS
   const valorIcms = total * (icmsAliquota / 100);
@@ -565,8 +579,8 @@ ngOnInit(): void {
   }
 
   calcularPisCofins(){
-    const base = Number(this.formProduto.get('baseDeCalculo')?.value) || 0;
-    const regime = this.formProduto.get('regimePisCofins')?.value;
+    const base = Number(this.formProduto.get('bcPisCofins')?.value) || 0;
+    const regime = this.formProduto.get('regimeApuPisCofins')?.value;
     console.log('Entrou no calculo do pis cofins mas nao selecionou o regime!!');
     
 
@@ -590,6 +604,7 @@ ngOnInit(): void {
     console.log('Valor do Pis ' + valorPis);
     console.log('Valor do Cofins ' + valorCofins);
 
+    // Até aqui, só o componente filho sabe desse valor. Ainda não chegou no pai.
     this.formProduto.patchValue({
       vrPis: valorPis,
       vrCofins: valorCofins },

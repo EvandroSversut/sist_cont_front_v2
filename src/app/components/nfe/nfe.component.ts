@@ -18,6 +18,7 @@ import { NfeService } from '../../services/nfe/nfe.service';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { GeraisNfeComponent } from "./geraisNfe-form.component";
 import { MatTabsModule } from '@angular/material/tabs';
+import { Produto } from '../../model/produto.model';
 
 
 
@@ -57,9 +58,12 @@ import { MatTabsModule } from '@angular/material/tabs';
   </mat-tab>
 
   <mat-tab label="Produtos">
+    <!--Aqui esta ligado ao evento do filho "emit"-->
+    <!-- O pai "escuta" o evento do filho -->
+    <!-- agora vai para "onProdutoAdicionado" aqui no pai -->
     <app-produto-form (produtoAdicionado)="adicionarProduto($event)"></app-produto-form>
     <app-produtos-tabela 
-      [produtos]="produtos" 
+      [produtos]="produto" 
       (excluirProduto)="removerProduto($event)">
     </app-produtos-tabela>
   </mat-tab>
@@ -78,7 +82,7 @@ import { MatTabsModule } from '@angular/material/tabs';
   <mat-tab-group>
      <mat-tab label="Totais">
        <app-totais-resumo 
-       [produtos]="produtos" 
+       [produto]="produto" 
        [formTotal]="totaisForm">
        </app-totais-resumo>
     </mat-tab>
@@ -103,7 +107,9 @@ export class NfeComponent {
 
   // @Output() buscarFornecedor = new EventEmitter<void>();
 
-  produtos: any[] = [];
+  // O pai mantém a lista final de produtos que irão pro backend
+  produto: Produto[] = [];
+
 
   constructor(
     private fb: FormBuilder,
@@ -236,30 +242,32 @@ console.log(this.formGeral.get('totais')?.value);
     }
   
     
-  adicionarProduto(produto: any) {
+  // Quando o filho emite, o pai guarda
+  adicionarProduto(produto: Produto) {
     //this.produtos.push(produto);
    produto.quantidade    = Number(produto.quantidade)    || 0;
    produto.valorUnitario = Number(produto.valorUnitario) || 0;
    produto.desconto      = Number(produto.desconto)      || 0;
-   produto.aliquotaIcms  = Number(produto.aliqIcms)  || 0;
-   console.log('📦 Produtos que serão enviados:', JSON.stringify(this.produtos, null, 2));
+   produto.aliqIcms  = Number(produto.aliqIcms)  || 0;
+   console.log('📦 Produtos que serão enviados:', JSON.stringify(this.produto, null, 2));
     
-    this.produtos = [...this.produtos, produto]; // cria novo array. 🔁 força atualização da tabela
-
-    console.log('➕ Produto adicionado:', produto);
-    console.log('📦 Produtos que serão enviados:', JSON.stringify(this.produtos, null, 2));
+    // agora o pai tem o produto
+    this.produto = [...this.produto, produto]; // cria novo array. 🔁 força atualização da tabela
+    console.log('%c📬 Pai: recebi produto do filho:', 'color: green;', produto);
+    //console.log('➕ Produto adicionado:', produto);
+    console.log('📦 Produtos que serão enviados:', JSON.stringify(this.produto, null, 2));
 
     this.atualizarTotais();
     
   }
 
   atualizarTotais() {
-  const totalBruto = this.produtos.reduce((acc, p) => acc + (p.quantidade * p.valorUnitario), 0);
-  const totalDesconto = this.produtos.reduce((acc, p) => acc + p.desconto, 0);
-  const totalIcms = this.produtos.reduce((acc, p) => {
+  const totalBruto = this.produto.reduce((acc, p) => acc + (p.quantidade * p.valorUnitario), 0);
+  const totalDesconto = this.produto.reduce((acc, p) => acc + p.desconto, 0);
+  const totalIcms = this.produto.reduce((acc, p) => {
     const base = p.quantidade * p.valorUnitario - (p.desconto || 0);
-    console.log('Produto:', p.nome, 'Base:', base, 'Aliquota:', p.aliquotaIcms);
-    return acc + ((base * p.aliquotaIcms) / 100);
+    console.log('Produto:', p.descricao, 'Base:', base, 'Aliquota:', p.aliqIcms);
+    return acc + ((base * p.aliqIcms) / 100);
   }, 0);
   const totalLiquido = totalBruto - totalDesconto;
 
@@ -274,8 +282,8 @@ console.log(this.formGeral.get('totais')?.value);
 
 
   removerProduto(index: number) {
-  const removido = this.produtos[index];
-  this.produtos = this.produtos.filter((_, i) => i !== index);
+  const removido = this.produto[index];
+  this.produto = this.produto.filter((_, i) => i !== index);
   console.log('🗑️ Produto removido:', removido);
    this.atualizarTotais();
 }
@@ -286,12 +294,12 @@ console.log(this.formGeral.get('totais')?.value);
     console.log('%c📑 Dados Gerais:', 'color: purple;', this.formGeral.value);
     console.log('%c🏢 Emitente (válido?):', 'color: green;', this.formEmitente.valid, this.formEmitente.value);
     console.log('%c🎯 Destinatário (válido?):', 'color: green;', this.formDestinatario.valid, this.formDestinatario.value);
-    console.log('%c📦 Produtos:', 'color: orange;', this.produtos);
+    console.log('%c📦 Produtos:', 'color: orange;', this.produto);
     console.log('%c🚚 Transporte:', 'color: teal;', this.formTransporte.value);
     console.log('%c💵 Pagamento:', 'color: brown;', this.formPagamento.value);
 
 
-    if (this.formEmitente.invalid || this.formDestinatario.invalid || this.produtos.length === 0) {
+    if (this.formEmitente.invalid || this.formDestinatario.invalid || this.produto.length === 0) {
       alert('Preencha todos os dados corretamente e adicione pelo menos um produto.');
       return;
     }
@@ -305,7 +313,7 @@ console.log(this.formGeral.get('totais')?.value);
       },
       emitente: this.formEmitente.value,
       destinatario: this.formDestinatario.value,
-      produtos: this.produtos,
+      produtos: this.produto,
       transporte: this.formTransporte.value,
       pagamento: this.formPagamento.value
     };
@@ -330,7 +338,7 @@ console.log(this.formGeral.get('totais')?.value);
   const dadosNota = {
     emitente: this.formEmitente.value,
     destinatario: this.formDestinatario.value,
-    produtos: this.produtos,
+    produtos: this.produto,
     transporte: this.formTransporte.value,
     pagamento: this.formPagamento.value
   };

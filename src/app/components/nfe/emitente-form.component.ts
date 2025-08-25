@@ -98,9 +98,8 @@ export class EmitenteFormComponent implements OnInit{
 
 ngOnInit() {
     this.formEmitente.get('crt')?.valueChanges.subscribe(value => {
-      console.log('crt ' + value + ' selecionado!!');
-         
-
+      console.log('%c🔔 Emitente → CRT alterado:', 'color: blue; font-weight: bold;', value);
+      //console.log('crt ' + value + ' selecionado!!');
       this.regimeService.setRegime(value);
       
     });
@@ -114,6 +113,7 @@ abrirBuscaFornecedor() {
 
 dialogRef.afterClosed().subscribe(result => {
 
+  console.log('%c📂 Emitente → Fornecedor selecionado no Dialog:', 'color: orange;', result);
   console.log('Fornecedor selecionado:', result);  // <-- Aqui imprime o que o Dialog retornou
 
   if (result) {
@@ -132,6 +132,7 @@ dialogRef.afterClosed().subscribe(result => {
       cnae: result.cnae,
       crt: result.crt
     });
+    console.log('%c✅ Emitente → Form atualizado:', 'color: green;', this.formEmitente.value);
   }
 });
 
