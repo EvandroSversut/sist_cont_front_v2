@@ -32,7 +32,7 @@ export interface Produto {
   vrCofins: number;       // valor do COFINS
 
   // Outras despesas e tributos
-  ipi: string;            // valor do IPI (se houver)
+  vrIPI: number;            // valor do IPI (se houver)
   iss: string;            // valor do ISS (se houver)
   frete: string;          // valor do frete (se houver)
   seguro: string;         // valor do seguro (se houver)

@@ -319,12 +319,12 @@ import { Produto } from '../../model/produto.model';
             <mat-label>Aliquota</mat-label>
             <input matInput type="number" formControlName="aliqIPI">
           </mat-form-field>
-        </form>
-
+       
         <mat-form-field appearance="fill">
             <mat-label>Valor do IPI</mat-label>
              <input matInput type="number" formControlName="vrIPI">
         </mat-form-field>
+         </form>
 
       </mat-tab>
 
@@ -474,9 +474,9 @@ export class ProdutoFormComponent implements OnInit{
       this.atualizaValorTotal();
 });
 
-    this.formProduto.get('aliqIcms')?.valueChanges.subscribe(() => {
+  /*  this.formProduto.get('aliqIcms')?.valueChanges.subscribe(() => {
       this.atualizaValorTotal();
-  });
+  });*/
 
   
 }
@@ -504,7 +504,7 @@ ngOnInit(): void {
     if (this.formProduto.valid) {
       // Habilita o campo para pegar o valor ao emitir
       this.formProduto.get('vrTotalProd')?.enable({ emitEvent: false });
-
+      console.log(this.formProduto.get('vrIPI')?.value);
       // Captura o valor com total incluso
       // Aqui o Angular incluir todos os campos declarados no FormGroup no Construtor
       // mesmo que nao apareca na tabela.
@@ -565,11 +565,16 @@ ngOnInit(): void {
     //const frete = this.formProduto.get('frete')!.value || 0;
     //const seguro = this.formProduto.get('seguro')!.value || 0;
     //const outrasDesp = this.formProduto.get('outrasDesp')!.value || 0;
+
     const total = (qtde * unit) - desconto;
+
     const icmsAliquota = Number(this.formProduto.get('aliqIcms')!.value) || 0;
+
     // Este  { emitEvent: false } serve para nao dar loop infinito pois estava travando a tela.
+    // Atualiza os campos do form
     this.formProduto.get('vrTotalProd')!.setValue(total, { emitEvent: false });
     this.formProduto.get('bcIcmsProd')!.setValue(total, { emitEvent: false });
+    this.formProduto.get('bcPisCofins')!.setValue(total, { emitEvent: false });
 
      // Calcula o valor do ICMS
   const valorIcms = total * (icmsAliquota / 100);
