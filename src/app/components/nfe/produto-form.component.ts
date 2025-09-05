@@ -354,7 +354,7 @@ import { Produto } from '../../model/produto.model';
         <form [formGroup]="formProduto" class="grid grid-cols-1 md:grid-cols-3 gap-4">
           <mat-form-field appearance="fill">
             <mat-label>IRRF</mat-label>
-            <input matInput formControlName="retIrrf">
+            <input matInput formControlName="retIRRF">
           </mat-form-field>
 
           <mat-form-field appearance="fill">
@@ -465,7 +465,7 @@ export class ProdutoFormComponent implements OnInit{
       vrTotalServ: [''],
       bcISSQN: [''],
       vrISSQN: [''],
-      retIRRf: [''],
+      retIRRF: [''],
       retPisCofins: [''],
     });
 
