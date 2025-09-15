@@ -55,7 +55,7 @@ import { Produto } from '../../model/produto.model';
     <form [formGroup]="formProduto" class="grid grid-cols-1 md:grid-cols-3 gap-4">
       <mat-form-field appearance="fill">
         <mat-label>Código</mat-label>
-        <input matInput formControlName="codigo">
+        <input matInput formControlName="codProd">
       </mat-form-field>
 
       <mat-form-field appearance="fill">
@@ -436,7 +436,7 @@ export class ProdutoFormComponent implements OnInit{
   private regimeService: NfeRegimeService) {
 
     this.formProduto = this.fb.group({
-      codigo: ['', Validators.required],
+      codProd: ['', Validators.required],
       descricao: ['', Validators.required],
       codBarras: [''],
       ncm: ['', Validators.required],
@@ -545,7 +545,7 @@ ngOnInit(): void {
       // o segundo codigo à direita é o que vem do banco ou objeto selecionado no dialog
       // Até aqui, só o componente filho sabe desse valor. Ainda não chegou no pai.
       this.formProduto.patchValue({
-        codigo: result.id,                          
+        codProd: result.id,                          
         descricao: result.nomeProduto,
         ncm: result.ncm,
         unidade: result.unidade

@@ -94,6 +94,35 @@ import { Produto } from '../../model/produto.model';
   </button>
 </div>
 
+<!-- aqui já estão as abas/forms da NF-e -->
+
+<hr class="my-4">
+
+<h2>Notas Fiscais Salvas</h2>
+<table class="table table-bordered table-striped mt-3">
+  <thead class="table-dark">
+    <tr>
+      <th>Número</th>
+      <th>Série</th>
+      <th>Data Emissão</th>
+      <th>Destinatário</th>
+      <th>Valor Total</th>
+      <th>Status</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let nota of notas">
+      <td>{{ nota.numero }}</td>
+      <td>{{ nota.serie }}</td>
+      <td>{{ nota.dataEmissao | date:'dd/MM/yyyy' }}</td>
+      <td>{{ nota.destinatarioNome }}</td>
+      <td>{{ nota.valorTotal | currency:'BRL' }}</td>
+      <td>{{ nota.status }}</td>
+    </tr>
+  </tbody>
+</table>
+
+
 `
 
 })
@@ -110,6 +139,11 @@ export class NfeComponent {
   // O pai mantém a lista final de produtos que irão pro backend
   produto: Produto[] = [];
 
+  notas: any[] = [];
+
+  ngOnInit(): void {
+  this.carregarNotas();
+}
 
   constructor(
     private fb: FormBuilder,
@@ -223,6 +257,13 @@ console.log(this.formGeral.get('totais')?.value);
 */
   }
 
+  carregarNotas() {
+  this.nfeService.getNotasSalvas().subscribe({
+    next: (res) => this.notas = res,
+    error: (err) => console.error('Erro ao carregar notas', err)
+  });
+}
+
      // 🔧 Getter criado para acessar o grupo 'totais' do formGeral de forma segura e tipada.
     // Isso é necessário porque, ao usar formGeral.get('totais') diretamente no HTML, o Angular
     // reconhece o retorno como AbstractControl, e não como FormGroup — o que gera erro de tipagem.
@@ -301,6 +342,7 @@ console.log(this.formGeral.get('totais')?.value);
 
     if (this.formEmitente.invalid || this.formDestinatario.invalid || this.produto.length === 0) {
       alert('Preencha todos os dados corretamente e adicione pelo menos um produto.');
+      console.log('Produtos cadastrados:', this.produto);
       return;
     }
 

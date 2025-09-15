@@ -31,4 +31,9 @@ export class NfeService {
   return this.http.post(endpoint, nfe);
 }
 
+getNotasSalvas(): Observable<any[]> {
+  return this.http.get<any[]>(`${this.apiUrl}/listar`);
+}
+
+
 }

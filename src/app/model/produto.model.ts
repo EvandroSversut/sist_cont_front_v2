@@ -6,7 +6,7 @@
  */
 export interface Produto {
   // Identificação básica
-  codigo: number;         // código interno do produto
+  codProd: number;         // código interno do produto
   descricao: string;      // descrição do produto
   ncm: string;            // NCM selecionado
   cfop: string;           // CFOP
