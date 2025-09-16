@@ -19,6 +19,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { GeraisNfeComponent } from "./geraisNfe-form.component";
 import { MatTabsModule } from '@angular/material/tabs';
 import { Produto } from '../../model/produto.model';
+import { MatTableModule } from '@angular/material/table';
 
 
 
@@ -40,6 +41,7 @@ import { Produto } from '../../model/produto.model';
     MatIconModule,
     MatFormFieldModule,
     MatTabsModule,
+    MatTableModule,
     GeraisNfeComponent
 ],
   template: `
@@ -96,31 +98,70 @@ import { Produto } from '../../model/produto.model';
 
 <!-- aqui já estão as abas/forms da NF-e -->
 
-<hr class="my-4">
+<mat-card *ngIf="notas.length > 0" class="mt-4">
+  <mat-card-header>
+    <mat-card-title>Notas Fiscais Salvas</mat-card-title>
+  </mat-card-header>
 
-<h2>Notas Fiscais Salvas</h2>
-<table class="table table-bordered table-striped mt-3">
-  <thead class="table-dark">
-    <tr>
-      <th>Número</th>
-      <th>Série</th>
-      <th>Data Emissão</th>
-      <th>Destinatário</th>
-      <th>Valor Total</th>
-      <th>Status</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr *ngFor="let nota of notas">
-      <td>{{ nota.numero }}</td>
-      <td>{{ nota.serie }}</td>
-      <td>{{ nota.dataEmissao | date:'dd/MM/yyyy' }}</td>
-      <td>{{ nota.destinatarioNome }}</td>
-      <td>{{ nota.valorTotal | currency:'BRL' }}</td>
-      <td>{{ nota.status }}</td>
-    </tr>
-  </tbody>
-</table>
+  <mat-card-content>
+    <table mat-table [dataSource]="notas" class="mat-elevation-z2 full-width">
+
+      <!-- Número -->
+      <ng-container matColumnDef="numero">
+        <th mat-header-cell *matHeaderCellDef> Número </th>
+        <td mat-cell *matCellDef="let nota"> {{ nota.numero }} </td>
+      </ng-container>
+
+      <!-- Série -->
+      <ng-container matColumnDef="serie">
+        <th mat-header-cell *matHeaderCellDef> Série </th>
+        <td mat-cell *matCellDef="let nota"> {{ nota.serie }} </td>
+      </ng-container>
+
+      <!-- Data -->
+      <ng-container matColumnDef="dtHrEmissao">
+        <th mat-header-cell *matHeaderCellDef> Data/Hora </th>
+        <td mat-cell *matCellDef="let nota">
+          {{ nota.dtHrEmissao | date:'dd/MM/yyyy HH:mm' }}
+        </td>
+      </ng-container>
+
+      <!-- Destinatário -->
+      <ng-container matColumnDef="destinatarioNome">
+        <th mat-header-cell *matHeaderCellDef> Destinatário </th>
+        <td mat-cell *matCellDef="let nota"> {{ nota.destinatarioNome }} </td>
+      </ng-container>
+
+      <!-- Valor Total -->
+      <ng-container matColumnDef="valorTotal">
+        <th mat-header-cell *matHeaderCellDef> Valor Total </th>
+        <td mat-cell *matCellDef="let nota"> {{ nota.valorTotal | currency:'BRL' }} </td>
+      </ng-container>
+
+      <!-- Status -->
+      <ng-container matColumnDef="status">
+        <th mat-header-cell *matHeaderCellDef> Status </th>
+        <td mat-cell *matCellDef="let nota"> {{ nota.status }} </td>
+      </ng-container>
+
+       <!-- Ações -->
+      <ng-container matColumnDef="acoes">
+        <th mat-header-cell *matHeaderCellDef> Ações </th>
+        <td mat-cell *matCellDef="let nota">
+          <button mat-icon-button color="primary" (click)="editarNota(nota)">
+            <mat-icon>edit</mat-icon>
+          </button>
+          <button mat-icon-button color="warn" (click)="excluirNota(nota.id)">
+            <mat-icon>delete</mat-icon>
+          </button>
+        </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    </table>
+  </mat-card-content>
+</mat-card>
 
 
 `
@@ -140,6 +181,16 @@ export class NfeComponent {
   produto: Produto[] = [];
 
   notas: any[] = [];
+
+  displayedColumns: string[] = [
+  'numero',
+  'serie',
+  'dtHrEmissao',
+  'destinatarioNome',
+  'valorTotal',
+  'status',
+  'acoes'
+];
 
   ngOnInit(): void {
   this.carregarNotas();
@@ -387,5 +438,18 @@ console.log(this.formGeral.get('totais')?.value);
     console.log('📄 XML Gerado:', dadosNota);
 
     this.nfeService.enviarNotaFiscal(dadosNota);
+  }
+
+  editarNota(nota: any) {
+    console.log('Editar NF', nota);
+    // aqui você pode carregar a NF no formulário para alteração
+  }
+
+  excluirNota(id: number) {
+    if (confirm('Deseja realmente excluir esta nota?')) {
+      console.log('Excluir NF ID:', id);
+      // aqui chama o service para excluir no backend
+      // depois chama carregarNotas() novamente
+    }
   }
 }
