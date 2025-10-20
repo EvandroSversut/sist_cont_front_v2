@@ -238,6 +238,7 @@ this.formGeral = this.fb.group({
 console.log(this.formGeral.get('totais')?.value);
 
     this.formEmitente = this.fb.group({
+      id: [null], // <-- campo oculto
       cnpj: ['23.335.656/0001-58', Validators.required],
       razaoSocial: ['Empresa Emitente Ltda', Validators.required],
       nomeFantasia: ['emitente', Validators.required],       
@@ -250,6 +251,7 @@ console.log(this.formGeral.get('totais')?.value);
     });
 
     this.formDestinatario = this.fb.group({
+      id: [null], // <-- campo oculto
       cnpj: ['456', Validators.required],
       razaoSocial: ['empresa b', Validators.required],
       nomeFantasia: ['empresa', Validators.required],

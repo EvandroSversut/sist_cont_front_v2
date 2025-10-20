@@ -30,6 +30,9 @@ import { MatTabChangeEvent } from '@angular/material/tabs';
     <mat-card>
       <mat-card-title style="margin-bottom: 20px;">Dados do Emitente</mat-card-title>
       <form [formGroup]="formEmitente" class="grid grid-cols-1 md:grid-cols-3 gap-4">
+
+      <input type="hidden" formControlName="id">
+      
         <mat-form-field appearance="fill">
           <mat-label>CNPJ ou CPF</mat-label>
           <input matInput formControlName="cnpj">
@@ -122,6 +125,7 @@ dialogRef.afterClosed().subscribe(result => {
     this.formEmitente.patchValue({
       
       // Aqui define o que vai ser populado nos input
+      id: result.id, // <-- adiciona o ID aqui mesmo que nao apareça na tela
       razaoSocial: result.razaoSocial,
       cnpj: result.cnpj,
       nomeFantasia: result.nomeFantasia,

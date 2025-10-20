@@ -140,6 +140,7 @@ export class DestinatarioFormComponent {
       if (result) {
         console.log('Campos do formDestinatario:', this.formDestinatario.controls);
         this.formDestinatario.patchValue({ 
+          id: result.id, // <-- adiciona o ID aqui mesmo que nao apareça na tela
           razaoSocial: result.razaoSocial, 
           cnpj: result.cnpj,
           nomeFantasia: result.nomeFantasia,
