@@ -1,0 +1,91 @@
+<mat-sidenav-container class="dashboard-container">
+  <!-- SIDEBAR -->
+  <mat-sidenav mode="side" opened class="sidebar">
+    <div class="sidebar-header">
+      <h3>Sistema NF-e</h3>
+    </div>
+    <nav>
+      <button mat-button routerLink="/dashboard" color="primary">
+        <mat-icon>dashboard</mat-icon> Dashboard
+      </button>
+      <button mat-button routerLink="/notas">
+        <mat-icon>receipt_long</mat-icon> Notas Fiscais
+      </button>
+      <button mat-button routerLink="/pessoas">
+        <mat-icon>groups</mat-icon> Clientes
+      </button>
+      <button mat-button routerLink="/produtos">
+        <mat-icon>inventory_2</mat-icon> Produtos
+      </button>
+    </nav>
+  </mat-sidenav>
+
+  <!-- CONTEÚDO -->
+  <mat-sidenav-content class="content">
+    <mat-toolbar color="primary" class="toolbar">
+      <span>Bem-vindo ao Sistema de Emissão de NF-e</span>
+      <span class="spacer"></span>
+      <button mat-icon-button>
+        <mat-icon>account_circle</mat-icon>
+      </button>
+    </mat-toolbar>
+
+    <div class="content-body">
+      <h2>Dashboard</h2>
+
+      <!-- CARDS -->
+      <div class="cards-grid">
+        <mat-card class="card" *ngFor="let card of [
+          {icon: 'attach_money', cor: 'primary', titulo: 'Vendas Totais', valor: resumo.totalVendas | currency:'BRL'},
+          {icon: 'savings', cor: 'accent', titulo: 'Lucro Bruto', valor: resumo.lucroBruto | currency:'BRL'},
+          {icon: 'group', cor: 'warn', titulo: 'Clientes Ativos', valor: resumo.clientesAtivos},
+          {icon: 'inventory', cor: 'primary', titulo: 'Itens em Estoque', valor: resumo.itensEstoque}
+        ]">
+          <mat-card-content>
+            <div class="card-content">
+              <mat-icon [color]="card.cor" class="card-icon">{{card.icon}}</mat-icon>
+              <div>
+                <p class="card-title">{{card.titulo}}</p>
+                <h3>{{card.valor}}</h3>
+              </div>
+            </div>
+          </mat-card-content>
+        </mat-card>
+      </div>
+
+      <!-- TABELA DE ATIVIDADES -->
+      <mat-card class="table-card">
+        <mat-card-title>Atividade Recente</mat-card-title>
+        <mat-card-content>
+          <table mat-table [dataSource]="atividades" class="mat-elevation-z2 full-width-table">
+
+            <ng-container matColumnDef="data">
+              <th mat-header-cell *matHeaderCellDef>Data</th>
+              <td mat-cell *matCellDef="let item">{{item.data}}</td>
+            </ng-container>
+
+            <ng-container matColumnDef="descricao">
+              <th mat-header-cell *matHeaderCellDef>Descrição</th>
+              <td mat-cell *matCellDef="let item">{{item.descricao}}</td>
+            </ng-container>
+
+            <ng-container matColumnDef="valor">
+              <th mat-header-cell *matHeaderCellDef>Valor</th>
+              <td mat-cell *matCellDef="let item">{{item.valor | currency:'BRL'}}</td>
+            </ng-container>
+
+            <ng-container matColumnDef="status">
+              <th mat-header-cell *matHeaderCellDef>Status</th>
+              <td mat-cell *matCellDef="let item">
+                <span class="status" [ngClass]="item.statusCor">{{item.status}}</span>
+              </td>
+            </ng-container>
+
+            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+          </table>
+        </mat-card-content>
+      </mat-card>
+    </div>
+  </mat-sidenav-content>
+</mat-sidenav-container>
