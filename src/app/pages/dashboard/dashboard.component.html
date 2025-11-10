@@ -37,6 +37,7 @@
       <div class="cards-grid">
         <mat-card class="card" *ngFor="let card of [
           {icon: 'attach_money', cor: 'primary', titulo: 'Vendas Totais', valor: resumo.totalVendas | currency:'BRL'},
+          {icon: 'savings', cor: 'accent', titulo: 'Total de Notas', valor: resumo.totalNotas},
           {icon: 'savings', cor: 'accent', titulo: 'Lucro Bruto', valor: resumo.lucroBruto | currency:'BRL'},
           {icon: 'group', cor: 'warn', titulo: 'Clientes Ativos', valor: resumo.clientesAtivos},
           {icon: 'inventory', cor: 'primary', titulo: 'Itens em Estoque', valor: resumo.itensEstoque}

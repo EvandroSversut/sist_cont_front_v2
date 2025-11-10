@@ -27,6 +27,7 @@ export class DashboardComponent implements OnInit {
 
   resumo = {
     totalVendas: 0,
+    totalNotas: 0,
     lucroBruto: 0,
     clientesAtivos: 0,
     itensEstoque: 0
@@ -38,10 +39,15 @@ export class DashboardComponent implements OnInit {
   constructor(private http: HttpClient) {}
 
   ngOnInit(): void {
-    this.http.get('http://localhost:8080/api/dashboard')
-      .subscribe((dados: any) => {
-        this.resumo = dados.resumo;
-        this.atividades = dados.atividades;
-      });
-  }
+  this.http.get('http://localhost:8080/dashboard/vendas')
+    .subscribe((dados: any) => {
+      // como o backend retorna { totalVendas, totalNotas }
+      this.resumo.totalVendas = dados.totalVendas ?? 0;
+      this.resumo.totalNotas = dados.totalNotas ?? 0;
+      this.resumo.clientesAtivos = dados.totalClientes ?? 0,
+      // se quiser, zere as atividades (até ter endpoint real)
+      this.atividades = [];
+    });
+
+ }
 }
